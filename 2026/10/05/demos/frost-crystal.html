@@ -1,0 +1,848 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>성에 결정 데모</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #edf2f5;
+      --panel: #ffffff;
+      --text: #213a48;
+      --muted: #607480;
+      --line: #d6e2e8;
+      --accent: #236b83;
+      --accent-soft: #e3f3f7;
+      --button-text: #ffffff;
+      --shadow: 0 14px 40px rgba(27, 53, 68, .09);
+      --scene-bg: #0c1822;
+      --scene-text: #d9f5fb;
+      --scene-muted: #a3bdc9;
+      --scene-glass: rgba(10, 23, 33, .77);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+        --bg: #0d161e;
+        --panel: #16232d;
+        --text: #dfedf3;
+        --muted: #9cb0bc;
+        --line: #2c414e;
+        --accent: #91e1f0;
+        --accent-soft: #203e4c;
+        --button-text: #12303e;
+        --shadow: 0 14px 40px rgba(0, 0, 0, .2);
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "맑은 고딕", "Apple SD Gothic Neo", system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    main { max-width: 960px; margin: 0 auto; padding: 28px 16px 22px; }
+    h1 { margin: 0; font-size: clamp(25px, 4.7vw, 34px); letter-spacing: -.05em; font-weight: 750; }
+    .description { margin: 7px 0 21px; color: var(--muted); font-size: 14px; }
+    .viewer {
+      position: relative;
+      width: 100%;
+      height: 520px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--scene-bg);
+      box-shadow: var(--shadow);
+    }
+    .viewer canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: crosshair; }
+    .viewer.dragging canvas { cursor: grabbing; }
+    .guide {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      z-index: 1;
+      pointer-events: none;
+      color: var(--scene-text);
+      background: var(--scene-glass);
+      border: 1px solid rgba(169, 220, 238, .13);
+      border-radius: 9px;
+      padding: 9px 12px;
+      font-size: 11px;
+      line-height: 1.7;
+    }
+    .guide span { color: var(--scene-muted); }
+    .scene-note {
+      position: absolute;
+      bottom: 14px;
+      left: 14px;
+      right: 14px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--scene-muted);
+      font-size: 11px;
+      pointer-events: none;
+    }
+    .legend { display: flex; gap: 14px; flex-wrap: wrap; }
+    .dot { width: 7px; height: 7px; display: inline-block; border-radius: 50%; margin-right: 5px; }
+    .dot.enemy { background: #d85a30; }
+    .dot.player { background: #639922; }
+    .dot.ice { background: #b7edff; }
+    .error { position: absolute; inset: 0; display: grid; place-items: center; padding: 28px; color: var(--scene-text); text-align: center; background: var(--scene-bg); }
+    .error[hidden] { display: none; }
+    .buttons { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+    button, select { font: inherit; }
+    button {
+      padding: 10px 16px;
+      min-height: 42px;
+      border-radius: 9px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      cursor: pointer;
+      transition: background .15s, transform .15s;
+    }
+    button:hover { background: var(--accent-soft); }
+    button:active { transform: translateY(1px); }
+    button.primary { background: var(--accent); color: var(--button-text); border-color: var(--accent); font-weight: 700; }
+    button:disabled { opacity: .5; cursor: default; }
+    button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+    .settings {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px 24px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      padding: 18px 20px;
+      border-radius: 12px;
+    }
+    .control { min-width: 0; }
+    .control label { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; }
+    output { color: var(--accent); font-weight: 750; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    input[type="range"] { width: 100%; height: 22px; margin: 7px 0 0; accent-color: var(--accent); cursor: pointer; }
+    .options { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 22px; margin: 17px 2px; font-size: 12px; }
+    .options label { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+    input[type="checkbox"] { accent-color: var(--accent); width: 15px; height: 15px; margin: 0; }
+    select { background: var(--panel); color: var(--text); border: 1px solid var(--line); padding: 5px 24px 5px 9px; border-radius: 7px; }
+    .option-note { color: var(--muted); margin-left: auto; }
+    .status {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 5px 10px;
+      margin: 0;
+      border-top: 1px solid var(--line);
+      padding-top: 13px;
+      font-size: 12px;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+    .status strong { color: var(--text); font-weight: 700; }
+    .status .phase { color: var(--accent); }
+    .separator { opacity: .5; }
+    @media (max-width: 680px) {
+      main { padding-top: 20px; }
+      .settings { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 18px; padding: 16px; }
+      .option-note { margin-left: 0; width: 100%; }
+      .scene-note > span { display: none; }
+      .guide { top: 11px; left: 11px; }
+    }
+    @media (max-width: 380px) {
+      .settings { grid-template-columns: minmax(0, 1fr); }
+      button { padding: 9px 11px; font-size: 12px; }
+      .status { gap: 5px 7px; font-size: 11px; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>성에 수지상 결정</h1>
+  <p class="description">아이스메테오 착탄 뒤, 지면을 타고 자라는 얼음 가지와 빙결·파열 판정 시안.</p>
+  <div class="viewer" id="viewer" aria-label="성에 결정 삼차원 시연">
+    <div class="guide">드래그로 회전 · 휠로 확대<br><span>바닥을 클릭하면 그 지점에 시전</span></div>
+    <div class="scene-note">
+      <div class="legend"><span><i class="dot enemy"></i>적</span><span><i class="dot player"></i>플레이어</span><span><i class="dot ice"></i>성에 · 빙결</span></div>
+      <span>36 × 36미터 · 동시 시전 최대 3회</span>
+    </div>
+    <div class="error" id="error" hidden></div>
+  </div>
+  <div class="buttons">
+    <button class="primary" id="castButton" type="button">적 무리 쪽에 시전</button>
+    <button id="resetEnemies" type="button">적 다시 배치</button>
+    <button id="clearFrost" type="button">성에 지우기</button>
+  </div>
+  <div class="settings" aria-label="결정 성장 설정">
+    <div class="control"><label for="length">최대 길이 <output id="lengthValue" for="length">10미터</output></label><input id="length" type="range" min="4" max="16" step="1" value="10"></div>
+    <div class="control"><label for="branch">곁가지 확률 <output id="branchValue" for="branch">0.18</output></label><input id="branch" type="range" min="0" max="0.5" step="0.01" value="0.18"></div>
+    <div class="control"><label for="speed">성장 속도 <output id="speedValue" for="speed">35마디/초</output></label><input id="speed" type="range" min="10" max="80" step="1" value="35"></div>
+    <div class="control"><label for="attraction">적 끌림 <output id="attractionValue" for="attraction">0.5</output></label><input id="attraction" type="range" min="0" max="1" step="0.05" value="0.5"></div>
+    <div class="control"><label for="hold">유지 시간 <output id="holdValue" for="hold">2.5초</output></label><input id="hold" type="range" min="0.5" max="5" step="0.1" value="2.5"></div>
+    <div class="control"><label for="enemyCount">적 수 <output id="enemyCountValue" for="enemyCount">12마리</output></label><input id="enemyCount" type="range" min="0" max="24" step="1" value="12"></div>
+  </div>
+  <div class="options">
+    <label for="arms">팔 수 <select id="arms"><option value="3">3개</option><option value="4">4개</option><option value="6" selected>6개</option><option value="8">8개</option></select></label>
+    <label><input id="spikes" type="checkbox" checked>얼음 가시</label>
+    <label><input id="movement" type="checkbox" checked>적 이동</label>
+    <span class="option-note">빙결 2초 · 성장 설정은 다음 시전부터 적용</span>
+  </div>
+  <p class="status" id="status" role="status" aria-live="polite" aria-atomic="true">
+    <span>단계 <strong class="phase" id="phase">대기</strong></span><span class="separator">·</span>
+    <span>가지 마디 <strong id="nodeCount">0</strong></span><span class="separator">·</span>
+    <span>가시 <strong id="spikeCount">0</strong></span><span class="separator">·</span>
+    <span>빙결 적 <strong id="frozenCount">0</strong></span>
+  </p>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(() => {
+  'use strict';
+
+  const byId = id => document.getElementById(id);
+  const ui = {
+    viewer: byId('viewer'), error: byId('error'), length: byId('length'),
+    branch: byId('branch'), speed: byId('speed'), attraction: byId('attraction'),
+    hold: byId('hold'), enemyCount: byId('enemyCount'), arms: byId('arms'),
+    spikes: byId('spikes'), movement: byId('movement'), phase: byId('phase'),
+    nodes: byId('nodeCount'), spikeCount: byId('spikeCount'), frozen: byId('frozenCount')
+  };
+  const sliderUnits = { length: '미터', branch: '', speed: '마디/초', attraction: '', hold: '초', enemyCount: '마리' };
+  for (const key of Object.keys(sliderUnits)) {
+    const input = ui[key], output = byId(key + 'Value');
+    input.addEventListener('input', () => {
+      output.textContent = String(Math.round(Number(input.value) * 100) / 100) + sliderUnits[key];
+    });
+  }
+  function fail(message) {
+    ui.error.textContent = message;
+    ui.error.hidden = false;
+    ui.phase.textContent = '장면 준비 실패';
+    for (const id of ['castButton', 'resetEnemies', 'clearFrost']) byId(id).disabled = true;
+  }
+  if (typeof THREE === 'undefined') {
+    fail('삼차원 장면을 불러오지 못했습니다. 인터넷 연결 후 페이지를 새로고침해 주세요.');
+    return;
+  }
+
+  // Every simulation collection has a fixed ceiling. Enemy queries use a 4m grid.
+  const SIZE = 36, HALF = 18, TEX_SIZE = 1024, STEP = .3, TURN = Math.PI / 3;
+  const MAX_CASTS = 3, MAX_NODES = 2400, MAX_TIPS = 192;
+  const MAX_SPIKES = 1200, MAX_PARTICLES = 640, MAX_ENEMIES = 24;
+  const FREEZE_TIME = 2, CELL_SIZE = 4, GRID_SIZE = 9;
+  const FROST_CELL = .25, FROST_GRID = 144, FROST_FADE_TIME = 2.4;
+  const phaseNames = { warning: '예고', falling: '낙하', growing: '결정 성장', holding: '유지', shattering: '파열' };
+  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+  const randomRange = (lo, hi) => lo + Math.random() * (hi - lo);
+  let time = 0, totalNodes = 0, activeSpikes = 0, particleCursor = 0, spikeHighWater = 0;
+  let groundDirty = true, lastTextureUpdate = -1, lastStatusUpdate = -1;
+  const casts = [];
+
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' });
+  } catch (error) {
+    fail('이 브라우저에서는 삼차원 화면을 시작할 수 없습니다. 하드웨어 가속 설정을 확인해 주세요.');
+    return;
+  }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+  renderer.setClearColor(0x0c1822);
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  ui.viewer.appendChild(renderer.domElement);
+  renderer.domElement.setAttribute('aria-label', '바닥을 클릭해 얼음 운석을 시전하는 삼차원 장면');
+  renderer.domElement.addEventListener('webglcontextlost', event => {
+    event.preventDefault();
+    fail('삼차원 화면 연결이 끊겼습니다. 페이지를 새로고침해 주세요.');
+  });
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(0x0c1822, 48, 90);
+  scene.add(new THREE.HemisphereLight(0xa4c9dd, 0x14202a, .6));
+  const moon = new THREE.DirectionalLight(0xadc9df, .65);
+  moon.position.set(-8, 18, 10);
+  scene.add(moon);
+  const camera = new THREE.PerspectiveCamera(43, 1, .1, 140);
+  const orbit = { radius: 47, theta: .56, phi: .70 };
+  const cameraTarget = new THREE.Vector3(0, .3, 0);
+  function updateCamera() {
+    const horizontal = orbit.radius * Math.sin(orbit.phi);
+    camera.position.set(horizontal * Math.sin(orbit.theta), orbit.radius * Math.cos(orbit.phi), horizontal * Math.cos(orbit.theta));
+    camera.lookAt(cameraTarget);
+  }
+  updateCamera();
+  function resize() {
+    const width = ui.viewer.clientWidth, height = ui.viewer.clientHeight;
+    renderer.setSize(width, height, false);
+    camera.aspect = width / height;
+    // Keep the ground readable in a narrow, tall mobile viewport.
+    camera.fov = width < 600 ? clamp(43 * 600 / width, 43, 78) : 43;
+    camera.updateProjectionMatrix();
+  }
+  if (typeof ResizeObserver !== 'undefined') new ResizeObserver(resize).observe(ui.viewer);
+  else window.addEventListener('resize', resize);
+  resize();
+
+  // The actual floor is a single 1024px CanvasTexture; per-cast layers let it fade independently.
+  const baseCanvas = document.createElement('canvas');
+  baseCanvas.width = baseCanvas.height = TEX_SIZE;
+  const base = baseCanvas.getContext('2d');
+  const grain = base.createImageData(TEX_SIZE, TEX_SIZE);
+  for (let i = 0; i < grain.data.length; i += 4) {
+    const n = Math.floor(Math.random() * 5);
+    grain.data[i] = 27 + n; grain.data[i + 1] = 40 + n; grain.data[i + 2] = 50 + n; grain.data[i + 3] = 255;
+  }
+  base.putImageData(grain, 0, 0);
+  base.strokeStyle = 'rgba(120,158,178,.09)';
+  base.lineWidth = 1;
+  for (let m = 0; m <= SIZE; m += 2) {
+    const pixel = m / SIZE * TEX_SIZE;
+    base.beginPath(); base.moveTo(pixel, 0); base.lineTo(pixel, TEX_SIZE); base.stroke();
+    base.beginPath(); base.moveTo(0, pixel); base.lineTo(TEX_SIZE, pixel); base.stroke();
+  }
+  const groundCanvas = document.createElement('canvas');
+  groundCanvas.width = groundCanvas.height = TEX_SIZE;
+  const groundContext = groundCanvas.getContext('2d');
+  groundContext.drawImage(baseCanvas, 0, 0);
+  const groundTexture = new THREE.CanvasTexture(groundCanvas);
+  groundTexture.encoding = THREE.sRGBEncoding;
+  groundTexture.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(SIZE, SIZE), new THREE.MeshPhongMaterial({ map: groundTexture, shininess: 12, color: 0xc2d5e0 }));
+  ground.rotation.x = -Math.PI / 2;
+  ground.position.y = .025;
+  scene.add(ground);
+  const plinth = new THREE.Mesh(new THREE.BoxGeometry(SIZE + .2, .32, SIZE + .2), new THREE.MeshPhongMaterial({ color: 0x172730, shininess: 18 }));
+  plinth.position.y = -.16;
+  scene.add(plinth);
+
+  const player = new THREE.Mesh(new THREE.CylinderGeometry(.48, .48, 1.15, 20), new THREE.MeshPhongMaterial({ color: 0x639922, emissive: 0x263d0b, shininess: 30 }));
+  player.position.set(-10, .60, 9);
+  scene.add(player);
+  const playerRing = new THREE.Mesh(new THREE.TorusGeometry(.75, .025, 6, 36), new THREE.MeshBasicMaterial({ color: 0x83b84b, transparent: true, opacity: .5, blending: THREE.AdditiveBlending, depthWrite: false }));
+  playerRing.rotation.x = Math.PI / 2; playerRing.position.set(-10, .06, 9); scene.add(playerRing);
+
+  const dummy = new THREE.Object3D();
+  const zeroMatrix = new THREE.Matrix4().makeScale(0, 0, 0);
+  const tiltAxis = new THREE.Vector3();
+  const color = new THREE.Color();
+  function makeInstances(geometry, material, count) {
+    const mesh = new THREE.InstancedMesh(geometry, material, count);
+    mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+    mesh.frustumCulled = false;
+    for (let i = 0; i < count; i++) mesh.setMatrixAt(i, zeroMatrix);
+    scene.add(mesh);
+    return mesh;
+  }
+
+  const enemyMesh = makeInstances(new THREE.BoxGeometry(.9, .9, .9), new THREE.MeshPhongMaterial({ color: 0xffffff, shininess: 24 }), MAX_ENEMIES);
+  const iceBoxes = makeInstances(new THREE.BoxGeometry(1.2, 1.2, 1.2), new THREE.MeshPhongMaterial({ color: 0xb8ecff, transparent: true, opacity: .55, shininess: 100, emissive: 0x225366, depthWrite: false }), MAX_ENEMIES);
+  const iceEdges = makeInstances(new THREE.BoxGeometry(1.23, 1.23, 1.23), new THREE.MeshBasicMaterial({ color: 0x8bddff, transparent: true, opacity: .32, wireframe: true, blending: THREE.AdditiveBlending, depthWrite: false }), MAX_ENEMIES);
+  const enemyFlashes = makeInstances(new THREE.SphereGeometry(.78, 10, 8), new THREE.MeshBasicMaterial({ color: 0xc6f7ff, transparent: true, opacity: .5, blending: THREE.AdditiveBlending, depthWrite: false }), MAX_ENEMIES);
+  const enemies = Array.from({ length: MAX_ENEMIES }, () => ({ x: 0, z: 0, direction: 0, speed: 0, decisionAt: 0, paused: false, frozenUntil: 0, flashUntil: 0, shellUntil: 0 }));
+  const enemyHeads = new Int16Array(GRID_SIZE * GRID_SIZE);
+  const enemyNext = new Int16Array(MAX_ENEMIES);
+  let enemyCount = 12;
+  function enemyCell(v) { return clamp(Math.floor((v + HALF) / CELL_SIZE), 0, GRID_SIZE - 1); }
+  function rebuildEnemyGrid() {
+    enemyHeads.fill(-1);
+    for (let i = 0; i < enemyCount; i++) {
+      const e = enemies[i], cell = enemyCell(e.z) * GRID_SIZE + enemyCell(e.x);
+      enemyNext[i] = enemyHeads[cell]; enemyHeads[cell] = i;
+    }
+  }
+  function nearestUnfrozen(x, z) {
+    let best = -1, bestDistance = 16;
+    const minX = enemyCell(x - 4), maxX = enemyCell(x + 4), minZ = enemyCell(z - 4), maxZ = enemyCell(z + 4);
+    for (let gz = minZ; gz <= maxZ; gz++) for (let gx = minX; gx <= maxX; gx++) {
+      for (let id = enemyHeads[gz * GRID_SIZE + gx]; id !== -1; id = enemyNext[id]) {
+        const e = enemies[id];
+        if (e.frozenUntil > time) continue;
+        const dx = e.x - x, dz = e.z - z, distance = dx * dx + dz * dz;
+        if (distance < bestDistance) { bestDistance = distance; best = id; }
+      }
+    }
+    return best;
+  }
+  function freezeNear(cast, x, z) {
+    const minX = enemyCell(x - .7), maxX = enemyCell(x + .7), minZ = enemyCell(z - .7), maxZ = enemyCell(z + .7);
+    for (let gz = minZ; gz <= maxZ; gz++) for (let gx = minX; gx <= maxX; gx++) {
+      for (let id = enemyHeads[gz * GRID_SIZE + gx]; id !== -1; id = enemyNext[id]) {
+        const e = enemies[id], dx = e.x - x, dz = e.z - z;
+        if (dx * dx + dz * dz > .49) continue;
+        const wasFrozen = e.frozenUntil > time;
+        e.frozenUntil = time + FREEZE_TIME;
+        cast.victims[id] = 1;
+        if (!wasFrozen) { e.flashUntil = time + .16; emitShards(e.x, .6, e.z, 5, .8, false); }
+      }
+    }
+  }
+  function resetEnemies() {
+    enemyCount = Number(ui.enemyCount.value);
+    enemyMesh.count = iceBoxes.count = iceEdges.count = enemyFlashes.count = enemyCount;
+    for (const cast of casts) cast.victims.fill(0);
+    const shiftX = randomRange(-3, 3), shiftZ = randomRange(-3, 3), angle = randomRange(0, Math.PI * 2);
+    for (let i = 0; i < MAX_ENEMIES; i++) {
+      const e = enemies[i], a = angle + i * 2.39996, radius = 2.2 + Math.sqrt(i / Math.max(1, enemyCount)) * 7.5;
+      e.x = clamp(shiftX + Math.cos(a) * radius, -15, 15);
+      e.z = clamp(shiftZ + Math.sin(a) * radius, -15, 15);
+      e.direction = randomRange(0, Math.PI * 2); e.speed = randomRange(.35, .65);
+      e.decisionAt = time + randomRange(.3, 1.8); e.paused = Math.random() < .3;
+      e.frozenUntil = e.flashUntil = e.shellUntil = 0;
+    }
+    rebuildEnemyGrid();
+    renderEnemies();
+  }
+  function moveEnemies(dt) {
+    for (let i = 0; i < enemyCount; i++) {
+      const e = enemies[i];
+      if (!ui.movement.checked || e.frozenUntil > time) continue;
+      if (time >= e.decisionAt) {
+        e.decisionAt = time + randomRange(.9, 2.6);
+        e.paused = Math.random() < .3;
+        e.direction += randomRange(-1.2, 1.2);
+      }
+      if (e.paused) continue;
+      e.x += Math.cos(e.direction) * e.speed * dt;
+      e.z += Math.sin(e.direction) * e.speed * dt;
+      if (Math.abs(e.x) > 16.4) { e.x = clamp(e.x, -16.4, 16.4); e.direction = Math.PI - e.direction; }
+      if (Math.abs(e.z) > 16.4) { e.z = clamp(e.z, -16.4, 16.4); e.direction = -e.direction; }
+    }
+    rebuildEnemyGrid();
+  }
+  function renderEnemies() {
+    for (let i = 0; i < enemyCount; i++) {
+      const e = enemies[i], frozen = e.frozenUntil > time, flash = e.flashUntil > time;
+      dummy.position.set(e.x, .48, e.z); dummy.rotation.set(0, e.direction, 0); dummy.scale.set(1, 1, 1); dummy.updateMatrix();
+      enemyMesh.setMatrixAt(i, dummy.matrix);
+      color.setHex(flash ? 0xf0fcff : frozen ? 0xb98162 : 0xd85a30);
+      enemyMesh.setColorAt(i, color);
+      if (frozen || e.shellUntil > time) {
+        const scale = frozen ? 1 : 1 + (1 - (e.shellUntil - time) / .22) * .35;
+        dummy.position.y = .62; dummy.rotation.set(0, 0, 0); dummy.scale.setScalar(scale); dummy.updateMatrix();
+        iceBoxes.setMatrixAt(i, dummy.matrix); iceEdges.setMatrixAt(i, dummy.matrix);
+      } else { iceBoxes.setMatrixAt(i, zeroMatrix); iceEdges.setMatrixAt(i, zeroMatrix); }
+      if (flash) {
+        dummy.position.y = .65; dummy.rotation.set(0, 0, 0);
+        dummy.scale.setScalar(Math.max(.05, (e.flashUntil - time) / .4)); dummy.updateMatrix();
+        enemyFlashes.setMatrixAt(i, dummy.matrix);
+      } else enemyFlashes.setMatrixAt(i, zeroMatrix);
+    }
+    enemyMesh.instanceMatrix.needsUpdate = true;
+    if (enemyMesh.instanceColor) enemyMesh.instanceColor.needsUpdate = true;
+    iceBoxes.instanceMatrix.needsUpdate = iceEdges.instanceMatrix.needsUpdate = enemyFlashes.instanceMatrix.needsUpdate = true;
+  }
+
+  // Merge a short hexagonal shaft and pointed hexagonal cone without another library.
+  function crystalGeometry() {
+    const shaft = new THREE.CylinderGeometry(.115, .145, .62, 6, 1, false).toNonIndexed();
+    const point = new THREE.ConeGeometry(.115, .38, 6, 1, false).toNonIndexed();
+    shaft.translate(0, .31, 0); point.translate(0, .81, 0);
+    const geometry = new THREE.BufferGeometry();
+    for (const attribute of ['position', 'normal']) {
+      const a = shaft.getAttribute(attribute).array, b = point.getAttribute(attribute).array;
+      const combined = new Float32Array(a.length + b.length);
+      combined.set(a); combined.set(b, a.length);
+      geometry.setAttribute(attribute, new THREE.BufferAttribute(combined, 3));
+    }
+    shaft.dispose(); point.dispose();
+    geometry.computeBoundingSphere();
+    return geometry;
+  }
+  const crystalGeo = crystalGeometry();
+  const spikeMesh = makeInstances(crystalGeo, new THREE.MeshPhongMaterial({ color: 0xc5f0ff, transparent: true, opacity: .69, shininess: 110, emissive: 0x195e7b, emissiveIntensity: .55, depthWrite: false, flatShading: true }), MAX_SPIKES);
+  const spikeGlow = makeInstances(crystalGeo, new THREE.MeshBasicMaterial({ color: 0x79d6ff, transparent: true, opacity: .23, wireframe: true, blending: THREE.AdditiveBlending, depthWrite: false }), MAX_SPIKES);
+  spikeMesh.count = spikeGlow.count = 0;
+  const spikePool = Array.from({ length: MAX_SPIKES }, () => ({ active: false, x: 0, z: 0, height: 0, width: 0, born: 0, tilt: 0, axis: 0 }));
+  const freeSpikes = [];
+  for (let i = MAX_SPIKES - 1; i >= 0; i--) freeSpikes.push(i);
+  function addSpike(cast, node, alreadyGrown) {
+    if (!freeSpikes.length || node.spike >= 0) return;
+    const id = freeSpikes.pop(), spike = spikePool[id];
+    node.spike = id;
+    spike.active = true; spike.x = node.x; spike.z = node.z;
+    const falloff = clamp(1 - node.distance / cast.settings.length, 0, 1);
+    spike.height = Math.min(2.2, (.24 + 1.96 * Math.pow(falloff, 1.25)) * randomRange(.85, 1.05));
+    spike.width = node.depth ? randomRange(.58, .85) : randomRange(.85, 1.2);
+    spike.born = alreadyGrown ? time - .15 : time;
+    spike.tilt = randomRange(5, 20) * Math.PI / 180;
+    spike.axis = randomRange(0, Math.PI * 2);
+    activeSpikes++;
+    spikeHighWater = Math.max(spikeHighWater, id + 1);
+    spikeMesh.count = spikeGlow.count = spikeHighWater;
+  }
+  function releaseSpike(node, burst) {
+    if (node.spike < 0) return;
+    const id = node.spike, spike = spikePool[id];
+    if (burst && ui.spikes.checked) emitShards(spike.x, spike.height * .55, spike.z, Math.random() < .5 ? 3 : 4, .65, false);
+    spike.active = false; node.spike = -1;
+    spikeMesh.setMatrixAt(id, zeroMatrix); spikeGlow.setMatrixAt(id, zeroMatrix);
+    freeSpikes.push(id); activeSpikes--;
+  }
+  function animateSpikes() {
+    let changed = false;
+    for (let i = 0; i < spikeHighWater; i++) {
+      const s = spikePool[i];
+      if (!s.active) continue;
+      const t = clamp((time - s.born) / .15, 0, 1);
+      // easeOutBack gives the quick, slightly overshooting rise.
+      const q = t - 1, rise = 1 + 2.70158 * q * q * q + 1.70158 * q * q;
+      dummy.position.set(s.x, .035, s.z);
+      tiltAxis.set(Math.cos(s.axis), 0, Math.sin(s.axis));
+      dummy.quaternion.setFromAxisAngle(tiltAxis, s.tilt);
+      dummy.scale.set(s.width, Math.max(.001, s.height * rise), s.width);
+      dummy.updateMatrix(); spikeMesh.setMatrixAt(i, dummy.matrix);
+      dummy.scale.x *= 1.035; dummy.scale.z *= 1.035; dummy.updateMatrix(); spikeGlow.setMatrixAt(i, dummy.matrix);
+      changed = true;
+    }
+    // Release operations also dirty the matrices, even when the last spike breaks.
+    if (changed || spikeHighWater) spikeMesh.instanceMatrix.needsUpdate = spikeGlow.instanceMatrix.needsUpdate = true;
+  }
+
+  const shards = makeInstances(new THREE.IcosahedronGeometry(.085, 0), new THREE.MeshBasicMaterial({ color: 0x9ce8ff, transparent: true, opacity: .78, blending: THREE.AdditiveBlending, depthWrite: false }), MAX_PARTICLES);
+  const particles = Array.from({ length: MAX_PARTICLES }, () => ({ active: false, x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, born: 0, life: 0, size: 0, rx: 0, rz: 0 }));
+  shards.count = 0;
+  function emitShards(x, y, z, count, force, impact) {
+    for (let n = 0; n < count; n++) {
+      const id = particleCursor; particleCursor = (particleCursor + 1) % MAX_PARTICLES;
+      const p = particles[id], angle = randomRange(0, Math.PI * 2), speed = randomRange(1.2, 3.5) * force;
+      p.active = true; p.x = x; p.y = y; p.z = z;
+      p.vx = Math.cos(angle) * speed; p.vz = Math.sin(angle) * speed; p.vy = randomRange(1.8, 4.5) * force;
+      p.born = time; p.life = impact ? randomRange(.65, 1.1) : randomRange(.32, .65);
+      p.size = impact ? randomRange(1.1, 2.3) : randomRange(.45, 1.15);
+      p.rx = randomRange(0, Math.PI); p.rz = randomRange(0, Math.PI);
+      shards.count = Math.max(shards.count, id + 1);
+    }
+  }
+  function animateParticles(dt) {
+    for (let i = 0; i < shards.count; i++) {
+      const p = particles[i];
+      if (!p.active) continue;
+      const age = time - p.born;
+      if (age >= p.life) { p.active = false; shards.setMatrixAt(i, zeroMatrix); continue; }
+      p.vy -= 8.5 * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.z += p.vz * dt;
+      if (p.y < .055) { p.y = .055; p.vy = Math.abs(p.vy) * .22; p.vx *= .8; p.vz *= .8; }
+      p.rx += dt * 4; p.rz += dt * 3;
+      dummy.position.set(p.x, p.y, p.z); dummy.rotation.set(p.rx, 0, p.rz);
+      const scale = p.size * Math.min(1, (1 - age / p.life) * 3);
+      dummy.scale.set(scale, scale * 1.65, scale); dummy.updateMatrix(); shards.setMatrixAt(i, dummy.matrix);
+    }
+    shards.instanceMatrix.needsUpdate = true;
+  }
+
+  const warningRingGeo = new THREE.TorusGeometry(2.5, .04, 6, 80);
+  const warningDiskGeo = new THREE.CircleGeometry(2.5, 64);
+  const meteorGeo = new THREE.IcosahedronGeometry(.74, 0);
+  const meteorTailGeo = new THREE.ConeGeometry(.5, 3, 6);
+  const impactRingGeo = new THREE.TorusGeometry(1, .045, 6, 80);
+  const impactDiskGeo = new THREE.CircleGeometry(1, 48);
+  function glowMaterial(hex, opacity) {
+    return new THREE.MeshBasicMaterial({ color: hex, transparent: true, opacity, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide });
+  }
+  function castAt(x, z) {
+    if (!ui.error.hidden) return;
+    if (casts.length >= MAX_CASTS) destroyCast(casts[0]);
+    const settings = {
+      length: Number(ui.length.value), branch: Number(ui.branch.value), speed: Number(ui.speed.value),
+      attraction: Number(ui.attraction.value), hold: Number(ui.hold.value), arms: Number(ui.arms.value)
+    };
+    const layer = document.createElement('canvas'); layer.width = layer.height = TEX_SIZE;
+    const cast = {
+      x: clamp(x, -17.5, 17.5), z: clamp(z, -17.5, 17.5), settings, phase: 'warning', born: time,
+      impactAt: -1, holdAt: 0, shatterAt: 0, fade: 1, accumulator: 0, nodes: [], tips: [],
+      visited: new Uint8Array(FROST_GRID * FROST_GRID), victims: new Uint8Array(MAX_ENEMIES),
+      layer, context: layer.getContext('2d'), breakCursor: 0, maxDistance: 1,
+      group: new THREE.Group(), materials: []
+    };
+    function own(material) { cast.materials.push(material); return material; }
+    cast.warningRing = new THREE.Mesh(warningRingGeo, own(glowMaterial(0x9bdfff, .08)));
+    cast.warningRing.rotation.x = Math.PI / 2; cast.warningRing.position.y = .065;
+    cast.warningDisk = new THREE.Mesh(warningDiskGeo, own(glowMaterial(0x6fcfff, .015)));
+    cast.warningDisk.rotation.x = -Math.PI / 2; cast.warningDisk.position.y = .05;
+    cast.meteor = new THREE.Group();
+    cast.meteor.add(new THREE.Mesh(meteorGeo, own(new THREE.MeshPhongMaterial({ color: 0xd6f6ff, emissive: 0x267491, shininess: 100, flatShading: true }))));
+    const meteorOutline = new THREE.Mesh(meteorGeo, own(glowMaterial(0x8bdfff, .38)));
+    meteorOutline.material.wireframe = true; meteorOutline.scale.setScalar(1.03); cast.meteor.add(meteorOutline);
+    const tail = new THREE.Mesh(meteorTailGeo, own(glowMaterial(0x69cdff, .12)));
+    tail.position.y = 1.9; cast.meteor.add(tail); cast.meteor.visible = false;
+    cast.impactRing = new THREE.Mesh(impactRingGeo, own(glowMaterial(0xb3efff, .8)));
+    cast.impactRing.rotation.x = Math.PI / 2; cast.impactRing.position.y = .075; cast.impactRing.visible = false;
+    cast.flash = new THREE.Mesh(impactDiskGeo, own(glowMaterial(0xd1f5ff, .6)));
+    cast.flash.rotation.x = -Math.PI / 2; cast.flash.position.y = .07; cast.flash.visible = false;
+    cast.light = new THREE.PointLight(0x8fdbff, 0, 12, 2); cast.light.position.y = 2;
+    cast.group.add(cast.warningRing, cast.warningDisk, cast.meteor, cast.impactRing, cast.flash, cast.light);
+    cast.group.position.set(cast.x, 0, cast.z); scene.add(cast.group);
+    casts.push(cast); updateStatus();
+  }
+  function impact(cast) {
+    cast.phase = 'growing'; cast.impactAt = time;
+    cast.meteor.visible = cast.warningRing.visible = cast.warningDisk.visible = false;
+    emitShards(cast.x, .4, cast.z, 12, 1.4, true);
+    const context = cast.context, px = (cast.x + HALF) / SIZE * TEX_SIZE, py = (cast.z + HALF) / SIZE * TEX_SIZE;
+    const halo = context.createRadialGradient(px, py, 0, px, py, 72);
+    halo.addColorStop(0, 'rgba(180,235,255,.30)'); halo.addColorStop(.3, 'rgba(140,215,245,.10)'); halo.addColorStop(1, 'rgba(140,215,245,0)');
+    context.fillStyle = halo; context.fillRect(px - 72, py - 72, 144, 144);
+    const rotation = randomRange(0, TURN);
+    for (let arm = 0; arm < cast.settings.arms; arm++) {
+      cast.tips.push({ x: cast.x, z: cast.z, base: rotation + arm * Math.PI * 2 / cast.settings.arms, direction: 0, remaining: cast.settings.length, depth: 0 });
+    }
+    freezeNear(cast, cast.x, cast.z);
+    groundDirty = true;
+  }
+  function drawNode(cast, oldX, oldZ, node) {
+    const ctx = cast.context, scale = TEX_SIZE / SIZE;
+    const ax = (oldX + HALF) * scale, ay = (oldZ + HALF) * scale;
+    const bx = (node.x + HALF) * scale, by = (node.z + HALF) * scale;
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by);
+    ctx.strokeStyle = 'rgba(151,218,245,.09)'; ctx.lineWidth = node.depth ? 8 : 13;
+    ctx.shadowColor = 'rgba(158,226,255,.25)'; ctx.shadowBlur = 7; ctx.stroke();
+    ctx.shadowBlur = 0; ctx.strokeStyle = node.depth ? 'rgba(207,242,255,.78)' : 'rgba(230,249,255,.95)';
+    ctx.lineWidth = node.depth ? 1.5 : 3; ctx.stroke();
+    // Fine lateral needles make the canvas pattern readable even with 3D spikes disabled.
+    if (Math.random() < .45) {
+      const angle = Math.atan2(node.z - oldZ, node.x - oldX), needle = randomRange(2, 5);
+      ctx.lineWidth = .7; ctx.strokeStyle = 'rgba(196,238,255,.35)'; ctx.beginPath();
+      for (const side of [-1, 1]) {
+        ctx.moveTo(bx, by); ctx.lineTo(bx + Math.cos(angle + side * TURN) * needle, by + Math.sin(angle + side * TURN) * needle);
+      }
+      ctx.stroke();
+    }
+    groundDirty = true;
+  }
+  function frostCell(x, z) {
+    const gx = Math.floor((x + HALF) / FROST_CELL), gz = Math.floor((z + HALF) / FROST_CELL);
+    return gx < 0 || gx >= FROST_GRID || gz < 0 || gz >= FROST_GRID ? -1 : gz * FROST_GRID + gx;
+  }
+  function growTip(cast, tip) {
+    if (tip.remaining + 1e-6 < STEP || totalNodes >= MAX_NODES) return false;
+    // Snap relative to this arm, preserving equally spaced 3/4/6/8-arm origins.
+    const wobble = randomRange(-.035, .035);
+    let direction = Math.round((tip.direction * TURN + wobble) / TURN);
+    if (Math.random() < cast.settings.attraction) {
+      const targetId = nearestUnfrozen(tip.x, tip.z);
+      if (targetId >= 0) {
+        const target = enemies[targetId]; let best = Infinity;
+        for (let candidate = direction - 1; candidate <= direction + 1; candidate++) {
+          const angle = tip.base + candidate * TURN;
+          const dx = tip.x + Math.cos(angle) * STEP - target.x, dz = tip.z + Math.sin(angle) * STEP - target.z;
+          const distance = dx * dx + dz * dz;
+          if (distance < best) { best = distance; direction = candidate; }
+        }
+      }
+    }
+    const angle = tip.base + direction * TURN, x = tip.x + Math.cos(angle) * STEP, z = tip.z + Math.sin(angle) * STEP;
+    const cell = frostCell(x, z);
+    if (cell < 0 || cast.visited[cell]) return false;
+    cast.visited[cell] = 1;
+    const distance = Math.hypot(x - cast.x, z - cast.z);
+    const node = { x, z, distance, depth: tip.depth, spike: -1, broken: false, breakAt: 0 };
+    cast.nodes.push(node); totalNodes++; cast.maxDistance = Math.max(cast.maxDistance, distance);
+    drawNode(cast, tip.x, tip.z, node);
+    if (ui.spikes.checked) addSpike(cast, node, false);
+    freezeNear(cast, x, z);
+    tip.x = x; tip.z = z; tip.direction = direction; tip.remaining -= STEP;
+    const childLength = tip.remaining * .45;
+    if (childLength >= STEP && cast.tips.length < MAX_TIPS && totalNodes < MAX_NODES && Math.random() < cast.settings.branch) {
+      cast.tips.push({ x, z, base: tip.base, direction: direction + (Math.random() < .5 ? -1 : 1), remaining: childLength, depth: tip.depth + 1 });
+    }
+    return tip.remaining + 1e-6 >= STEP;
+  }
+  function grow(cast, dt) {
+    cast.accumulator = Math.min(5, cast.accumulator + dt * cast.settings.speed);
+    let budget = 512;
+    while (cast.accumulator >= 1 && cast.tips.length && budget > 0) {
+      cast.accumulator--;
+      const initialCount = cast.tips.length;
+      for (let i = initialCount - 1; i >= 0 && budget > 0; i--, budget--) {
+        if (!growTip(cast, cast.tips[i])) {
+          cast.tips[i] = cast.tips[cast.tips.length - 1]; cast.tips.pop();
+        }
+      }
+    }
+    if (!cast.tips.length || totalNodes >= MAX_NODES) {
+      cast.tips.length = 0; cast.phase = 'holding'; cast.holdAt = time;
+    }
+  }
+  function beginShatter(cast) {
+    cast.phase = 'shattering'; cast.shatterAt = time; cast.breakCursor = 0;
+    cast.nodes.sort((a, b) => b.distance - a.distance);
+    for (const node of cast.nodes) node.breakAt = (1 - node.distance / cast.maxDistance) * .95;
+    // Remember enemies hit during growth, even if their two-second movement freeze has expired.
+    for (let i = 0; i < enemyCount; i++) {
+      if (!cast.victims[i]) continue;
+      const e = enemies[i]; e.frozenUntil = 0; e.flashUntil = time + .4; e.shellUntil = time + .22;
+      emitShards(e.x, .65, e.z, 9, 1.15, false); cast.victims[i] = 0;
+    }
+  }
+  function updateCast(cast, dt) {
+    const age = time - cast.born;
+    if (cast.phase === 'warning') {
+      const t = clamp(age, 0, 1);
+      cast.warningRing.material.opacity = .08 + .72 * t;
+      cast.warningDisk.material.opacity = .015 + .075 * t;
+      if (age >= 1) { cast.phase = 'falling'; cast.meteor.visible = true; }
+    }
+    if (cast.phase === 'falling') {
+      const t = clamp((age - 1) / .3, 0, 1);
+      cast.meteor.position.y = 16 * (1 - t * t) + .72;
+      cast.meteor.rotation.set(t * 1.2, t * 1.6, t * .6);
+      cast.warningRing.material.opacity = .9;
+      if (t >= 1) impact(cast);
+    }
+    if (cast.impactAt >= 0) {
+      const sinceImpact = time - cast.impactAt, t = clamp(sinceImpact / .65, 0, 1);
+      cast.impactRing.visible = t < 1;
+      cast.impactRing.scale.setScalar(.5 + 6.5 * (1 - Math.pow(1 - t, 2)));
+      cast.impactRing.material.opacity = .9 * (1 - t);
+      cast.flash.visible = sinceImpact < .26; cast.flash.scale.setScalar(1.1 + t * 3);
+      cast.flash.material.opacity = .7 * Math.max(0, 1 - sinceImpact / .26);
+      cast.light.intensity = 5 * Math.pow(1 - t, 2);
+    }
+    if (cast.phase === 'growing') grow(cast, dt);
+    if (cast.phase === 'holding' && time - cast.holdAt >= cast.settings.hold) beginShatter(cast);
+    if (cast.phase === 'shattering') {
+      const elapsed = time - cast.shatterAt;
+      while (cast.breakCursor < cast.nodes.length && cast.nodes[cast.breakCursor].breakAt <= elapsed) {
+        const node = cast.nodes[cast.breakCursor++]; node.broken = true; releaseSpike(node, true);
+      }
+      cast.fade = Math.max(0, 1 - elapsed / FROST_FADE_TIME);
+      groundDirty = true;
+      if (elapsed >= FROST_FADE_TIME) destroyCast(cast);
+    }
+  }
+  function destroyCast(cast) {
+    const index = casts.indexOf(cast);
+    if (index < 0) return;
+    for (const node of cast.nodes) releaseSpike(node, false);
+    totalNodes -= cast.nodes.length;
+    casts.splice(index, 1); scene.remove(cast.group);
+    for (const material of cast.materials) material.dispose();
+    cast.tips.length = 0; groundDirty = true;
+  }
+  function updateGround() {
+    if (!groundDirty || time - lastTextureUpdate < 1 / 30) return;
+    groundContext.globalAlpha = 1; groundContext.drawImage(baseCanvas, 0, 0);
+    for (const cast of casts) {
+      if (cast.impactAt < 0) continue;
+      groundContext.globalAlpha = cast.fade; groundContext.drawImage(cast.layer, 0, 0);
+    }
+    groundContext.globalAlpha = 1; groundTexture.needsUpdate = true;
+    groundDirty = false; lastTextureUpdate = time;
+  }
+  function clearFrost() {
+    while (casts.length) destroyCast(casts[casts.length - 1]);
+    for (let i = 0; i < MAX_PARTICLES; i++) { particles[i].active = false; shards.setMatrixAt(i, zeroMatrix); }
+    shards.instanceMatrix.needsUpdate = true; shards.count = 0; particleCursor = 0;
+    spikeHighWater = 0; spikeMesh.count = spikeGlow.count = 0;
+    for (const e of enemies) e.frozenUntil = e.flashUntil = e.shellUntil = 0;
+    groundDirty = true; lastTextureUpdate = -1; updateGround(); renderEnemies(); updateStatus();
+  }
+  function castAtGroup() {
+    if (!enemyCount) { castAt(0, 0); return; }
+    // Only a button press performs this tiny (at most 24x24) cluster search.
+    let best = 0, most = -1;
+    for (let i = 0; i < enemyCount; i++) {
+      let neighbors = 0;
+      for (let j = 0; j < enemyCount; j++) {
+        const dx = enemies[j].x - enemies[i].x, dz = enemies[j].z - enemies[i].z;
+        if (dx * dx + dz * dz < 49) neighbors++;
+      }
+      if (neighbors > most) { best = i; most = neighbors; }
+    }
+    let x = 0, z = 0, count = 0;
+    for (let i = 0; i < enemyCount; i++) {
+      const dx = enemies[i].x - enemies[best].x, dz = enemies[i].z - enemies[best].z;
+      if (dx * dx + dz * dz < 49) { x += enemies[i].x; z += enemies[i].z; count++; }
+    }
+    castAt(x / count, z / count);
+  }
+  function updateStatus() {
+    const newest = casts.length ? casts[casts.length - 1] : null;
+    let frozen = 0;
+    for (let i = 0; i < enemyCount; i++) if (enemies[i].frozenUntil > time) frozen++;
+    const nextPhase = newest ? phaseNames[newest.phase] : '대기';
+    if (ui.phase.textContent !== nextPhase) ui.phase.textContent = nextPhase;
+    const nodes = String(totalNodes), spikes = String(ui.spikes.checked ? activeSpikes : 0), frozenText = String(frozen);
+    if (ui.nodes.textContent !== nodes) ui.nodes.textContent = nodes;
+    if (ui.spikeCount.textContent !== spikes) ui.spikeCount.textContent = spikes;
+    if (ui.frozen.textContent !== frozenText) ui.frozen.textContent = frozenText;
+  }
+  byId('castButton').addEventListener('click', castAtGroup);
+  byId('resetEnemies').addEventListener('click', resetEnemies);
+  byId('clearFrost').addEventListener('click', clearFrost);
+  ui.enemyCount.addEventListener('input', resetEnemies);
+  ui.spikes.addEventListener('change', () => {
+    spikeMesh.visible = spikeGlow.visible = ui.spikes.checked;
+    if (ui.spikes.checked) for (const cast of casts) {
+      if (cast.phase !== 'growing' && cast.phase !== 'holding') continue;
+      for (const node of cast.nodes) if (!node.broken && node.spike < 0) addSpike(cast, node, true);
+    }
+    updateStatus();
+  });
+
+  const raycaster = new THREE.Raycaster(), pointer = new THREE.Vector2();
+  const floorHits = [];
+  const drag = { active: false, id: -1, x: 0, y: 0, lastX: 0, lastY: 0, maxDistance: 0 };
+  const canvas = renderer.domElement;
+  canvas.addEventListener('pointerdown', event => {
+    if (!event.isPrimary || event.button !== 0 || drag.active) return;
+    drag.active = true; drag.id = event.pointerId;
+    drag.x = drag.lastX = event.clientX; drag.y = drag.lastY = event.clientY; drag.maxDistance = 0;
+    canvas.setPointerCapture(event.pointerId);
+  });
+  canvas.addEventListener('pointermove', event => {
+    if (!drag.active || event.pointerId !== drag.id) return;
+    const dx = event.clientX - drag.x, dy = event.clientY - drag.y;
+    drag.maxDistance = Math.max(drag.maxDistance, dx * dx + dy * dy);
+    if (drag.maxDistance >= 25) {
+      orbit.theta -= (event.clientX - drag.lastX) * .007;
+      orbit.phi = clamp(orbit.phi - (event.clientY - drag.lastY) * .006, .25, 1.23);
+      updateCamera(); ui.viewer.classList.add('dragging');
+    }
+    drag.lastX = event.clientX; drag.lastY = event.clientY;
+  });
+  canvas.addEventListener('pointerup', event => {
+    if (!drag.active || event.pointerId !== drag.id) return;
+    const dx = event.clientX - drag.x, dy = event.clientY - drag.y;
+    drag.maxDistance = Math.max(drag.maxDistance, dx * dx + dy * dy);
+    const clicked = drag.maxDistance < 25;
+    drag.active = false; ui.viewer.classList.remove('dragging');
+    if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
+    if (!clicked) return;
+    const rect = canvas.getBoundingClientRect();
+    pointer.set((event.clientX - rect.left) / rect.width * 2 - 1, -(event.clientY - rect.top) / rect.height * 2 + 1);
+    raycaster.setFromCamera(pointer, camera);
+    floorHits.length = 0; raycaster.intersectObject(ground, false, floorHits);
+    if (floorHits.length) castAt(floorHits[0].point.x, floorHits[0].point.z);
+  });
+  function cancelDrag() { drag.active = false; ui.viewer.classList.remove('dragging'); }
+  canvas.addEventListener('pointercancel', cancelDrag);
+  canvas.addEventListener('lostpointercapture', cancelDrag);
+  canvas.addEventListener('wheel', event => {
+    event.preventDefault();
+    const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? 520 : 1);
+    orbit.radius = clamp(orbit.radius * Math.exp(clamp(delta, -240, 240) * .0012), 18, 68);
+    updateCamera();
+  }, { passive: false });
+
+  resetEnemies();
+  let previous = performance.now();
+  function frame(now) {
+    requestAnimationFrame(frame);
+    const dt = document.hidden ? 0 : Math.min(.05, Math.max(0, (now - previous) / 1000));
+    previous = now;
+    if (!ui.error.hidden || document.hidden) return;
+    time += dt;
+    moveEnemies(dt);
+    // Iterate backward because finished casts remove themselves.
+    for (let i = casts.length - 1; i >= 0; i--) updateCast(casts[i], dt);
+    animateSpikes(); animateParticles(dt); renderEnemies(); updateGround();
+    if (time - lastStatusUpdate >= .12) { updateStatus(); lastStatusUpdate = time; }
+    renderer.render(scene, camera);
+  }
+  requestAnimationFrame(frame);
+  const demonstration = window.setTimeout(castAtGroup, 500);
+  byId('clearFrost').addEventListener('click', () => window.clearTimeout(demonstration));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>멩거 스펀지 보스 패턴 데모</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #f1f4f1; --panel: #ffffff; --ink: #23342f; --muted: #697b73;
+      --border: #d7e1db; --accent: #087f70; --accent-soft: #e3f3eb;
+      --track: #cddbd4; --button: #f5f8f5; --shadow: #16382a0a;
+      --view: #17222a; --view-ink: #e3eee7; --view-muted: #a4b9b2;
+      --cyan: #76ffdf; --danger: #d85a30;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+        --page: #111916; --panel: #1a2520; --ink: #e1ece4; --muted: #9aada1;
+        --border: #34463a; --accent: #78dac0; --accent-soft: #243e33;
+        --track: #3e5647; --button: #25332b; --shadow: #00000025;
+      }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--page); color: var(--ink); font: 14px/1.6 system-ui, sans-serif; }
+    main { width: calc(100% - 32px); max-width: 960px; margin: 32px auto; }
+    .eyebrow { color: var(--accent); font-size: 11px; font-weight: 750; letter-spacing: .17em; margin: 0 0 5px; }
+    h1 { margin: 0; font-size: clamp(24px, 4vw, 32px); letter-spacing: -.055em; line-height: 1.3; }
+    .intro { color: var(--muted); margin: 9px 0 21px; font-size: 13px; }
+    .view { height: 520px; position: relative; border: 1px solid var(--border); background: var(--view); border-radius: 16px; overflow: hidden; }
+    canvas { display: block; width: 100%; height: 100%; touch-action: none; outline: none; }
+    canvas:focus-visible { outline: 2px solid var(--cyan); outline-offset: -3px; }
+    .help { position: absolute; z-index: 2; left: 17px; top: 14px; font-size: 11px; line-height: 1.8; color: var(--view-muted); pointer-events: none; text-shadow: 0 1px 3px var(--view); }
+    .help strong { color: var(--view-ink); font-weight: 600; }
+    .phase-hud { position: absolute; z-index: 2; right: 16px; top: 16px; color: var(--view-ink); pointer-events: none; text-align: right; font-size: 12px; }
+    .phase-hud b { display: block; font-weight: 650; }
+    .phase-hud span { font-size: 10px; color: var(--view-muted); }
+    .progress { margin-top: 7px; width: 100px; height: 2px; background: #ffffff20; overflow: hidden; }
+    .progress i { display: block; height: 100%; background: var(--cyan); transform-origin: left; transform: scaleX(0); }
+    .legend { position: absolute; bottom: 13px; left: 17px; right: 17px; color: var(--view-muted); display: flex; flex-wrap: wrap; gap: 7px 16px; pointer-events: none; font-size: 10px; }
+    .legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); }
+    .dot.player { background: #639922; } .dot.enemy { background: var(--danger); } .dot.wall { background: #b3b9bd; }
+    .controls { margin-top: 14px; padding: 18px; border: 1px solid var(--border); background: var(--panel); border-radius: 14px; box-shadow: 0 8px 28px var(--shadow); }
+    .toolbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    button, select { font: inherit; color: var(--ink); border: 1px solid var(--border); background: var(--button); border-radius: 7px; padding: 7px 12px; cursor: pointer; }
+    button:hover { border-color: var(--accent); } button:active { transform: translateY(1px); }
+    button.primary { background: var(--accent-soft); color: var(--accent); border-color: var(--track); font-weight: 700; }
+    button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .counters { display: flex; gap: 12px; color: var(--muted); margin-left: auto; font-size: 12px; }
+    .counters b { color: var(--ink); font-variant-numeric: tabular-nums; margin-left: 3px; }
+    .sliders { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; padding: 19px 0 17px; margin-top: 15px; border-top: 1px solid var(--border); }
+    .slider label { display: flex; justify-content: space-between; gap: 7px; font-size: 12px; }
+    output { color: var(--accent); font-weight: 650; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    input[type=range] { width: 100%; margin: 11px 0 0; accent-color: var(--accent); cursor: pointer; }
+    .options { display: flex; gap: 10px 21px; align-items: center; flex-wrap: wrap; padding-top: 14px; border-top: 1px solid var(--border); font-size: 12px; }
+    .options label { display: inline-flex; align-items: center; gap: 7px; }
+    input[type=checkbox] { accent-color: var(--accent); width: 15px; height: 15px; margin: 0; cursor: pointer; }
+    select { padding: 4px 24px 4px 9px; font-size: 12px; }
+    .note { color: var(--muted); font-size: 11px; margin: 13px 0 0; }
+    .status { margin: 12px 1px 0; color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+    .error { position: absolute; inset: 0; padding: 28px; display: grid; place-content: center; text-align: center; color: var(--view-ink); background: var(--view); z-index: 5; }
+    @media (max-width: 640px) {
+      main { margin-top: 22px; } .controls { padding: 14px; }
+      .sliders { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px 20px; }
+      .counters { margin-left: 0; width: 100%; padding-top: 5px; }
+      .help { left: 12px; top: 12px; font-size: 10px; max-width: 62%; }
+      .phase-hud { right: 12px; top: 13px; font-size: 11px; } .progress { width: 73px; }
+      .legend { left: 12px; right: 12px; gap: 6px 12px; }
+      .options { gap: 12px 16px; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="eyebrow">프랙털 보스 실험실 · 27미터 경기장</p>
+    <h1>멩거 스펀지 분열</h1>
+    <p class="intro">공중에서 갈라지는 큐브 보스. 청록빛 구멍으로 피하고, 착지한 벽 사이에서 살아남으세요.</p>
+  </header>
+  <div class="view" id="view">
+    <div class="help"><strong>마우스를 올리면 이동</strong> · 클릭 후 방향 키 W A S D<br>드래그로 시점 회전 · 휠로 확대 · 청록 칸은 안전</div>
+    <div class="phase-hud"><b id="phaseLabel">휴식 · L 1</b><span id="phaseDetail">첫 시전 준비</span><div class="progress"><i id="phaseProgress"></i></div></div>
+    <div class="legend"><span><i class="dot"></i>안전 칸</span><span><i class="dot wall"></i>낙하 · 벽</span><span><i class="dot player"></i>플레이어</span><span><i class="dot enemy"></i>배회하는 적</span></div>
+  </div>
+  <section class="controls" aria-label="패턴 설정">
+    <div class="toolbar">
+      <button class="primary" id="next">다음 페이즈</button>
+      <button id="reset">처음부터</button>
+      <button id="cast">지금 시전</button>
+      <div class="counters" aria-label="전투 기록"><span>페이즈<b id="phaseCount">1</b></span><span>맞음<b id="hits">0</b></span><span>회피<b id="dodges">0</b></span></div>
+    </div>
+    <div class="sliders">
+      <div class="slider"><label for="warning">예고 시간<output id="warningValue">1.6초</output></label><input id="warning" type="range" min="0.6" max="3" step="0.1" value="1.6"></div>
+      <div class="slider"><label for="hold">유지 시간<output id="holdValue">2.5초</output></label><input id="hold" type="range" min="0.5" max="5" step="0.1" value="2.5"></div>
+      <div class="slider"><label for="fallSpeed">낙하 속도 배율<output id="fallSpeedValue">1배</output></label><input id="fallSpeed" type="range" min="0.5" max="2" step="0.1" value="1"></div>
+      <div class="slider"><label for="playerSpeed">플레이어 속도<output id="playerSpeedValue">5미터/초</output></label><input id="playerSpeed" type="range" min="2" max="8" step="0.1" value="5"></div>
+    </div>
+    <div class="options">
+      <label for="level">단계<select id="level"><option value="1">L1</option><option value="2">L2</option><option value="3">L3</option></select></label>
+      <label><input type="checkbox" id="shift" checked>구멍 이동</label>
+      <label><input type="checkbox" id="invert">반전</label>
+      <label><input type="checkbox" id="auto" checked>자동 반복</label>
+      <label><input type="checkbox" id="collision" checked>벽 충돌</label>
+    </div>
+    <p class="note" id="note">반전은 구멍 기둥만 떨어뜨립니다. 안전 칸까지 이동할 시간이 부족하면 예고를 늘립니다. 층마다 0.06초 간격으로 낙하합니다.</p>
+  </section>
+  <p class="status" id="status" role="status" aria-live="off">휴식 · L 1 · 조각 20 · 안전 칸 1 · 가까운 안전 칸 — 미터 · 맞음 0 / 회피 0 · FPS 0</p>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(() => {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const view = $('view');
+  function showError(message) {
+    const box = document.createElement('div'); box.className = 'error'; box.textContent = message; view.appendChild(box);
+    $('status').textContent = message;
+  }
+  if (!window.THREE) { showError('3차원 엔진을 불러오지 못했습니다. 인터넷 연결을 확인하고 새로고침해 주세요.'); return; }
+  const SIZE = 27, HALF = 13.5, MAX_PIECES = 8000, MAX_CELLS = 729, MAX_DUST = 300;
+  const RADIUS = 0.4, INSET = 0.43, HOVER_BASE = 12;
+  const ui = { warning: $('warning'), hold: $('hold'), fall: $('fallSpeed'), speed: $('playerSpeed'), level: $('level'), shift: $('shift'), invert: $('invert'), auto: $('auto'), collision: $('collision') };
+  const rounded = value => Math.round(value * 10) / 10;
+  for (const [id, suffix] of [['warning', '초'], ['hold', '초'], ['fallSpeed', '배'], ['playerSpeed', '미터/초']]) {
+    $(id).addEventListener('input', () => { $(id + 'Value').textContent = rounded(Number($(id).value)) + suffix; });
+  }
+  function carpetAt(x, z, level) {
+    for (let d = 0; d < level; d++) {
+      if (x % 3 === 1 && z % 3 === 1) return false;
+      x = Math.floor(x / 3); z = Math.floor(z / 3);
+    }
+    return true;
+  }
+  function mengerAt(x, y, z, level) {
+    for (let d = 0; d < level; d++) {
+      if ((x % 3 === 1 ? 1 : 0) + (y % 3 === 1 ? 1 : 0) + (z % 3 === 1 ? 1 : 0) >= 2) return false;
+      x = Math.floor(x / 3); y = Math.floor(y / 3); z = Math.floor(z / 3);
+    }
+    return true;
+  }
+  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+  const mod = (v, n) => ((v % n) + n) % n;
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' }); }
+  catch (error) { showError('이 브라우저에서 3차원 화면을 시작하지 못했습니다. 하드웨어 가속 설정을 확인해 주세요.'); return; }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+  renderer.shadowMap.enabled = false;
+  renderer.domElement.tabIndex = 0;
+  renderer.domElement.setAttribute('aria-label', '멩거 스펀지 경기장. 마우스로 이동하고 드래그로 시점을 회전하세요.');
+  view.insertBefore(renderer.domElement, view.firstChild);
+  const scene = new THREE.Scene(); scene.background = new THREE.Color(0x17222a);
+  scene.fog = new THREE.Fog(0x17222a, 105, 220);
+  const camera = new THREE.PerspectiveCamera(46, 1, 0.1, 300);
+  scene.add(new THREE.HemisphereLight(0xc6ddd4, 0x243341, 0.68));
+  const keyLight = new THREE.DirectionalLight(0xffefd1, 0.95); keyLight.position.set(-18, 35, 20); scene.add(keyLight);
+  const rimLight = new THREE.DirectionalLight(0x8fc7dc, 0.55); rimLight.position.set(20, 24, -15); scene.add(rimLight);
+  const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
+  const planeGeometry = new THREE.PlaneGeometry(1, 1);
+  const cylinderGeometry = new THREE.CylinderGeometry(1, 1, 1, 6);
+  const transform = new THREE.Object3D(), matrix = new THREE.Matrix4(), color = new THREE.Color();
+  function boxAt(mesh, index, x, y, z, sx, sy, sz) {
+    matrix.makeScale(sx, sy, sz); matrix.setPosition(x, y, z); mesh.setMatrixAt(index, matrix);
+  }
+  function cylinderAt(mesh, index, x, y, z, radius, length, direction) {
+    transform.position.set(x, y, z); transform.scale.set(radius, length, radius);
+    transform.rotation.set(direction === 'z' ? Math.PI / 2 : 0, 0, direction === 'x' ? Math.PI / 2 : 0);
+    transform.updateMatrix(); mesh.setMatrixAt(index, transform.matrix);
+  }
+  function floorAt(mesh, index, x, z, size, height = 0.064) {
+    transform.position.set(x, height, z); transform.rotation.set(-Math.PI / 2, 0, 0); transform.scale.set(size, size, 1);
+    transform.updateMatrix(); mesh.setMatrixAt(index, transform.matrix);
+  }
+  const stone = new THREE.MeshStandardMaterial({ color: 0xd1d2c8, roughness: 0.96 });
+  const floor = new THREE.Mesh(new THREE.BoxGeometry(27, 0.35, 27), stone); floor.position.y = -0.19; scene.add(floor);
+  const tiles = new THREE.InstancedMesh(planeGeometry, new THREE.MeshStandardMaterial({ roughness: 1 }), MAX_CELLS);
+  for (let z = 0, i = 0; z < 27; z++) for (let x = 0; x < 27; x++, i++) {
+    floorAt(tiles, i, x - 13, z - 13, 0.997, 0.036);
+    color.setRGB(0.63 + ((x * 13 + z * 7) % 5) * 0.01, 0.65 + ((x + z * 3) % 4) * 0.008, 0.59 + ((x * 3 + z) % 5) * 0.009);
+    tiles.setColorAt(i, color);
+  }
+  scene.add(tiles);
+  const fineGridVertices = [];
+  for (let i = 0; i <= 27; i++) {
+    const p = i - HALF;
+    fineGridVertices.push(p, 0.045, -HALF, p, 0.045, HALF, -HALF, 0.045, p, HALF, 0.045, p);
+  }
+  const fineGridGeometry = new THREE.BufferGeometry(); fineGridGeometry.setAttribute('position', new THREE.Float32BufferAttribute(fineGridVertices, 3));
+  scene.add(new THREE.LineSegments(fineGridGeometry, new THREE.LineBasicMaterial({ color: 0x7d8d82, transparent: true, opacity: 0.32, linewidth: 1 })));
+  const majorGrid = new THREE.InstancedMesh(cylinderGeometry, new THREE.MeshBasicMaterial({ color: 0x687b70, transparent: true, opacity: 0.55 }), 20);
+  for (let i = 0, k = 0; i <= 27; i += 3) {
+    const r = i % 9 === 0 ? 0.031 : 0.016;
+    cylinderAt(majorGrid, k++, i - HALF, 0.048, 0, r, 27, 'z');
+    cylinderAt(majorGrid, k++, 0, 0.048, i - HALF, r, 27, 'x');
+  }
+  scene.add(majorGrid);
+  const wallMaterial = new THREE.MeshStandardMaterial({ color: 0x9aab9f, roughness: 0.92 });
+  const perimeter = new THREE.InstancedMesh(boxGeometry, wallMaterial, 4);
+  boxAt(perimeter, 0, 0, 0.3, -13.65, 27.6, 0.6, 0.3); boxAt(perimeter, 1, 0, 0.3, 13.65, 27.6, 0.6, 0.3);
+  boxAt(perimeter, 2, -13.65, 0.3, 0, 0.3, 0.6, 27); boxAt(perimeter, 3, 13.65, 0.3, 0, 0.3, 0.6, 27); scene.add(perimeter);
+  const glowMaterial = new THREE.MeshBasicMaterial({ color: 0x69ffe0, blending: THREE.AdditiveBlending, transparent: true, opacity: 0.9, depthWrite: false, toneMapped: false });
+  const perimeterGlow = new THREE.InstancedMesh(cylinderGeometry, glowMaterial, 4);
+  cylinderAt(perimeterGlow, 0, 0, 0.61, -13.65, 0.024, 27.4, 'x'); cylinderAt(perimeterGlow, 1, 0, 0.61, 13.65, 0.024, 27.4, 'x');
+  cylinderAt(perimeterGlow, 2, -13.65, 0.61, 0, 0.024, 27.4, 'z'); cylinderAt(perimeterGlow, 3, 13.65, 0.61, 0, 0.024, 27.4, 'z'); scene.add(perimeterGlow);
+  const boss = new THREE.Group();
+  const bossCube = new THREE.Mesh(new THREE.BoxGeometry(3, 3, 3), new THREE.MeshStandardMaterial({ color: 0x8f969e, metalness: 0.35, roughness: 0.45 })); boss.add(bossCube);
+  const bossEdges = new THREE.InstancedMesh(cylinderGeometry, new THREE.MeshBasicMaterial({ color: 0xbcfff3, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false }), 12);
+  let edgeIndex = 0;
+  for (const a of [-1.51, 1.51]) for (const b of [-1.51, 1.51]) {
+    cylinderAt(bossEdges, edgeIndex++, 0, a, b, 0.032, 3.05, 'x');
+    cylinderAt(bossEdges, edgeIndex++, a, 0, b, 0.032, 3.05, 'y');
+    cylinderAt(bossEdges, edgeIndex++, a, b, 0, 0.032, 3.05, 'z');
+  }
+  boss.add(bossEdges); boss.position.set(0, 4.7, 0); scene.add(boss);
+  const fragmentMaterial = new THREE.MeshStandardMaterial({ roughness: 0.62, metalness: 0.2 });
+  const fragments = new THREE.InstancedMesh(boxGeometry, fragmentMaterial, MAX_PIECES);
+  fragments.instanceMatrix.setUsage(THREE.DynamicDrawUsage); fragments.frustumCulled = false; fragments.count = 0; scene.add(fragments);
+  const safeMaterial = new THREE.MeshBasicMaterial({ color: 0x28d8b5, transparent: true, opacity: 0.2, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false });
+  const safeFloor = new THREE.InstancedMesh(planeGeometry, safeMaterial, MAX_CELLS); safeFloor.count = 0; scene.add(safeFloor);
+  const safeLineMaterial = glowMaterial.clone();
+  const safeEdges = new THREE.InstancedMesh(cylinderGeometry, safeLineMaterial, MAX_CELLS * 4); safeEdges.count = 0; scene.add(safeEdges);
+  const shadowMaterial = new THREE.MeshBasicMaterial({ color: 0x102128, transparent: true, opacity: 0.1, depthWrite: false });
+  const hazardFloor = new THREE.InstancedMesh(planeGeometry, shadowMaterial, MAX_CELLS); hazardFloor.count = 0; scene.add(hazardFloor);
+  function circleShadow(radius, opacity) {
+    const m = new THREE.Mesh(new THREE.CircleGeometry(radius, 24), new THREE.MeshBasicMaterial({ color: 0x15282b, transparent: true, opacity, depthWrite: false }));
+    m.rotation.x = -Math.PI / 2; m.position.y = 0.056; scene.add(m); return m;
+  }
+  const bossShadow = circleShadow(2.1, 0.2);
+  const playerMaterial = new THREE.MeshStandardMaterial({ color: 0x639922, roughness: 0.7, transparent: true });
+  const player = new THREE.Mesh(new THREE.CylinderGeometry(RADIUS, RADIUS, 1.6, 16), playerMaterial); player.position.set(-7, 0.8, 5); scene.add(player);
+  const playerShadow = circleShadow(0.65, 0.28);
+  const playerMarker = new THREE.Mesh(new THREE.RingGeometry(0.48, 0.56, 32), new THREE.MeshBasicMaterial({ color: 0xb5e768, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide, toneMapped: false }));
+  playerMarker.rotation.x = -Math.PI / 2; playerMarker.position.y = 0.08; scene.add(playerMarker);
+  const enemy = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.9, 0.9), new THREE.MeshStandardMaterial({ color: 0xd85a30, roughness: 0.7 })); enemy.position.set(7, 0.45, -5); scene.add(enemy);
+  const enemyShadow = circleShadow(0.7, 0.25);
+  const targetRing = new THREE.Mesh(new THREE.RingGeometry(0.25, 0.3, 20), new THREE.MeshBasicMaterial({ color: 0xb6d2bf, transparent: true, opacity: 0.5, depthWrite: false, side: THREE.DoubleSide }));
+  targetRing.rotation.x = -Math.PI / 2; targetRing.position.y = 0.075; targetRing.visible = false; scene.add(targetRing);
+  const hitMaterial = new THREE.MeshBasicMaterial({ color: 0xff4939, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide, toneMapped: false });
+  const hitRing = new THREE.Mesh(new THREE.RingGeometry(0.75, 0.9, 48), hitMaterial); hitRing.rotation.x = -Math.PI / 2; hitRing.position.y = 0.09; hitRing.visible = false; scene.add(hitRing);
+  const dust = new THREE.InstancedMesh(boxGeometry, new THREE.MeshBasicMaterial({ color: 0xc5c7b4, transparent: true, opacity: 0.7, depthWrite: false }), MAX_DUST);
+  dust.instanceMatrix.setUsage(THREE.DynamicDrawUsage); dust.frustumCulled = false; dust.count = 0; scene.add(dust);
+  const dustX = new Float32Array(MAX_DUST), dustY = new Float32Array(MAX_DUST), dustZ = new Float32Array(MAX_DUST);
+  const dustVX = new Float32Array(MAX_DUST), dustVY = new Float32Array(MAX_DUST), dustVZ = new Float32Array(MAX_DUST), dustLife = new Float32Array(MAX_DUST);
+  let dustCursor = 0;
+  function emitDust(x, z, scale, amount) {
+    for (let k = 0; k < amount; k++) {
+      const i = dustCursor; dustCursor = (dustCursor + 1) % MAX_DUST;
+      const angle = Math.random() * Math.PI * 2, velocity = 0.6 + Math.random() * 2;
+      dustX[i] = x + (Math.random() - 0.5) * Math.min(scale, 2); dustZ[i] = z + (Math.random() - 0.5) * Math.min(scale, 2); dustY[i] = 0.12;
+      dustVX[i] = Math.cos(angle) * velocity; dustVZ[i] = Math.sin(angle) * velocity; dustVY[i] = 1.5 + Math.random() * 2; dustLife[i] = 0.4 + Math.random() * 0.4;
+    }
+  }
+  function updateDust(dt) {
+    let drawn = 0;
+    for (let i = 0; i < MAX_DUST; i++) if (dustLife[i] > 0) {
+      dustLife[i] -= dt; if (dustLife[i] <= 0) continue;
+      dustVY[i] -= 8 * dt; dustX[i] += dustVX[i] * dt; dustY[i] = Math.max(0.08, dustY[i] + dustVY[i] * dt); dustZ[i] += dustVZ[i] * dt;
+      const s = 0.07 + Math.min(0.6, dustLife[i]) * 0.15;
+      boxAt(dust, drawn++, dustX[i], dustY[i], dustZ[i], s, s, s);
+    }
+    dust.count = drawn; if (drawn) dust.instanceMatrix.needsUpdate = true;
+  }
+  const px = new Float32Array(MAX_PIECES), py = new Float32Array(MAX_PIECES), pz = new Float32Array(MAX_PIECES);
+  const layer = new Uint8Array(MAX_PIECES), stack = new Uint8Array(MAX_PIECES), column = new Uint16Array(MAX_PIECES), landed = new Uint8Array(MAX_PIECES);
+  const targetY = new Float32Array(MAX_PIECES), fallDuration = new Float32Array(MAX_PIECES);
+  const hazard = new Uint8Array(MAX_CELLS), blocked = new Uint8Array(MAX_CELLS), columnRank = new Uint8Array(MAX_CELLS), columnDust = new Uint8Array(MAX_CELLS);
+  const safeList = new Uint16Array(MAX_CELLS), candidateOffsets = new Uint16Array(MAX_CELLS);
+  let level = 1, n = 3, cell = 9, pieceCount = 0, safeCount = 0, shiftX = 0, shiftZ = 0, isInverted = false;
+  let phase = '휴식', phaseTime = 0, warningTime = 1.6, holdTime = 2.5, fallingTime = 0.8, fallMultiplier = 1;
+  let nearestCellDistance = NaN, nearestX = 0, nearestZ = 0, nearestDistance = 0;
+  let hitCount = 0, dodgeCount = 0, castHadHit = false, castRunning = false, restWaiting = true, bootPending = true, firstImpact = false;
+  let invulnerability = 0, hitAge = 9, shakeTime = 0, totalTime = 0, enemyTimer = 0, enemyDX = 0, enemyDZ = 0;
+  let cameraAzimuth = 0.73, cameraPolar = 0.68, cameraRadius = 72, cameraTargetY = 9, cameraFitScale = 1;
+  function cellOf(x, z) { return clamp(Math.floor((z + HALF) / cell), 0, n - 1) * n + clamp(Math.floor((x + HALF) / cell), 0, n - 1); }
+  function nearestSafe(x, z, inset = INSET) {
+    let best = Infinity, bx = x, bz = z;
+    for (let i = 0; i < safeCount; i++) {
+      const id = safeList[i], cx = id % n, cz = Math.floor(id / n);
+      const qx = clamp(x, -HALF + cx * cell + inset, -HALF + (cx + 1) * cell - inset);
+      const qz = clamp(z, -HALF + cz * cell + inset, -HALF + (cz + 1) * cell - inset);
+      const d = (qx - x) * (qx - x) + (qz - z) * (qz - z);
+      if (d < best) { best = d; bx = qx; bz = qz; }
+    }
+    nearestX = bx; nearestZ = bz; nearestDistance = Math.sqrt(best);
+  }
+  function chooseShift() {
+    if (!ui.shift.checked) { shiftX = 0; shiftZ = 0; return; }
+    let count = 0, bestOffset = -1, bestDistance = Infinity;
+    const reach = Number(ui.speed.value) * Math.max(0.3, Number(ui.warning.value) - 0.15);
+    const previous = shiftZ * n + shiftX;
+    for (let oz = 0; oz < n; oz++) for (let ox = 0; ox < n; ox++) {
+      let closest = Infinity;
+      for (let z = 0; z < n; z++) for (let x = 0; x < n; x++) {
+        if (carpetAt(x, z, level) !== isInverted) continue;
+        const sx = (x + ox) % n, sz = (z + oz) % n;
+        const qx = clamp(player.position.x, -HALF + sx * cell + INSET, -HALF + (sx + 1) * cell - INSET);
+        const qz = clamp(player.position.z, -HALF + sz * cell + INSET, -HALF + (sz + 1) * cell - INSET);
+        const d = (qx - player.position.x) ** 2 + (qz - player.position.z) ** 2;
+        if (d < closest) closest = d;
+        if (closest < 0.0001) break;
+      }
+      const offset = oz * n + ox;
+      if (offset === previous && n > 1) continue;
+      if (closest < bestDistance) { bestDistance = closest; bestOffset = offset; }
+      if (closest <= reach * reach) candidateOffsets[count++] = offset;
+    }
+    const selected = count ? candidateOffsets[Math.floor(Math.random() * count)] : bestOffset;
+    shiftX = selected % n; shiftZ = Math.floor(selected / n);
+  }
+  function buildPattern() {
+    pieceCount = 0; safeCount = 0; hazard.fill(0); blocked.fill(0); columnRank.fill(0); columnDust.fill(0); landed.fill(0);
+    let hazardCount = 0, borderCount = 0;
+    for (let z = 0; z < n; z++) for (let x = 0; x < n; x++) {
+      const filled = carpetAt(mod(x - shiftX, n), mod(z - shiftZ, n), level);
+      const dangerous = isInverted ? !filled : filled;
+      const id = z * n + x, cx = -HALF + (x + 0.5) * cell, cz = -HALF + (z + 0.5) * cell;
+      hazard[id] = dangerous ? 1 : 0;
+      if (dangerous) floorAt(hazardFloor, hazardCount++, cx, cz, cell * 0.995);
+      else {
+        safeList[safeCount] = id; floorAt(safeFloor, safeCount++, cx, cz, cell * 0.985);
+        const r = Math.max(0.019, Math.min(0.045, cell * 0.016)), edge = cell * 0.49;
+        cylinderAt(safeEdges, borderCount++, cx, 0.082, cz - edge, r, cell * 0.98, 'x');
+        cylinderAt(safeEdges, borderCount++, cx, 0.082, cz + edge, r, cell * 0.98, 'x');
+        cylinderAt(safeEdges, borderCount++, cx - edge, 0.082, cz, r, cell * 0.98, 'z');
+        cylinderAt(safeEdges, borderCount++, cx + edge, 0.082, cz, r, cell * 0.98, 'z');
+      }
+    }
+    safeFloor.count = safeCount; safeEdges.count = borderCount; hazardFloor.count = hazardCount;
+    safeFloor.instanceMatrix.needsUpdate = true; safeEdges.instanceMatrix.needsUpdate = true; hazardFloor.instanceMatrix.needsUpdate = true;
+    let lastArrival = 0;
+    for (let y = 0; y < n; y++) for (let z = 0; z < n; z++) for (let x = 0; x < n; x++) {
+      if (isInverted ? carpetAt(x, z, level) : !mengerAt(x, y, z, level)) continue;
+      if (pieceCount >= MAX_PIECES) break;
+      const i = pieceCount++, sx = (x + shiftX) % n, sz = (z + shiftZ) % n, id = sz * n + sx;
+      px[i] = -HALF + (sx + 0.5) * cell; pz[i] = -HALF + (sz + 0.5) * cell; py[i] = HOVER_BASE + (y + 0.5) * cell;
+      layer[i] = y; column[i] = id; stack[i] = columnRank[id]++;
+      targetY[i] = isInverted ? cell * 0.5 : (Math.min(stack[i], 3) + 0.5) * cell;
+      fallDuration[i] = 0.8 * Math.sqrt(Math.max(0.1, py[i] - targetY[i]) / (HOVER_BASE + SIZE));
+      lastArrival = Math.max(lastArrival, y * 0.06 + fallDuration[i]);
+      const edgeLight = (x === 0 || x === n - 1 || z === 0 || z === n - 1) && (x * 13 + z * 7 + y * 3) % 5 === 0;
+      const shade = 0.38 + y / n * 0.16 + (edgeLight ? 0.2 : 0);
+      color.setRGB(shade * 0.94, shade, shade * 1.06); fragments.setColorAt(i, color);
+    }
+    fragments.count = pieceCount; fragments.instanceColor.needsUpdate = true;
+    fallingTime = lastArrival / fallMultiplier;
+  }
+  function recordNearestCell() {
+    const here = cellOf(player.position.x, player.position.z), x = here % n, z = Math.floor(here / n);
+    let best = Infinity;
+    for (let i = 0; i < safeCount; i++) {
+      const id = safeList[i]; const dx = id % n - x, dz = Math.floor(id / n) - z;
+      best = Math.min(best, dx * dx + dz * dz);
+    }
+    nearestCellDistance = Math.sqrt(best) * cell;
+  }
+  function beginWarning() {
+    phase = '예고'; phaseTime = 0;
+    // Layout is settled before telegraphing; this snapshot is the design-check distance.
+    recordNearestCell(); nearestSafe(player.position.x, player.position.z);
+    warningTime = Math.max(Number(ui.warning.value), nearestDistance / Number(ui.speed.value) + 0.18);
+  }
+  function startCast() {
+    level = Number(ui.level.value); n = 3 ** level; cell = SIZE / n; isInverted = ui.invert.checked;
+    fallMultiplier = Number(ui.fall.value); holdTime = Number(ui.hold.value); chooseShift(); buildPattern();
+    phase = '상승·분열'; phaseTime = 0; castRunning = true; castHadHit = false; restWaiting = false; bootPending = false; firstImpact = false;
+    nearestCellDistance = NaN; dustLife.fill(0); hitRing.visible = false; hitAge = 9; shakeTime = 0;
+    $('phaseCount').textContent = level; fragments.visible = true; safeFloor.visible = false; safeEdges.visible = false; hazardFloor.visible = false;
+    boss.visible = false; bossShadow.visible = false; updateFragmentTransforms(); updateStatus();
+  }
+  function hitPlayer() {
+    if (invulnerability > 0) return;
+    invulnerability = 1; hitAge = 0; hitCount++; castHadHit = true;
+    hitRing.position.x = player.position.x; hitRing.position.z = player.position.z; hitRing.visible = true;
+    $('hits').textContent = hitCount;
+  }
+  function pushOut(actor, radius) {
+    if (!ui.collision.checked || isInverted) return;
+    const x = actor.position.x, z = actor.position.z;
+    const xmin = clamp(Math.floor((x - radius + HALF) / cell), 0, n - 1), xmax = clamp(Math.floor((x + radius + HALF) / cell), 0, n - 1);
+    const zmin = clamp(Math.floor((z - radius + HALF) / cell), 0, n - 1), zmax = clamp(Math.floor((z + radius + HALF) / cell), 0, n - 1);
+    let overlap = false;
+    for (let cz = zmin; cz <= zmax; cz++) for (let cx = xmin; cx <= xmax; cx++) if (blocked[cz * n + cx]) {
+      const dx = x - clamp(x, -HALF + cx * cell, -HALF + (cx + 1) * cell);
+      const dz = z - clamp(z, -HALF + cz * cell, -HALF + (cz + 1) * cell);
+      if (dx * dx + dz * dz < radius * radius - 0.000001) overlap = true;
+    }
+    if (!overlap) return;
+    // A newly created wall must not trap an actor already standing inside it.
+    nearestSafe(x, z, radius + 0.03); actor.position.x = nearestX; actor.position.z = nearestZ;
+    if (actor === player) targetValid = false;
+  }
+  function landPiece(i) {
+    landed[i] = 1;
+    const id = column[i];
+    if (!firstImpact) { firstImpact = true; shakeTime = 0.2; }
+    if (cellOf(player.position.x, player.position.z) === id) hitPlayer();
+    if (!columnDust[id]) { columnDust[id] = 1; emitDust(px[i], pz[i], cell, level === 3 ? 2 : 5); }
+    if (!isInverted && stack[i] < 3) {
+      blocked[id] = 1; pushOut(player, RADIUS); pushOut(enemy, 0.45);
+    }
+  }
+  function updateFragmentTransforms() {
+    if (!fragments.visible) return;
+    let angle = 0, spread = 1, shape = 1;
+    const p = clamp(phaseTime, 0, 1);
+    if (phase === '상승·분열') {
+      const ease = p * p * (3 - 2 * p); shape = ease;
+      spread = 1 + Math.sin(p * Math.PI) * 0.1; angle = Math.sin(p * Math.PI) * 0.11;
+    } else if (phase === '예고') {
+      const remain = warningTime - phaseTime;
+      angle = remain <= 0.3 ? (0.11 + Math.sin((warningTime - 0.3) * 0.8) * 0.06) * Math.max(0, remain / 0.3) : 0.11 + Math.sin(phaseTime * 0.8) * 0.06;
+    }
+    const cosine = Math.cos(angle), sine = Math.sin(angle), size = cell * 0.96;
+    let collapse = 0;
+    if (phase === '붕괴') collapse = clamp(phaseTime / 0.6, 0, 1);
+    for (let i = 0; i < pieceCount; i++) {
+      let x = px[i], y = py[i], z = pz[i], s = size;
+      if (phase === '상승·분열') {
+        const ratio = 3 / SIZE;
+        x *= (ratio + (1 - ratio) * shape) * spread; z *= (ratio + (1 - ratio) * shape) * spread;
+        const localY = py[i] - HOVER_BASE - SIZE / 2;
+        y = 4.7 + 7.3 * shape + localY * ratio * (1 - shape) + (py[i] - 12) * shape;
+        s = (cell * ratio + (size - cell * ratio) * shape) * (1 + Math.sin(p * Math.PI) * 0.035);
+      } else if (phase === '낙하') {
+        const t = Math.max(0, phaseTime * fallMultiplier - layer[i] * 0.06);
+        const q = clamp(t / fallDuration[i], 0, 1); y = py[i] + (targetY[i] - py[i]) * q * q;
+        if (q >= 1 && !landed[i]) landPiece(i);
+        if (landed[i] && (isInverted || stack[i] >= 3)) s = 0;
+      } else if (phase === '벽 유지' || phase === '붕괴') {
+        y = targetY[i]; if (isInverted || stack[i] >= 3) s = 0;
+        if (collapse > 0) { s *= 1 - collapse; y = targetY[i] * (1 - collapse) - cell * collapse * 0.35; }
+      } else if (phase === '휴식') s = 0;
+      const rx = x * cosine - z * sine, rz = x * sine + z * cosine;
+      transform.position.set(rx, y, rz); transform.rotation.set(0, angle, 0); transform.scale.set(s, s, s); transform.updateMatrix(); fragments.setMatrixAt(i, transform.matrix);
+    }
+    fragments.instanceMatrix.needsUpdate = true;
+  }
+  function phaseLength() {
+    if (phase === '상승·분열') return 1;
+    if (phase === '예고') return warningTime;
+    if (phase === '낙하') return fallingTime;
+    if (phase === '벽 유지') return holdTime;
+    return 0.6;
+  }
+  function advancePattern(dt) {
+    phaseTime += dt;
+    if (bootPending) { if (phaseTime >= 0.5) startCast(); return; }
+    if (phase === '휴식') {
+      if (restWaiting && phaseTime >= 0.6 && ui.auto.checked) {
+        ui.level.value = String(Number(ui.level.value) % 3 + 1); startCast();
+      }
+      return;
+    }
+    if (phaseTime < phaseLength()) return;
+    if (phase === '상승·분열') beginWarning();
+    else if (phase === '예고') { phase = '낙하'; phaseTime = 0; }
+    else if (phase === '낙하') {
+      // Finalize every landing even if a slow frame skips its exact impact time.
+      for (let i = 0; i < pieceCount; i++) if (!landed[i]) landPiece(i);
+      phase = '벽 유지'; phaseTime = 0;
+    } else if (phase === '벽 유지') {
+      phase = '붕괴'; phaseTime = 0; blocked.fill(0);
+      for (let k = 0; k < Math.min(safeCount + 20, 70); k++) {
+        const i = Math.floor(Math.random() * pieceCount); emitDust(px[i], pz[i], cell, 2);
+      }
+    } else if (phase === '붕괴') {
+      if (castRunning && !castHadHit) { dodgeCount++; $('dodges').textContent = dodgeCount; }
+      castRunning = false; phase = '휴식'; phaseTime = 0; restWaiting = true; fragments.visible = false;
+      safeFloor.visible = false; safeEdges.visible = false; hazardFloor.visible = false; boss.visible = true; bossShadow.visible = true;
+    }
+  }
+  function moveAxis(actor, amount, axis, radius) {
+    if (!amount) return;
+    const position = actor.position, old = position[axis];
+    let next = clamp(old + amount, -HALF + radius, HALF - radius);
+    if (ui.collision.checked && !isInverted && (phase === '낙하' || phase === '벽 유지')) {
+      const x = axis === 'x' ? next : position.x, z = axis === 'z' ? next : position.z;
+      const xmin = clamp(Math.floor((x - radius + HALF) / cell), 0, n - 1), xmax = clamp(Math.floor((x + radius + HALF) / cell), 0, n - 1);
+      const zmin = clamp(Math.floor((z - radius + HALF) / cell), 0, n - 1), zmax = clamp(Math.floor((z + radius + HALF) / cell), 0, n - 1);
+      for (let cz = zmin; cz <= zmax; cz++) for (let cx = xmin; cx <= xmax; cx++) if (blocked[cz * n + cx]) {
+        const lower = -HALF + (axis === 'x' ? cx : cz) * cell, upper = lower + cell;
+        const cross = axis === 'x' ? position.z : position.x, crossLower = -HALF + (axis === 'x' ? cz : cx) * cell;
+        const crossDistance = cross - clamp(cross, crossLower, crossLower + cell);
+        if (Math.abs(crossDistance) >= radius) continue;
+        const reach = Math.sqrt(radius * radius - crossDistance * crossDistance);
+        if (amount > 0 && old <= lower - reach + 0.0001) next = Math.min(next, lower - reach - 0.0001);
+        else if (amount < 0 && old >= upper + reach - 0.0001) next = Math.max(next, upper + reach + 0.0001);
+      }
+    }
+    position[axis] = next;
+  }
+  function moveActor(actor, dx, dz, radius) {
+    const steps = Math.max(1, Math.ceil(Math.max(Math.abs(dx), Math.abs(dz)) / 0.12));
+    for (let k = 0; k < steps; k++) { moveAxis(actor, dx / steps, 'x', radius); moveAxis(actor, dz / steps, 'z', radius); }
+  }
+  const pointer = new THREE.Vector2(), raycaster = new THREE.Raycaster(), ground = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0), groundHit = new THREE.Vector3();
+  const keys = { w: false, a: false, s: false, d: false };
+  let mouseInside = false, pointerDown = false, dragging = false, startX = 0, startY = 0, lastX = 0, lastY = 0;
+  let mouseX = 0, mouseY = 0, targetX = player.position.x, targetZ = player.position.z, targetValid = false;
+  const canvas = renderer.domElement;
+  function aimAt(clientX, clientY) {
+    const rect = canvas.getBoundingClientRect();
+    pointer.set((clientX - rect.left) / rect.width * 2 - 1, -(clientY - rect.top) / rect.height * 2 + 1);
+    raycaster.setFromCamera(pointer, camera);
+    if (raycaster.ray.intersectPlane(ground, groundHit)) {
+      if (Math.abs(groundHit.x) > HALF || Math.abs(groundHit.z) > HALF) { targetValid = false; return; }
+      targetX = clamp(groundHit.x, -HALF + RADIUS, HALF - RADIUS); targetZ = clamp(groundHit.z, -HALF + RADIUS, HALF - RADIUS); targetValid = true;
+    } else targetValid = false;
+  }
+  canvas.addEventListener('pointerenter', event => { mouseInside = event.pointerType !== 'touch'; mouseX = event.clientX; mouseY = event.clientY; });
+  canvas.addEventListener('pointerleave', () => { mouseInside = false; if (!pointerDown) targetValid = false; });
+  canvas.addEventListener('pointerdown', event => {
+    if (event.button !== 0) return;
+    canvas.focus({ preventScroll: true }); pointerDown = true; dragging = false; targetValid = false;
+    startX = lastX = event.clientX; startY = lastY = event.clientY; canvas.setPointerCapture(event.pointerId);
+  });
+  canvas.addEventListener('pointermove', event => {
+    mouseX = event.clientX; mouseY = event.clientY;
+    if (pointerDown) {
+      if (Math.hypot(event.clientX - startX, event.clientY - startY) >= 5) dragging = true;
+      if (dragging) { cameraAzimuth -= (event.clientX - lastX) * 0.006; cameraPolar = clamp(cameraPolar - (event.clientY - lastY) * 0.005, 0.12, 1.28); }
+      lastX = event.clientX; lastY = event.clientY;
+    } else if (event.pointerType !== 'touch') { mouseInside = true; aimAt(event.clientX, event.clientY); }
+  });
+  canvas.addEventListener('pointerup', event => {
+    if (!pointerDown) return;
+    if (!dragging && Math.hypot(event.clientX - startX, event.clientY - startY) < 5) aimAt(event.clientX, event.clientY);
+    pointerDown = false;
+    if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
+  });
+  canvas.addEventListener('pointercancel', () => { pointerDown = false; dragging = false; targetValid = false; });
+  canvas.addEventListener('wheel', event => { event.preventDefault(); cameraRadius = clamp(cameraRadius * Math.exp(event.deltaY * 0.001), 38, 108); }, { passive: false });
+  canvas.addEventListener('keydown', event => {
+    const k = event.key.toLowerCase(); if (k in keys) { keys[k] = true; targetValid = false; event.preventDefault(); }
+  });
+  canvas.addEventListener('keyup', event => { const k = event.key.toLowerCase(); if (k in keys) { keys[k] = false; event.preventDefault(); } });
+  function clearInput() { keys.w = keys.a = keys.s = keys.d = false; pointerDown = false; targetValid = false; mouseInside = false; }
+  canvas.addEventListener('blur', clearInput); window.addEventListener('blur', clearInput);
+  function updatePlayer(dt) {
+    const forward = (keys.w ? 1 : 0) - (keys.s ? 1 : 0), right = (keys.d ? 1 : 0) - (keys.a ? 1 : 0);
+    let dx = 0, dz = 0;
+    if (forward || right) {
+      dx = -Math.sin(cameraAzimuth) * forward + Math.cos(cameraAzimuth) * right;
+      dz = -Math.cos(cameraAzimuth) * forward - Math.sin(cameraAzimuth) * right;
+      const length = Math.hypot(dx, dz); dx /= length; dz /= length;
+    } else if (!pointerDown) {
+      if (mouseInside) aimAt(mouseX, mouseY);
+      if (targetValid) {
+        dx = targetX - player.position.x; dz = targetZ - player.position.z;
+        const length = Math.hypot(dx, dz), step = Number(ui.speed.value) * dt;
+        if (length > 0.03) { const speed = Math.min(1, length / step); dx = dx / length * speed; dz = dz / length * speed; }
+        else { dx = dz = 0; }
+      }
+    }
+    const travel = Number(ui.speed.value) * dt; moveActor(player, dx * travel, dz * travel, RADIUS);
+    playerShadow.position.x = playerMarker.position.x = player.position.x; playerShadow.position.z = playerMarker.position.z = player.position.z;
+    targetRing.visible = targetValid && !pointerDown; targetRing.position.x = targetX; targetRing.position.z = targetZ;
+    invulnerability = Math.max(0, invulnerability - dt); hitAge += dt;
+    playerMaterial.color.setHex(hitAge < 0.18 ? 0xff3e30 : 0x639922);
+    playerMaterial.opacity = invulnerability > 0 && Math.floor(invulnerability * 14) % 2 === 0 ? 0.3 : 1;
+    if (hitAge < 0.6) { hitRing.visible = true; hitRing.scale.setScalar(1 + hitAge * 5); hitMaterial.opacity = (1 - hitAge / 0.6) * 0.85; }
+    else hitRing.visible = false;
+  }
+  function updateEnemy(dt) {
+    enemyTimer -= dt;
+    if (enemyTimer <= 0) {
+      enemyTimer = 1.2 + Math.random() * 1.8;
+      if (Math.random() < 0.3) { enemyDX = enemyDZ = 0; }
+      else { const angle = Math.random() * Math.PI * 2; enemyDX = Math.cos(angle); enemyDZ = Math.sin(angle); }
+    }
+    moveActor(enemy, enemyDX * dt * 0.8, enemyDZ * dt * 0.8, 0.45); enemy.rotation.y += dt * 0.2;
+    enemyShadow.position.x = enemy.position.x; enemyShadow.position.z = enemy.position.z;
+  }
+  function ensureWarningTime() {
+    if (phase !== '예고') return;
+    nearestSafe(player.position.x, player.position.z);
+    warningTime = Math.max(warningTime, phaseTime + nearestDistance / Number(ui.speed.value) + 0.18);
+  }
+  ui.speed.addEventListener('input', ensureWarningTime);
+  ui.warning.addEventListener('input', () => { if (phase === '예고') { warningTime = Math.max(phaseTime + 0.3, Number(ui.warning.value)); ensureWarningTime(); } });
+  ui.hold.addEventListener('input', () => { holdTime = Number(ui.hold.value); });
+  ui.fall.addEventListener('input', () => {
+    const previous = fallMultiplier; fallMultiplier = Number(ui.fall.value);
+    if (phase === '낙하') phaseTime *= previous / fallMultiplier;
+    fallingTime *= previous / fallMultiplier;
+  });
+  ui.collision.addEventListener('change', () => { if (ui.collision.checked) { pushOut(player, RADIUS); pushOut(enemy, 0.45); } });
+  ui.level.addEventListener('change', startCast); ui.shift.addEventListener('change', startCast); ui.invert.addEventListener('change', startCast);
+  $('cast').addEventListener('click', startCast);
+  $('next').addEventListener('click', () => { ui.level.value = String(Number(ui.level.value) % 3 + 1); startCast(); });
+  function resetDemo() {
+    ui.warning.value = '1.6'; ui.hold.value = '2.5'; ui.fall.value = '1'; ui.speed.value = '5'; ui.level.value = '1';
+    ui.shift.checked = true; ui.invert.checked = false; ui.auto.checked = true; ui.collision.checked = true;
+    for (const id of ['warning', 'hold', 'fallSpeed', 'playerSpeed']) $(id).dispatchEvent(new Event('input'));
+    hitCount = dodgeCount = 0; $('hits').textContent = '0'; $('dodges').textContent = '0'; $('phaseCount').textContent = '1';
+    player.position.set(-7, 0.8, 5); enemy.position.set(7, 0.45, -5); invulnerability = 0; hitAge = 9; clearInput();
+    cameraAzimuth = 0.73; cameraPolar = 0.68; cameraRadius = 72; cameraTargetY = 9; cameraFitScale = 1;
+    level = 1; n = 3; cell = 9; shiftX = shiftZ = 0; isInverted = false; fallMultiplier = 1; buildPattern();
+    phase = '휴식'; phaseTime = 0; castRunning = false; bootPending = true; restWaiting = true; nearestCellDistance = NaN;
+    fragments.visible = false; safeFloor.visible = false; safeEdges.visible = false; hazardFloor.visible = false;
+    boss.visible = true; bossShadow.visible = true; dustLife.fill(0); dust.count = 0; shakeTime = 0; updateStatus();
+  }
+  $('reset').addEventListener('click', resetDemo);
+  let fps = 0, fpsTime = 0, fpsFrames = 0, statusTimer = 0;
+  function updateStatus() {
+    const distance = Number.isFinite(nearestCellDistance) ? rounded(nearestCellDistance) : '—';
+    $('status').textContent = phase + ' · L ' + level + ' · 조각 ' + pieceCount + ' · 안전 칸 ' + safeCount + ' · 가까운 안전 칸 ' + distance + ' 미터 · 맞음 ' + hitCount + ' / 회피 ' + dodgeCount + ' · FPS ' + fps;
+    $('phaseLabel').textContent = phase + ' · L ' + level;
+    let detail = isInverted ? '반전 · 착지 즉시 붕괴' : '칸 크기 ' + cell + '미터';
+    if (phase === '예고') {
+      detail = '남은 예고 ' + rounded(Math.max(0, warningTime - phaseTime)) + '초';
+      if (warningTime > Number(ui.warning.value) + 0.05) detail += ' · 이동 시간 확보';
+    } else if (phase === '휴식') detail = bootPending ? '첫 시전 준비' : ui.auto.checked ? '다음 페이즈 준비' : '시전 대기';
+    $('phaseDetail').textContent = detail;
+    $('phaseProgress').style.transform = 'scaleX(' + clamp(phaseTime / phaseLength(), 0, 1) + ')';
+  }
+  function resize() {
+    const width = view.clientWidth, height = view.clientHeight; renderer.setSize(width, height, false); camera.aspect = width / height; camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', resize); resize();
+  if (window.ResizeObserver) new ResizeObserver(resize).observe(view);
+  function updateCamera(dt) {
+    const airborne = phase === '상승·분열' || phase === '예고' || phase === '낙하';
+    const target = airborne ? 16 : phase !== '휴식' && level === 1 && !isInverted ? 9 : 5;
+    cameraTargetY += (target - cameraTargetY) * Math.min(1, dt * 2.8);
+    cameraFitScale += ((airborne ? 1.16 : 1) - cameraFitScale) * Math.min(1, dt * 2.8);
+    const radius = cameraRadius * cameraFitScale * Math.max(1, 1.08 / camera.aspect), horizontal = radius * Math.sin(cameraPolar);
+    camera.position.set(Math.sin(cameraAzimuth) * horizontal, cameraTargetY + Math.cos(cameraPolar) * radius, Math.cos(cameraAzimuth) * horizontal);
+    if (shakeTime > 0) {
+      shakeTime = Math.max(0, shakeTime - dt); const strength = shakeTime / 0.2 * 0.32;
+      camera.position.x += (Math.random() - 0.5) * strength; camera.position.y += (Math.random() - 0.5) * strength;
+    }
+    camera.lookAt(0, cameraTargetY, 0); camera.updateMatrixWorld();
+  }
+  let previousTime = performance.now();
+  function frame(now) {
+    requestAnimationFrame(frame);
+    const elapsed = Math.max(0.0001, (now - previousTime) / 1000); previousTime = now; const dt = Math.min(elapsed, 0.05);
+    totalTime += dt; updateCamera(dt); updatePlayer(dt); updateEnemy(dt); advancePattern(dt); updateFragmentTransforms(); updateDust(dt);
+    const showing = phase === '예고' || phase === '낙하' || phase === '벽 유지' || phase === '붕괴';
+    safeFloor.visible = safeEdges.visible = hazardFloor.visible = showing;
+    if (phase === '예고') {
+      const q = clamp(phaseTime / warningTime, 0, 1); shadowMaterial.opacity = 0.08 + q * 0.56;
+      safeMaterial.opacity = 0.14 + q * 0.12; safeLineMaterial.opacity = 0.75 + Math.sin(totalTime * 4) * 0.12;
+    } else { shadowMaterial.opacity = 0.5; safeMaterial.opacity = 0.18; safeLineMaterial.opacity = 0.85; }
+    if (phase === '붕괴') { const q = 1 - clamp(phaseTime / 0.6, 0, 1); shadowMaterial.opacity *= q; safeMaterial.opacity *= q; safeLineMaterial.opacity *= q; }
+    if (boss.visible) {
+      boss.scale.setScalar(bootPending ? 1 : Math.min(1, phaseTime / 0.3));
+      boss.position.y = 4.7 + Math.sin(totalTime * 1.4) * 0.18; boss.rotation.set(totalTime * 0.09, totalTime * 0.16, 0);
+    }
+    renderer.render(scene, camera);
+    fpsTime += elapsed; fpsFrames++;
+    if (fpsTime >= 0.5) { fps = Math.round(fpsFrames / fpsTime); fpsTime = 0; fpsFrames = 0; }
+    statusTimer += dt; if (statusTimer >= 0.1) { statusTimer = 0; updateStatus(); }
+  }
+  document.addEventListener('visibilitychange', () => { previousTime = performance.now(); fpsTime = 0; fpsFrames = 0; clearInput(); });
+  resetDemo(); updateCamera(0.016); requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

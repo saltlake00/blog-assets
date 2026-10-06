@@ -1,0 +1,911 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>육각 타일 뒤집기 데모 v2</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #f1f2ed; --panel: #ffffff; --ink: #252d29; --muted: #6b746e;
+      --line: #d9dfd7; --accent: #56872d; --accent-soft: #edf3e7; --button: #283d30;
+      --view: #101919; --view-ink: #ecf0dc; --hot: #f4823d;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+        --page: #131917; --panel: #1c2520; --ink: #e5eade; --muted: #a2afa5;
+        --line: #354239; --accent: #96ba6f; --accent-soft: #2a3724; --button: #9abc80;
+        --view: #101919; --view-ink: #ecf0dc; --hot: #ff9857;
+      }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--page); color: var(--ink); font-family: system-ui, -apple-system, "Malgun Gothic", sans-serif; }
+    main { width: 100%; max-width: 960px; padding: 29px 16px 24px; margin: 0 auto; }
+    .eyebrow { color: var(--accent); font-size: 11px; font-weight: 800; letter-spacing: .15em; margin: 0 0 9px; }
+    h1 { margin: 0; font-size: clamp(24px, 4.6vw, 34px); letter-spacing: -.055em; font-weight: 780; }
+    .description { color: var(--muted); font-size: 13px; line-height: 1.65; margin: 10px 0 20px; }
+    .viewport { height: 520px; position: relative; overflow: hidden; background: var(--view); border-radius: 14px; border: 1px solid var(--line); }
+    canvas { display: block; width: 100%; height: 100%; touch-action: none; outline: none; }
+    canvas:focus-visible { box-shadow: inset 0 0 0 2px #9fca73; }
+    .help { position: absolute; top: 15px; left: 17px; color: #c6d3bd; font-size: 11px; line-height: 1.75; pointer-events: none; text-shadow: 0 1px 5px #000; }
+    .help strong { color: var(--view-ink); font-weight: 650; }
+    .legend { position: absolute; left: 17px; bottom: 17px; display: flex; gap: 13px; font-size: 10px; color: #bac9b9; pointer-events: none; }
+    .legend span { display: flex; align-items: center; gap: 5px; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: #748078; }
+    .dot.hot { background: #ff8a39; box-shadow: 0 0 8px #e96132; }
+    .dot.seam { background: #ee6456; }
+    .dot.gap { background: #85eee1; box-shadow: 0 0 6px #63dccc; }
+    .phase-card { position: absolute; right: 17px; bottom: 15px; text-align: right; pointer-events: none; }
+    .phase-card small { display: block; color: #97a991; font-size: 10px; margin-bottom: 4px; }
+    .phase-card b { color: #ecf0dc; font-size: 16px; font-weight: 650; letter-spacing: -.035em; }
+    .flash { position: absolute; inset: 0; pointer-events: none; border: 4px solid #ff604a; background: radial-gradient(ellipse, transparent 45%, #ff3a292e); opacity: 0; }
+    .error { position: absolute; inset: 0; display: none; place-content: center; padding: 30px; color: #f4e8d5; line-height: 1.7; text-align: center; font-size: 13px; }
+    .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 16px 0; }
+    .buttons { display: flex; gap: 8px; }
+    button { min-height: 38px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); padding: 0 16px; border-radius: 8px; font: inherit; font-size: 12px; font-weight: 650; cursor: pointer; }
+    button.primary { background: var(--button); border-color: var(--button); color: var(--page); }
+    button:hover { filter: brightness(1.1); }
+    button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .scores { display: flex; align-items: center; gap: 19px; font-size: 11px; color: var(--muted); }
+    .scores b { color: var(--ink); margin-left: 7px; font-size: 20px; font-variant-numeric: tabular-nums; }
+    .scores .hit b { color: #d46243; }
+    .controls { background: var(--panel); border: 1px solid var(--line); border-radius: 11px; padding: 17px 19px; }
+    .sliders { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 19px 32px; }
+    .slider-label { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 12px; margin-bottom: 8px; }
+    output { font-size: 11px; font-weight: 650; color: var(--accent); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    input[type="range"] { display: block; width: 100%; margin: 0; height: 17px; accent-color: var(--accent); cursor: pointer; }
+    .options { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; margin-top: 20px; padding-top: 15px; border-top: 1px solid var(--line); font-size: 12px; }
+    .options label { display: inline-flex; align-items: center; gap: 7px; cursor: pointer; }
+    input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--accent); margin: 0; }
+    select { font: inherit; background: var(--page); color: var(--ink); border: 1px solid var(--line); border-radius: 6px; padding: 6px 24px 6px 8px; max-width: 100%; }
+    .status { color: var(--muted); font-size: 11px; line-height: 1.8; padding: 13px 1px 0; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+    .control-note { margin: 13px 0 0; color: var(--muted); font-size: 11px; line-height: 1.7; }
+    @media (max-width: 540px) {
+      main { padding-top: 21px; }
+      .description { font-size: 12px; }
+      .controls { padding: 15px 13px; }
+      .sliders { gap: 17px 17px; }
+      .slider-label { font-size: 11px; }
+      .help { top: 12px; left: 12px; font-size: 10px; }
+      .legend { left: 12px; bottom: 15px; gap: 8px; font-size: 9px; }
+      .phase-card { right: 12px; }
+      .options { gap: 13px 16px; font-size: 11px; }
+      .scores { gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="eyebrow">보스 패턴 실험실</p>
+    <h1>육각 타일 뒤집기 데모 v2</h1>
+    <p class="description">퍼지는 위험 띠의 청록 틈을 지나 안전해진 안쪽으로 들어가거나, 파면보다 멀리 달아나세요. 틈과 안전 가장자리는 부서지지 않습니다.</p>
+  </header>
+  <div class="viewport" id="viewport">
+    <div class="help"><strong>마우스를 올리면 이동 · 클릭 후 키보드 이동</strong><br>드래그로 시점 회전 · 휠로 확대<br>초록 기둥이 플레이어 · 이동 키: W / A / S / D</div>
+    <div class="legend"><span><i class="dot"></i>돌 바닥</span><span><i class="dot hot"></i>위험 띠</span><span><i class="dot seam"></i>만남선</span><span><i class="dot gap"></i>안전 통로</span></div>
+    <div class="phase-card"><small id="round-label">547칸 · 회차 준비</small><b id="phase-label">휴식</b></div>
+    <div class="flash" id="flash"></div>
+    <div class="error" id="error" role="alert"></div>
+  </div>
+  <div class="toolbar">
+    <div class="buttons"><button class="primary" id="next">다음 회차</button><button id="reset">처음부터</button></div>
+    <div class="scores" aria-label="판정 기록"><span class="hit">맞음<b id="hits">0</b></span><span>회피<b id="dodges">0</b></span></div>
+  </div>
+  <div class="controls">
+    <div class="sliders">
+      <label><span class="slider-label"><span>파원 수</span><output id="source-value" for="sources">2개</output></span><input id="sources" type="range" min="1" max="3" step="1" value="2"></label>
+      <label><span class="slider-label"><span>파동 간격</span><output id="interval-value" for="interval">0.09초</output></span><input id="interval" type="range" min="0.03" max="0.2" step="0.01" value="0.09"></label>
+      <label><span class="slider-label"><span>위험 유지</span><output id="hold-value" for="hold">1.6초</output></span><input id="hold" type="range" min="0.6" max="3" step="0.1" value="1.6"></label>
+      <label><span class="slider-label"><span>플레이어 속도</span><output id="speed-value" for="speed">4.5미터/초</output></span><input id="speed" type="range" min="2" max="8" step="0.1" value="4.5"></label>
+      <label><span class="slider-label"><span>띠 폭</span><output id="band-value" for="band">4칸</output></span><input id="band" type="range" min="2" max="8" step="1" value="4"></label>
+      <label><span class="slider-label"><span>틈 수 (파원마다)</span><output id="gaps-value" for="gaps">2개</output></span><input id="gaps" type="range" min="0" max="3" step="1" value="2"></label>
+      <label><span class="slider-label"><span>틈 폭</span><output id="gap-width-value" for="gap-width">2칸</output></span><input id="gap-width" type="range" min="1" max="4" step="1" value="2"></label>
+    </div>
+    <div class="options">
+      <label for="hazard">위험면<select id="hazard"><option value="lava">용암</option><option value="spikes">가시</option></select></label>
+      <label><input type="checkbox" id="highlight" checked>만남선 강조</label>
+      <label><input type="checkbox" id="safe-edge" checked aria-describedby="edge-note">안전 가장자리</label>
+      <label><input type="checkbox" id="safe-view">안전 칸 보기</label>
+      <label><input type="checkbox" id="repeat" checked>자동 반복</label>
+    </div>
+    <p class="control-note" id="edge-note">패턴 설정은 다음 회차에 적용됩니다. 틈이 있거나 파원이 1개이면 바깥 2칸 안전 가장자리는 필수입니다. 위험 유지는 구멍이 남는 시간입니다.</p>
+    <p class="control-note">안전 칸 보기: 빨강 = 0.5초 안에 위험 예정 · 옅은 초록 = 지금부터 0.5초 동안 안전 · 피격 후 1초 무적</p>
+  </div>
+  <div class="status" id="status" role="status" aria-live="polite">휴식 · 파원 2 · 위험 칸 지금 0 · 틈 4 · 부서진 타일 0 · 맞음 0 / 회피 0</div>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(() => {
+  'use strict';
+  const ui = {};
+  ['viewport', 'next', 'reset', 'sources', 'interval', 'hold', 'speed', 'band', 'gaps', 'gap-width', 'safe-edge', 'safe-view', 'hazard', 'highlight', 'repeat', 'hits', 'dodges', 'status', 'phase-label', 'round-label', 'flash', 'error'].forEach(id => { ui[id] = document.getElementById(id); });
+  const settings = { sources: 2, interval: .09, hold: 1.6, speed: 4.5, band: 4, gaps: 2, 'gap-width': 2 };
+  const bindings = [ ['sources', 'source-value', 0, '개'], ['interval', 'interval-value', 2, '초'], ['hold', 'hold-value', 1, '초'], ['speed', 'speed-value', 1, '미터/초'], ['band', 'band-value', 0, '칸'], ['gaps', 'gaps-value', 0, '개'], ['gap-width', 'gap-width-value', 0, '칸'] ];
+  bindings.forEach(([id, output, decimals, unit]) => {
+    ui[id].addEventListener('input', () => {
+      settings[id] = Number(ui[id].value);
+      document.getElementById(output).textContent = settings[id].toFixed(decimals) + unit;
+      syncSafeEdge();
+    });
+  });
+  function syncSafeEdge() {
+    const required = settings.gaps > 0 || settings.sources === 1;
+    ui['safe-edge'].disabled = required;
+    if (required) ui['safe-edge'].checked = true;
+  }
+  syncSafeEdge();
+  function fail(message) {
+    ui.error.style.display = 'grid';
+    ui.error.textContent = message;
+    ui.next.disabled = ui.reset.disabled = true;
+  }
+  if (!window.THREE) {
+    fail('3D 엔진을 불러오지 못했습니다. 인터넷 연결을 확인하고 페이지를 다시 열어 주세요.');
+    return;
+  }
+
+  const RADIUS = 13, TILE_RADIUS = .75, THICKNESS = .25;
+  const APOTHEM = TILE_RADIUS * Math.sqrt(3) / 2;
+  const PITCH = TILE_RADIUS + .05 / Math.sqrt(3);
+  const SQRT3 = Math.sqrt(3), WARN_TIME = 1, FLIP_TIME = .25, BREAK_TIME = .72, REPAIR_TIME = .42;
+  const MAX_TILES = 547, MAX_SOURCES = 3, MAX_FRAGMENTS = MAX_TILES * 6;
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const smooth = p => p * p * (3 - 2 * p);
+  const hexDistance = (q1, r1, q2, r2) => Math.max(Math.abs(q1 - q2), Math.abs(r1 - r2), Math.abs(q1 + r1 - q2 - r2));
+  const tiles = [], tileLookup = new Map(), candidates = [];
+  for (let q = -RADIUS; q <= RADIUS; q++) {
+    for (let r = Math.max(-RADIUS, -q - RADIUS); r <= Math.min(RADIUS, -q + RADIUS); r++) {
+      const index = tiles.length;
+      const tile = { index, q, r, x: SQRT3 * PITCH * (q + r / 2), z: 1.5 * PITCH * r, distance: 0, start: 0, returnAt: 0, hazardStart: Infinity, hazardEnd: Infinity, source: 0, gap: false, edgeSafe: false, seam: false, seamIndex: -1, hint: -1, pose: 0, nx: 1, nz: 0, axis: new THREE.Vector3(0, 0, -1), state: 0 };
+      tiles.push(tile);
+      tileLookup.set(q + ',' + r, tile);
+      if (hexDistance(q, r, 0, 0) <= 11 && hexDistance(q, r, 0, 0) >= 3) candidates.push(tile);
+    }
+  }
+  const COUNT = tiles.length;
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' });
+  } catch (error) {
+    fail('이 브라우저에서 3D 화면을 만들 수 없습니다. 하드웨어 가속이 켜져 있는지 확인해 주세요.');
+    return;
+  }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.setClearColor(0x101919);
+  ui.viewport.prepend(renderer.domElement);
+  const canvas = renderer.domElement;
+  canvas.tabIndex = 0;
+  canvas.setAttribute('aria-label', '육각 타일 경기장. 마우스 이동, 드래그 회전, 클릭 후 키보드 이동을 사용할 수 있습니다.');
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x101919, .011);
+  const camera = new THREE.PerspectiveCamera(44, 1, .1, 150);
+  const orbit = { theta: .25, phi: .59, radius: 47 };
+  const cameraTarget = new THREE.Vector3(0, 0, 0);
+  function updateCamera() {
+    const fit = Math.max(1, 1.12 / camera.aspect);
+    const distance = orbit.radius * fit;
+    const horizontal = distance * Math.sin(orbit.phi);
+    camera.position.set(horizontal * Math.sin(orbit.theta), distance * Math.cos(orbit.phi), horizontal * Math.cos(orbit.theta));
+    camera.lookAt(cameraTarget);
+    camera.updateMatrixWorld();
+    scene.fog.density = .011 / fit;
+  }
+  updateCamera();
+  scene.add(new THREE.HemisphereLight(0xb3d3c6, 0x202017, .58));
+  const keyLight = new THREE.DirectionalLight(0xdfe6c9, .7);
+  keyLight.position.set(-12, 24, 10);
+  scene.add(keyLight);
+  const orangeLight = new THREE.PointLight(0xff7133, .85, 23, 2);
+  orangeLight.position.set(0, 3.2, 0);
+  scene.add(orangeLight);
+
+  // One fixed instance pool per visual type; no scene nodes are created during a round.
+  const matrix = new THREE.Matrix4(), localMatrix = new THREE.Matrix4(), combined = new THREE.Matrix4();
+  const position = new THREE.Vector3(), scale = new THREE.Vector3(), rotation = new THREE.Quaternion();
+  const color = new THREE.Color(), up = new THREE.Vector3(0, 1, 0), segment = new THREE.Vector3();
+  const identity = new THREE.Quaternion(), hiddenMatrix = new THREE.Matrix4().makeScale(0, 0, 0);
+  const axisTemp = new THREE.Vector3(), groundPlane = new THREE.Plane(up, 0);
+  function instances(geometry, material, count) {
+    const mesh = new THREE.InstancedMesh(geometry, material, count);
+    mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+    mesh.frustumCulled = false;
+    scene.add(mesh);
+    return mesh;
+  }
+  const stoneMaterials = [
+    new THREE.MeshStandardMaterial({ color: 0x414c45, roughness: .93 }),
+    new THREE.MeshStandardMaterial({ color: 0x879083, roughness: .91 }),
+    new THREE.MeshStandardMaterial({ color: 0x28222b, roughness: .9 })
+  ];
+  const tileGeometry = new THREE.CylinderGeometry(TILE_RADIUS, TILE_RADIUS, THICKNESS, 6, 1, false);
+  const bodies = instances(tileGeometry, stoneMaterials, COUNT);
+  for (let i = 0; i < COUNT; i++) {
+    const shade = .79 + ((i * 29) % 19) / 95;
+    color.setRGB(shade, shade, shade);
+    bodies.setColorAt(i, color);
+  }
+  function undersideHexGeometry(radius, y) {
+    const vertices = [0, y, 0], indices = [];
+    for (let i = 0; i < 6; i++) vertices.push(Math.sin(i * Math.PI / 3) * radius, y, Math.cos(i * Math.PI / 3) * radius);
+    for (let i = 0; i < 6; i++) indices.push(0, (i + 1) % 6 + 1, i + 1);
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+    geometry.setIndex(indices);
+    geometry.computeVertexNormals();
+    return geometry;
+  }
+  const glowMaterial = new THREE.MeshBasicMaterial({ color: 0xff731b, transparent: true, opacity: .88, blending: THREE.AdditiveBlending, depthWrite: false });
+  const lava = instances(undersideHexGeometry(.715, -.128), glowMaterial, COUNT);
+  const veinVertices = [];
+  for (let i = 0; i < 6; i++) {
+    const a = i * Math.PI / 3, b = a + .075;
+    veinVertices.push(0, -.132, 0, Math.sin(a) * .64, -.132, Math.cos(a) * .64, Math.sin(b) * .64, -.132, Math.cos(b) * .64);
+  }
+  const veinGeometry = new THREE.BufferGeometry();
+  veinGeometry.setAttribute('position', new THREE.Float32BufferAttribute(veinVertices, 3));
+  veinGeometry.computeVertexNormals();
+  const veins = instances(veinGeometry, new THREE.MeshBasicMaterial({ color: 0xffdd79, side: THREE.DoubleSide, transparent: true, opacity: .8, blending: THREE.AdditiveBlending, depthWrite: false }), COUNT);
+  const coneGeometry = new THREE.ConeGeometry(.125, .34, 5);
+  coneGeometry.rotateZ(Math.PI);
+  const spikes = instances(coneGeometry, new THREE.MeshStandardMaterial({ color: 0x939899, metalness: .45, roughness: .45 }), COUNT * 3);
+  const spikeLocal = [];
+  for (let i = 0; i < 3; i++) {
+    const a = Math.PI / 2 + i * Math.PI * 2 / 3;
+    spikeLocal.push(new THREE.Matrix4().makeTranslation(.29 * Math.cos(a), -.295, .29 * Math.sin(a)));
+  }
+  spikes.visible = false;
+  const pitGeometry = undersideHexGeometry(.74, 0);
+  pitGeometry.rotateX(Math.PI);
+  const pits = instances(pitGeometry, new THREE.MeshBasicMaterial({ color: 0xff5720, transparent: true, opacity: .68, blending: THREE.AdditiveBlending, depthWrite: false }), COUNT);
+  const gapTops = instances(pitGeometry, new THREE.MeshBasicMaterial({ color: 0x85eee1, transparent: true, opacity: .16, blending: THREE.AdditiveBlending, depthWrite: false }), COUNT);
+  gapTops.count = 0;
+
+  const base = new THREE.Mesh(new THREE.CylinderGeometry(SQRT3 * PITCH * RADIUS + .91, SQRT3 * PITCH * RADIUS + 1.05, .48, 6), new THREE.MeshStandardMaterial({ color: 0x242e2c, roughness: .93 }));
+  base.rotation.y = Math.PI / 6;
+  base.position.y = -.89;
+  scene.add(base);
+  const edgeGeometry = new THREE.CylinderGeometry(.018, .018, 1, 5);
+  const warningEdges = instances(edgeGeometry, new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: .85, blending: THREE.AdditiveBlending, depthWrite: false }), COUNT * 6);
+  warningEdges.visible = false;
+  const outerEdges = instances(new THREE.CylinderGeometry(.028, .028, 1, 5), new THREE.MeshBasicMaterial({ color: 0x526553 }), 6);
+  function setSegment(mesh, index, ax, ay, az, bx, by, bz, width = 1) {
+    segment.set(bx - ax, by - ay, bz - az);
+    const length = segment.length();
+    position.set((ax + bx) / 2, (ay + by) / 2, (az + bz) / 2);
+    rotation.setFromUnitVectors(up, segment.multiplyScalar(1 / Math.max(length, .001)));
+    scale.set(width, length, width);
+    matrix.compose(position, rotation, scale);
+    mesh.setMatrixAt(index, matrix);
+  }
+  const boundaryRadius = SQRT3 * PITCH * RADIUS + .87;
+  for (let i = 0; i < 6; i++) {
+    const a = i * Math.PI / 3, b = (i + 1) * Math.PI / 3;
+    setSegment(outerEdges, i, Math.cos(a) * boundaryRadius, -.54, Math.sin(a) * boundaryRadius, Math.cos(b) * boundaryRadius, -.54, Math.sin(b) * boundaryRadius);
+  }
+
+  // The shards are solid triangular prisms, six per seam tile, with a hard pool limit.
+  const fragmentGeometry = new THREE.BufferGeometry();
+  const fragmentVertices = [], fragmentIndices = [];
+  const triangle = [[0, 0], [0, .73], [Math.sin(Math.PI / 3) * .73, Math.cos(Math.PI / 3) * .73]];
+  const centroidX = (triangle[0][0] + triangle[1][0] + triangle[2][0]) / 3;
+  const centroidZ = (triangle[0][1] + triangle[1][1] + triangle[2][1]) / 3;
+  for (const y of [-.1, .1]) for (const v of triangle) fragmentVertices.push(v[0] - centroidX, y, v[1] - centroidZ);
+  fragmentIndices.push(0, 2, 1, 3, 4, 5, 0, 1, 4, 0, 4, 3, 1, 2, 5, 1, 5, 4, 2, 0, 3, 2, 3, 5);
+  fragmentGeometry.setAttribute('position', new THREE.Float32BufferAttribute(fragmentVertices, 3));
+  fragmentGeometry.setIndex(fragmentIndices);
+  fragmentGeometry.computeVertexNormals();
+  const fragments = instances(fragmentGeometry, new THREE.MeshStandardMaterial({ color: 0x7f8073, roughness: .88, side: THREE.DoubleSide }), MAX_FRAGMENTS);
+  fragments.count = 0;
+  const shardData = [];
+  for (let k = 0; k < 6; k++) {
+    const angle = k * Math.PI / 3;
+    shardData.push({ angle, ox: centroidX * Math.cos(angle) + centroidZ * Math.sin(angle), oz: -centroidX * Math.sin(angle) + centroidZ * Math.cos(angle), dx: Math.sin(angle + Math.PI / 6), dz: Math.cos(angle + Math.PI / 6), axis: new THREE.Vector3(Math.cos(angle), .6, Math.sin(angle)).normalize() });
+  }
+  const boss = new THREE.Mesh(new THREE.BoxGeometry(1.6, 1.6, 1.6), new THREE.MeshStandardMaterial({ color: 0x777f78, roughness: .75, metalness: .12 }));
+  boss.position.set(0, .925, 0);
+  scene.add(boss);
+  const bossEdges = new THREE.LineSegments(new THREE.EdgesGeometry(boss.geometry), new THREE.LineBasicMaterial({ color: 0xaebbad, transparent: true, opacity: .4 }));
+  boss.add(bossEdges);
+  const sources = [];
+  const sourceCubes = instances(new THREE.BoxGeometry(.65, .65, .65), new THREE.MeshStandardMaterial({ color: 0xa0aaa0, emissive: 0x623910, emissiveIntensity: .9, roughness: .65 }), MAX_SOURCES);
+  sourceCubes.count = 0;
+  const sourceRings = instances(new THREE.CylinderGeometry(.026, .026, 1, 5), new THREE.MeshBasicMaterial({ color: 0xffc76f, transparent: true, opacity: .8, blending: THREE.AdditiveBlending, depthWrite: false }), MAX_SOURCES * 3 * 6);
+  sourceRings.count = 0;
+  const sourcePads = instances(pitGeometry, new THREE.MeshBasicMaterial({ color: 0xffb95c, transparent: true, opacity: .65, blending: THREE.AdditiveBlending, depthWrite: false }), MAX_SOURCES);
+  sourcePads.count = 0;
+
+  const playerMaterial = new THREE.MeshStandardMaterial({ color: 0x639922, emissive: 0x20340a, roughness: .75, transparent: true });
+  const playerMesh = new THREE.Mesh(new THREE.CylinderGeometry(.32, .36, 1.05, 14), playerMaterial);
+  scene.add(playerMesh);
+  const playerRing = new THREE.Mesh(new THREE.RingGeometry(.41, .46, 24), new THREE.MeshBasicMaterial({ color: 0xa4d86a, side: THREE.DoubleSide, transparent: true, opacity: .6, depthWrite: false }));
+  playerRing.rotation.x = -Math.PI / 2;
+  scene.add(playerRing);
+  const targetRing = new THREE.Mesh(new THREE.RingGeometry(.19, .24, 24), new THREE.MeshBasicMaterial({ color: 0xb5d97d, transparent: true, opacity: .55, side: THREE.DoubleSide, depthWrite: false }));
+  targetRing.rotation.x = -Math.PI / 2;
+  targetRing.position.y = .15;
+  targetRing.visible = false;
+  scene.add(targetRing);
+  const player = { x: tiles[tileLookup.get('0,5').index].x, z: tiles[tileLookup.get('0,5').index].z, targetX: 0, targetZ: 0, hasTarget: false };
+  playerMesh.position.set(player.x, .65, player.z);
+  playerRing.position.set(player.x, .145, player.z);
+  // Ambient wandering enemy: decorative, separate from tile damage.
+  const enemy = new THREE.Mesh(new THREE.BoxGeometry(.9, .9, .9), new THREE.MeshStandardMaterial({ color: 0xd85a30, roughness: .72 }));
+  enemy.position.set(-5.4, .575, -4);
+  scene.add(enemy);
+  const enemyMove = { remaining: 0, moving: false, x: -5.4, z: -4, tx: -5.4, tz: -4 };
+
+  let phase = 'rest', phaseTime = 0, roundTime = 0, round = 0, hits = 0, dodges = 0;
+  let roundHit = false, hasRound = false, roundFinished = false, cooldown = 0, flashTime = 0;
+  let cycle = { count: 2, gaps: 2, interval: .09, hold: 1.6, band: 4, gapWidth: 2, flipTime: .18, safeEdge: true, waveDuration: 0, holdUntil: 0, duration: 0 };
+  let flippedCount = 0, brokenCount = 0, seamCount = 0, uiTimer = 0, elapsed = 0;
+  const phaseNames = { warn: '예고', wave: '파동', hold: '위험 유지', return: '복귀', rest: '휴식' };
+  let demoDelay = .5, started = false;
+  function setPhase(next) {
+    phase = next;
+    phaseTime = 0;
+    ui['phase-label'].textContent = phaseNames[phase];
+    uiTimer = .2;
+  }
+  function clearTiles() {
+    flippedCount = brokenCount = 0;
+    fragments.count = 0;
+    for (const tile of tiles) {
+      tile.state = 0;
+      tile.pose = 0;
+      tile.gap = tile.edgeSafe = tile.seam = false;
+      tile.hazardStart = tile.hazardEnd = Infinity;
+      tile.hint = -1;
+      position.set(tile.x, 0, tile.z);
+      matrix.compose(position, identity, scale.set(1, 1, 1));
+      writeTileMatrix(tile.index, matrix);
+      pits.setMatrixAt(tile.index, hiddenMatrix);
+    }
+    gapTops.count = 0;
+    markTileBuffers();
+  }
+  function writeTileMatrix(index, tileMatrix) {
+    bodies.setMatrixAt(index, tileMatrix);
+    lava.setMatrixAt(index, tileMatrix);
+    veins.setMatrixAt(index, tileMatrix);
+    for (let k = 0; k < 3; k++) {
+      combined.multiplyMatrices(tileMatrix, spikeLocal[k]);
+      spikes.setMatrixAt(index * 3 + k, combined);
+    }
+  }
+  function markTileBuffers() {
+    bodies.instanceMatrix.needsUpdate = lava.instanceMatrix.needsUpdate = veins.instanceMatrix.needsUpdate = spikes.instanceMatrix.needsUpdate = pits.instanceMatrix.needsUpdate = true;
+  }
+  function chooseSources() {
+    sources.length = 0;
+    for (let n = 0; n < cycle.count; n++) {
+      let pick = null;
+      for (let attempt = 0; attempt < 80; attempt++) {
+        const candidate = candidates[Math.floor(Math.random() * candidates.length)];
+        if (sources.every(other => hexDistance(candidate.q, candidate.r, other.q, other.r) >= 6)) { pick = candidate; break; }
+      }
+      if (!pick) pick = candidates.find(candidate => sources.every(other => hexDistance(candidate.q, candidate.r, other.q, other.r) >= 6));
+      sources.push(pick);
+    }
+  }
+  const hexSteps = [[1, 0], [0, 1], [-1, 1], [-1, 0], [0, -1], [1, -1]];
+  function markGaps() {
+    // Rasterize each random ray on complete hex rings, including cells outside the arena.
+    // Each ring contributes exactly gapWidth consecutive cells, so the passage never fans out.
+    for (const source of sources) {
+      source.gapAngles = [];
+      const baseAngle = Math.random() * Math.PI * 2;
+      for (let g = 0; g < cycle.gaps; g++) {
+        const spacing = Math.PI * 2 / cycle.gaps;
+        const angle = baseAngle + g * spacing + (Math.random() - .5) * spacing * .45;
+        source.gapAngles.push(angle);
+        source.gap = true;
+        const rf = Math.sin(angle) / (1.5 * PITCH);
+        const qf = Math.cos(angle) / (SQRT3 * PITCH) - rf / 2;
+        const norm = Math.max(Math.abs(qf), Math.abs(rf), Math.abs(qf + rf));
+        for (let d = 1; d <= RADIUS * 2; d++) {
+          const qFloat = qf / norm * d, rFloat = rf / norm * d;
+          let cq = Math.round(qFloat), cr = Math.round(rFloat), cs = Math.round(-qFloat - rFloat);
+          const dq = Math.abs(cq - qFloat), dr = Math.abs(cr - rFloat), ds = Math.abs(cs + qFloat + rFloat);
+          if (dq > dr && dq > ds) cq = -cr - cs;
+          else if (dr > ds) cr = -cq - cs;
+          const ring = [];
+          let q = 0, r = -d, center = 0;
+          for (const step of hexSteps) for (let k = 0; k < d; k++) {
+            if (q === cq && r === cr) center = ring.length;
+            ring.push([q, r]);
+            q += step[0]; r += step[1];
+          }
+          for (let w = 0; w < cycle.gapWidth; w++) {
+            const cell = ring[(center + w - Math.floor(cycle.gapWidth / 2) + ring.length) % ring.length];
+            const tile = tileLookup.get((source.q + cell[0]) + ',' + (source.r + cell[1]));
+            if (tile) tile.gap = true;
+          }
+        }
+      }
+    }
+  }
+  function buildGapTops() {
+    let count = 0;
+    for (const tile of tiles) if (tile.gap) {
+      position.set(tile.x, .14, tile.z);
+      matrix.compose(position, identity, scale.set(1, 1, 1));
+      gapTops.setMatrixAt(count++, matrix);
+    }
+    gapTops.count = count;
+    gapTops.instanceMatrix.needsUpdate = true;
+  }
+  const hintColors = [0, 0x85eee1, 0xff5748, 0xa3d9a5, 0xff5748];
+  function isDangerous(tile, time) {
+    return time >= tile.hazardStart && time < tile.hazardEnd;
+  }
+  function updateTileHints() {
+    warningEdges.visible = phase === 'warn' || ui['safe-view'].checked;
+    gapTops.visible = hasRound && phase !== 'rest';
+    if (!warningEdges.visible) return;
+    const time = hasRound ? roundTime - WARN_TIME : -WARN_TIME;
+    let dirty = false;
+    for (const tile of tiles) {
+      let hint = 0;
+      if (phase === 'warn' && tile.gap) hint = 1;
+      else if (ui['safe-view'].checked) {
+        const dangerNow = isDangerous(tile, time);
+        const dangerSoon = tile.hazardStart > time && tile.hazardStart <= time + .5;
+        if (dangerSoon) hint = 2;
+        else if (!dangerNow) hint = 3;
+      } else if (phase === 'warn' && ui.highlight.checked && tile.seam) hint = 4;
+      if (tile.hint === hint) continue;
+      tile.hint = hint;
+      dirty = true;
+      color.setHex(hintColors[hint]);
+      for (let k = 0; k < 6; k++) {
+        const index = tile.index * 6 + k;
+        if (hint) {
+          const a = k * Math.PI / 3, b = (k + 1) * Math.PI / 3;
+          setSegment(warningEdges, index, tile.x + Math.sin(a) * .72, .158, tile.z + Math.cos(a) * .72, tile.x + Math.sin(b) * .72, .158, tile.z + Math.cos(b) * .72, hint === 1 ? 1.5 : 1);
+        } else warningEdges.setMatrixAt(index, hiddenMatrix);
+        warningEdges.setColorAt(index, color);
+      }
+    }
+    if (dirty) warningEdges.instanceMatrix.needsUpdate = warningEdges.instanceColor.needsUpdate = true;
+  }
+  function beginRound() {
+    started = true;
+    clearTiles();
+    round++;
+    hasRound = true;
+    roundFinished = roundHit = false;
+    roundTime = 0;
+    const band = clamp(settings.band, 2, Math.min(8, RADIUS - 1));
+    cycle = { count: settings.sources, gaps: settings.gaps, gapWidth: settings['gap-width'], band, interval: settings.interval, hold: settings.hold, safeEdge: ui['safe-edge'].checked || settings.gaps > 0 || settings.sources === 1, flipTime: Math.min(FLIP_TIME, band * settings.interval / 2), waveDuration: 0, holdUntil: 0, duration: 0 };
+    chooseSources();
+    markGaps();
+    seamCount = 0;
+    for (const tile of tiles) {
+      let first = 100, second = 100, nearest = 0;
+      for (let n = 0; n < sources.length; n++) {
+        const distance = hexDistance(tile.q, tile.r, sources[n].q, sources[n].r);
+        if (distance < first) { second = first; first = distance; nearest = n; }
+        else if (distance < second) second = distance;
+      }
+      tile.distance = first;
+      tile.source = nearest;
+      tile.start = first * cycle.interval;
+      tile.edgeSafe = cycle.safeEdge && hexDistance(tile.q, tile.r, 0, 0) >= RADIUS - 1;
+      // A gap from ANY source protects the cell from every wave and from seam damage.
+      const protectedTile = tile.gap || tile.edgeSafe;
+      tile.seam = !protectedTile && cycle.count > 1 && second - first <= 1;
+      tile.seamIndex = tile.seam ? seamCount++ : -1;
+      const source = sources[nearest];
+      const angle = Math.round(Math.atan2(tile.z - source.z, tile.x - source.x) / (Math.PI / 3)) * Math.PI / 3;
+      tile.nx = Math.cos(angle); tile.nz = Math.sin(angle);
+      tile.axis.set(tile.nz, 0, -tile.nx);
+      cycle.waveDuration = Math.max(cycle.waveDuration, tile.start + cycle.band * cycle.interval);
+      if (!protectedTile) {
+        if (tile.seam) {
+          tile.hazardStart = tile.start + .18;
+          tile.returnAt = tile.hazardStart + cycle.hold;
+          tile.hazardEnd = tile.returnAt + REPAIR_TIME;
+          cycle.holdUntil = Math.max(cycle.holdUntil, tile.returnAt);
+          cycle.duration = Math.max(cycle.duration, tile.hazardEnd);
+        } else {
+          tile.returnAt = tile.start + cycle.band * cycle.interval;
+          // The dangerous face crosses upright halfway through each flip.
+          // Equal offsets at both ends preserve the exact band-width duration.
+          tile.hazardStart = tile.start + cycle.flipTime / 2;
+          tile.hazardEnd = tile.returnAt + cycle.flipTime / 2;
+          cycle.duration = Math.max(cycle.duration, tile.returnAt + cycle.flipTime);
+        }
+      }
+    }
+    cycle.holdUntil = Math.max(cycle.holdUntil, cycle.waveDuration);
+    cycle.duration = Math.max(cycle.duration, cycle.waveDuration);
+    fragments.count = Math.min(seamCount * 6, MAX_FRAGMENTS);
+    for (let i = 0; i < fragments.count; i++) fragments.setMatrixAt(i, hiddenMatrix);
+    fragments.instanceMatrix.needsUpdate = true;
+    sourceCubes.count = sourcePads.count = sources.length;
+    buildGapTops();
+    setPhase('warn');
+    updateTileHints();
+    updateStatus();
+  }
+  function reset() {
+    started = true;
+    round = hits = dodges = 0;
+    hasRound = roundFinished = roundHit = false;
+    cooldown = flashTime = 0;
+    roundTime = 0;
+    sources.length = 0;
+    sourceCubes.count = sourceRings.count = sourcePads.count = 0;
+    clearTiles();
+    const startTile = tileLookup.get('0,5');
+    player.x = startTile.x; player.z = startTile.z; player.hasTarget = false;
+    targetRing.visible = false;
+    keys.clear();
+    setPhase('rest');
+    updateTileHints();
+    // Reset always gives a single fresh demonstration after the same half-second delay.
+    started = false;
+    demoDelay = .5;
+    updateStatus();
+  }
+  function updateStatus() {
+    ui.hits.textContent = hits;
+    ui.dodges.textContent = dodges;
+    const count = hasRound ? cycle.count : settings.sources;
+    const gaps = count * (hasRound ? cycle.gaps : settings.gaps);
+    const suffix = phase === 'rest' && started && !ui.repeat.checked ? ' · 다음 회차 대기' : '';
+    ui.status.textContent = phaseNames[phase] + ' · 파원 ' + count + ' · 위험 칸 지금 ' + (flippedCount + brokenCount) + ' · 틈 ' + gaps + ' · 부서진 타일 ' + brokenCount + ' · 맞음 ' + hits + ' / 회피 ' + dodges + suffix;
+    ui['round-label'].textContent = round ? '547칸 · ' + round + '회차' : '547칸 · 회차 준비';
+  }
+  ui.next.addEventListener('click', beginRound);
+  ui.reset.addEventListener('click', reset);
+  ui.hazard.addEventListener('change', () => {
+    const isLava = ui.hazard.value === 'lava';
+    lava.visible = veins.visible = isLava;
+    spikes.visible = !isLava;
+    stoneMaterials[2].color.set(isLava ? 0x28222b : 0x272b2e);
+  });
+  ui.repeat.addEventListener('change', updateStatus);
+  ui.highlight.addEventListener('change', updateTileHints);
+  ui['safe-view'].addEventListener('change', updateTileHints);
+
+  function setFlip(tile, progress, returning) {
+    const p = smooth(clamp(progress, 0, 1));
+    const amount = returning ? 1 - p : p;
+    const angle = Math.PI * amount;
+    // Rotate about the far edge; slide the moving hinge back so the tile lands in its own cell.
+    const offset = APOTHEM * (1 - Math.cos(angle)) - 2 * APOTHEM * amount;
+    position.set(tile.x + tile.nx * offset, (APOTHEM + .08) * Math.sin(angle), tile.z + tile.nz * offset);
+    rotation.setFromAxisAngle(tile.axis, angle);
+    matrix.compose(position, rotation, scale.set(1, 1, 1));
+    writeTileMatrix(tile.index, matrix);
+  }
+  function showPit(tile, shown) {
+    if (!shown) { pits.setMatrixAt(tile.index, hiddenMatrix); return; }
+    position.set(tile.x, -.54, tile.z);
+    matrix.compose(position, identity, scale.set(1, 1, 1));
+    pits.setMatrixAt(tile.index, matrix);
+  }
+  function animateShards(tile, time) {
+    const age = time - .18;
+    for (let k = 0; k < 6; k++) {
+      const index = tile.seamIndex * 6 + k;
+      if (age < 0 || age > BREAK_TIME - .18) { fragments.setMatrixAt(index, hiddenMatrix); continue; }
+      const shard = shardData[k];
+      const velocity = 1.2 + ((tile.index + k * 3) % 7) * .14;
+      position.set(tile.x + shard.ox + shard.dx * age * velocity, .6 + (1.4 + k * .08) * age - 8 * age * age, tile.z + shard.oz + shard.dz * age * velocity);
+      rotation.setFromAxisAngle(up, shard.angle);
+      axisTemp.copy(shard.axis);
+      const tumble = localMatrix.makeRotationAxis(axisTemp, age * (4 + k));
+      matrix.compose(position, rotation, scale.setScalar(clamp(1 - Math.max(0, age - .34) * 4.5, 0, 1)));
+      matrix.multiply(tumble);
+      fragments.setMatrixAt(index, matrix);
+    }
+  }
+  function animateTiles() {
+    const time = roundTime - WARN_TIME;
+    if (!hasRound || time < 0) return;
+    flippedCount = brokenCount = 0;
+    for (const tile of tiles) {
+      if (tile.gap || tile.edgeSafe) continue;
+      const age = time - tile.start;
+      if (age < 0) continue;
+      if (!tile.seam) {
+        if (age < cycle.flipTime) {
+          setFlip(tile, age / cycle.flipTime, false);
+          tile.pose = 3;
+        } else if (time < tile.returnAt) {
+          if (tile.pose !== 1) setFlip(tile, 1, false);
+          tile.pose = 1;
+        } else if (time < tile.returnAt + cycle.flipTime) {
+          setFlip(tile, (time - tile.returnAt) / cycle.flipTime, true);
+          tile.pose = 3;
+        } else {
+          if (tile.pose !== 0) setFlip(tile, 1, true);
+          tile.pose = 0;
+        }
+        tile.state = isDangerous(tile, time) ? 1 : 0;
+      } else {
+        if (age < .18) {
+          position.set(tile.x, .6 * Math.sin(age / .18 * Math.PI / 2), tile.z);
+          matrix.compose(position, identity, scale.set(1, 1, 1));
+          writeTileMatrix(tile.index, matrix);
+          tile.pose = 3;
+        } else if (time < tile.returnAt) {
+          if (tile.pose !== 2) {
+            writeTileMatrix(tile.index, hiddenMatrix);
+            showPit(tile, true);
+          }
+          tile.pose = 2;
+        } else if (time < tile.hazardEnd) {
+          const p = smooth(clamp((time - tile.returnAt) / REPAIR_TIME, 0, 1));
+          position.set(tile.x, -.95 * (1 - p), tile.z);
+          matrix.compose(position, identity, scale.setScalar(.7 + .3 * p));
+          writeTileMatrix(tile.index, matrix);
+          showPit(tile, true);
+          tile.pose = 3;
+        } else {
+          if (tile.pose !== 0) {
+            position.set(tile.x, 0, tile.z);
+            matrix.compose(position, identity, scale.set(1, 1, 1));
+            writeTileMatrix(tile.index, matrix);
+            showPit(tile, false);
+          }
+          tile.pose = 0;
+        }
+        if (age <= BREAK_TIME + .06) animateShards(tile, age);
+        tile.state = isDangerous(tile, time) ? 2 : 0;
+      }
+      if (tile.state === 1) flippedCount++;
+      else if (tile.state === 2) brokenCount++;
+    }
+    markTileBuffers();
+    fragments.instanceMatrix.needsUpdate = true;
+  }
+  function advancePattern(dt) {
+    if (!started) {
+      demoDelay -= dt;
+      if (demoDelay <= 0) beginRound();
+      return;
+    }
+    phaseTime += dt;
+    if (phase === 'rest') {
+      if (phaseTime >= .6 && ui.repeat.checked && hasRound && !roundFinished) beginRound();
+      return;
+    }
+    roundTime += dt;
+    const time = roundTime - WARN_TIME;
+    animateTiles();
+    const next = time < 0 ? 'warn' : time < cycle.waveDuration ? 'wave' : time < cycle.holdUntil ? 'hold' : time < cycle.duration ? 'return' : 'rest';
+    if (next !== phase) {
+      if (next === 'rest') roundFinished = true;
+      setPhase(next);
+    }
+  }
+  function animateSources() {
+    sourceRings.count = phase === 'warn' ? sources.length * 18 : 0;
+    sourcePads.visible = phase === 'warn';
+    for (let n = 0; n < sources.length; n++) {
+      const source = sources[n];
+      const warning = phase === 'warn';
+      const size = warning ? 1 + .06 * Math.sin(phaseTime * 14) : .87;
+      position.set(source.x, .51 + .06 * Math.sin(elapsed * 3 + n), source.z);
+      rotation.setFromAxisAngle(up, elapsed * .28 + n);
+      matrix.compose(position, rotation, scale.setScalar(size));
+      sourceCubes.setMatrixAt(n, matrix);
+      position.set(source.x, .147, source.z);
+      matrix.compose(position, identity, scale.setScalar(1 + .05 * Math.sin(elapsed * 15)));
+      sourcePads.setMatrixAt(n, matrix);
+      if (warning) for (let ring = 0; ring < 3; ring++) {
+        const p = (phaseTime * 1.35 + ring / 3) % 1;
+        const radius = .48 + p * 2.3;
+        const y = .25 + ring * .22;
+        for (let k = 0; k < 6; k++) {
+          const a = k * Math.PI / 3, b = (k + 1) * Math.PI / 3;
+          setSegment(sourceRings, n * 18 + ring * 6 + k, source.x + Math.sin(a) * radius, y, source.z + Math.cos(a) * radius, source.x + Math.sin(b) * radius, y, source.z + Math.cos(b) * radius, 1 - p * .65);
+        }
+      }
+    }
+    sourceCubes.instanceMatrix.needsUpdate = sourcePads.instanceMatrix.needsUpdate = sourceRings.instanceMatrix.needsUpdate = true;
+    warningEdges.material.opacity = phase === 'warn' ? .75 + .15 * Math.sin(elapsed * 11) : .65;
+  }
+
+  // Cube-round the axial coordinate; then reject the physical gaps between hexagons.
+  function tileAt(x, z, includeGaps = false) {
+    const rf = z / (1.5 * PITCH), qf = x / (SQRT3 * PITCH) - rf / 2;
+    let q = Math.round(qf), r = Math.round(rf), s = Math.round(-qf - rf);
+    const dq = Math.abs(q - qf), dr = Math.abs(r - rf), ds = Math.abs(s + qf + rf);
+    if (dq > dr && dq > ds) q = -r - s;
+    else if (dr > ds) r = -q - s;
+    const tile = tileLookup.get(q + ',' + r);
+    if (!tile || includeGaps) return tile || null;
+    const dx = Math.abs(x - tile.x), dz = Math.abs(z - tile.z);
+    if (dx > APOTHEM + .018 || dz > TILE_RADIUS + .018 || dx + SQRT3 * dz > SQRT3 * TILE_RADIUS + .03) return null;
+    return tile;
+  }
+  const keys = new Set();
+  const raycaster = new THREE.Raycaster(), pointerNDC = new THREE.Vector2(), rayPoint = new THREE.Vector3();
+  const pointer = { inside: false, down: false, drag: false, id: null, x: 0, y: 0, startX: 0, startY: 0, lastX: 0, lastY: 0, theta: 0, phi: 0, touch: false, mode: 'hover' };
+  function pointerTarget(clientX, clientY) {
+    const rect = canvas.getBoundingClientRect();
+    pointerNDC.set((clientX - rect.left) / rect.width * 2 - 1, -(clientY - rect.top) / rect.height * 2 + 1);
+    raycaster.setFromCamera(pointerNDC, camera);
+    if (!raycaster.ray.intersectPlane(groundPlane, rayPoint)) return false;
+    if (!tileAt(rayPoint.x, rayPoint.z, true)) { player.hasTarget = false; targetRing.visible = false; return false; }
+    player.targetX = rayPoint.x; player.targetZ = rayPoint.z; player.hasTarget = true;
+    targetRing.position.x = rayPoint.x; targetRing.position.z = rayPoint.z;
+    targetRing.visible = true;
+    return true;
+  }
+  canvas.addEventListener('pointerenter', event => { pointer.inside = true; pointer.x = event.clientX; pointer.y = event.clientY; });
+  canvas.addEventListener('pointerleave', () => {
+    pointer.inside = false;
+    if (!pointer.down) { player.hasTarget = false; targetRing.visible = false; }
+  });
+  canvas.addEventListener('pointerdown', event => {
+    if (event.button !== 0 || pointer.down) return;
+    canvas.focus({ preventScroll: true });
+    pointer.down = true; pointer.drag = false; pointer.id = event.pointerId;
+    pointer.touch = event.pointerType === 'touch';
+    pointer.startX = pointer.lastX = pointer.x = event.clientX;
+    pointer.startY = pointer.lastY = pointer.y = event.clientY;
+    pointer.theta = orbit.theta; pointer.phi = orbit.phi;
+    player.hasTarget = false;
+    targetRing.visible = false;
+    canvas.setPointerCapture(event.pointerId);
+  });
+  canvas.addEventListener('pointermove', event => {
+    pointer.x = event.clientX; pointer.y = event.clientY;
+    pointer.mode = 'hover';
+    if (pointer.down && event.pointerId === pointer.id) {
+      const dx = event.clientX - pointer.startX, dy = event.clientY - pointer.startY;
+      if (Math.hypot(dx, dy) >= 5) pointer.drag = true;
+      if (pointer.drag) {
+        orbit.theta = pointer.theta - dx * .006;
+        orbit.phi = clamp(pointer.phi - dy * .004, .28, 1.18);
+        updateCamera();
+      }
+    } else if (event.pointerType !== 'touch') pointerTarget(event.clientX, event.clientY);
+  });
+  canvas.addEventListener('pointerup', event => {
+    if (!pointer.down || event.pointerId !== pointer.id) return;
+    const moved = Math.hypot(event.clientX - pointer.startX, event.clientY - pointer.startY);
+    if (!pointer.drag && moved < 5) pointerTarget(event.clientX, event.clientY);
+    if (pointer.touch) pointer.mode = 'click';
+    // Leave tracking suspended after an orbit drag until the mouse moves again.
+    else if (pointer.drag) pointer.mode = 'orbit';
+    pointer.down = false; pointer.drag = false;
+    if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
+  });
+  canvas.addEventListener('pointercancel', () => { pointer.down = pointer.drag = false; player.hasTarget = false; targetRing.visible = false; });
+  canvas.addEventListener('wheel', event => {
+    event.preventDefault();
+    orbit.radius = clamp(orbit.radius * Math.exp(event.deltaY * .001), 23, 70);
+    updateCamera();
+    if (pointer.inside && !pointer.down && pointer.mode === 'hover') pointerTarget(pointer.x, pointer.y);
+  }, { passive: false });
+  canvas.addEventListener('keydown', event => {
+    if (['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowLeft', 'ArrowDown', 'ArrowRight'].includes(event.code)) {
+      event.preventDefault();
+      keys.add(event.code);
+      player.hasTarget = false; targetRing.visible = false;
+      pointer.mode = 'keyboard';
+    }
+  });
+  window.addEventListener('keyup', event => keys.delete(event.code));
+  canvas.addEventListener('blur', () => keys.clear());
+  window.addEventListener('blur', () => { keys.clear(); pointer.down = pointer.drag = false; player.hasTarget = false; targetRing.visible = false; });
+  function movePlayer(dt) {
+    if (pointer.inside && !pointer.down && pointer.mode === 'hover' && !keys.size) pointerTarget(pointer.x, pointer.y);
+    let dx = 0, dz = 0;
+    if (keys.size && document.activeElement === canvas) {
+      const forward = (keys.has('KeyW') || keys.has('ArrowUp') ? 1 : 0) - (keys.has('KeyS') || keys.has('ArrowDown') ? 1 : 0);
+      const right = (keys.has('KeyD') || keys.has('ArrowRight') ? 1 : 0) - (keys.has('KeyA') || keys.has('ArrowLeft') ? 1 : 0);
+      dx = -Math.sin(orbit.theta) * forward + Math.cos(orbit.theta) * right;
+      dz = -Math.cos(orbit.theta) * forward - Math.sin(orbit.theta) * right;
+      const length = Math.hypot(dx, dz);
+      if (length) { dx = dx / length * settings.speed * dt; dz = dz / length * settings.speed * dt; }
+    } else if (player.hasTarget && !pointer.down) {
+      dx = player.targetX - player.x; dz = player.targetZ - player.z;
+      const distance = Math.hypot(dx, dz), step = Math.min(distance, settings.speed * dt);
+      if (distance > .02) { dx = dx / distance * step; dz = dz / distance * step; }
+      else dx = dz = 0;
+    }
+    const nx = player.x + dx, nz = player.z + dz;
+    if (tileAt(nx, nz, true)) { player.x = nx; player.z = nz; }
+    else {
+      if (tileAt(nx, player.z, true)) player.x = nx;
+      if (tileAt(player.x, nz, true)) player.z = nz;
+    }
+    playerMesh.position.set(player.x, .65 + .018 * Math.sin(elapsed * 7), player.z);
+    playerRing.position.set(player.x, .146, player.z);
+  }
+  function checkDamage(dt) {
+    cooldown = Math.max(0, cooldown - dt);
+    flashTime = Math.max(0, flashTime - dt);
+    const tile = tileAt(player.x, player.z, true);
+    if (hasRound && phase !== 'rest' && tile && (tile.state === 1 || tile.state === 2) && cooldown === 0) {
+      hits++; roundHit = true; cooldown = 1; flashTime = .23; uiTimer = .2;
+    }
+    if (roundFinished) {
+      if (!roundHit) dodges++;
+      roundFinished = false;
+      uiTimer = .2;
+    }
+    const flash = flashTime / .23;
+    ui.flash.style.opacity = String(flash * .7);
+    playerMaterial.color.set(flashTime > 0 ? 0xff4b36 : 0x639922);
+    playerMaterial.emissive.set(flashTime > 0 ? 0x7b140b : 0x20340a);
+    const blink = cooldown > 0 && Math.floor(cooldown * 12) % 2 === 0;
+    playerMaterial.opacity = cooldown > 0 ? (blink ? .22 : .58) : 1;
+    playerMaterial.depthWrite = cooldown === 0;
+    playerRing.material.opacity = cooldown > 0 ? (blink ? .2 : .45) : .6;
+  }
+  function moveEnemy(dt) {
+    enemyMove.remaining -= dt;
+    if (enemyMove.remaining <= 0) {
+      enemyMove.moving = Math.random() >= .3;
+      enemyMove.remaining = enemyMove.moving ? 1.8 + Math.random() * 2.8 : .8 + Math.random() * 1.4;
+      const target = candidates[Math.floor(Math.random() * candidates.length)];
+      enemyMove.tx = target.x; enemyMove.tz = target.z;
+    }
+    if (enemyMove.moving) {
+      const dx = enemyMove.tx - enemyMove.x, dz = enemyMove.tz - enemyMove.z;
+      const distance = Math.hypot(dx, dz), step = Math.min(distance, .7 * dt);
+      if (distance > .05) {
+        enemyMove.x += dx / distance * step; enemyMove.z += dz / distance * step;
+        enemy.rotation.y = Math.atan2(dx, dz);
+      }
+    }
+    enemy.position.set(enemyMove.x, .575, enemyMove.z);
+  }
+  function animateGlow() {
+    for (let i = 0; i < COUNT; i++) {
+      const strength = .66 + .21 * Math.sin(elapsed * 4.6 + i * .71) + .1 * Math.sin(elapsed * 8.2 + i * .31);
+      color.setRGB(1, .52 + strength * .32, .28 + strength * .31);
+      lava.setColorAt(i, color);
+      color.setRGB(.73 + .27 * strength, .56 + .35 * strength, .48 + .35 * strength);
+      pits.setColorAt(i, color);
+    }
+    lava.instanceColor.needsUpdate = pits.instanceColor.needsUpdate = true;
+    veins.material.opacity = .55 + .2 * Math.sin(elapsed * 5);
+    orangeLight.intensity = .75 + .18 * Math.sin(elapsed * 3);
+  }
+  function resize() {
+    const width = ui.viewport.clientWidth, height = ui.viewport.clientHeight;
+    renderer.setSize(width, height, false);
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+    updateCamera();
+  }
+  new ResizeObserver(resize).observe(ui.viewport);
+  resize();
+  clearTiles();
+  updateStatus();
+  let previous = performance.now(), frameNumber = 0;
+  document.addEventListener('visibilitychange', () => { previous = performance.now(); keys.clear(); });
+  function frame(now) {
+    requestAnimationFrame(frame);
+    const dt = Math.min(Math.max((now - previous) / 1000, 0), .05);
+    previous = now;
+    if (document.hidden) return;
+    elapsed += dt;
+    advancePattern(dt);
+    movePlayer(dt);
+    checkDamage(dt);
+    updateTileHints();
+    animateSources();
+    moveEnemy(dt);
+    if ((frameNumber++ & 1) === 0) animateGlow();
+    uiTimer += dt;
+    if (uiTimer >= .16) { updateStatus(); uiTimer = 0; }
+    renderer.render(scene, camera);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

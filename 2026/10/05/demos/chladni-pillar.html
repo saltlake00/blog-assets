@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>클라드니 토계 기둥 데모 v2</title>
+<style>
+:root{--bg:#f7f6f2;--text:#1f1e1b;--sub:#5f5e5a;--muted:#888780;--border:rgba(0,0,0,.14)}
+@media (prefers-color-scheme:dark){:root{--bg:#1c1b19;--text:#ecebe6;--sub:#b4b2a9;--muted:#888780;--border:rgba(255,255,255,.16)}}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,"Noto Sans KR",sans-serif}
+main{max-width:960px;margin:0 auto;padding:20px 16px}
+h1{font-size:20px;font-weight:500;margin:0 0 4px}
+p.d{font-size:13px;color:var(--sub);margin:0 0 12px}
+#view{width:100%;height:520px;border-radius:12px;border:1px solid var(--border);overflow:hidden;cursor:grab;touch-action:none}
+.hint{font-size:12px;color:var(--muted);margin-top:6px}
+.bt{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0}
+button,select{font:inherit;font-size:13px;color:var(--text);background:transparent;border:1px solid var(--border);border-radius:8px;padding:6px 12px;cursor:pointer}
+select{padding:5px 8px}
+.cw{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px 20px;margin:12px 0 0}
+.cr{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--sub)}
+.cr input[type=range]{flex:1}
+.cr b{font-weight:500;color:var(--text);min-width:34px;text-align:right}
+#info{font-size:13px;color:var(--sub);margin-top:10px}
+</style>
+</head>
+<body>
+<main>
+<h1>클라드니 토계 기둥 데모 v2</h1>
+<p class="d">조준점에서 충격파가 퍼지며 바닥이 격자로 갈라지고, 클라드니 무늬 점수만큼 직육면체 기둥이 솟는다. 설계: 위키 projects/gamedev/개인프로젝트/토계-클라드니-기둥-설계.md</p>
+<div id="view"></div>
+<div class="hint">바닥 클릭 = 그 자리에서 시전 · 드래그 = 카메라 회전 · 휠 = 확대</div>
+<div class="bt">
+<button id="cast">시전</button>
+<button id="reset">되돌리기</button>
+<button id="phase">다음 단계 (모드 올리기)</button>
+<button id="rand">무작위 무늬</button>
+<button id="top">위에서 보기</button>
+</div>
+<div class="cw">
+<div class="cr">n<input type="range" id="n" min="1" max="9" step="1" value="3"><b id="nO">3</b></div>
+<div class="cr">m<input type="range" id="m" min="1" max="9" step="1" value="5"><b id="mO">5</b></div>
+<div class="cr">선 두께<input type="range" id="w" min="0.05" max="0.6" step="0.01" value="0.22"><b id="wO">0.22</b></div>
+<div class="cr">퍼짐 속도<input type="range" id="sp" min="2" max="30" step="1" value="7"><b id="spO">7</b></div>
+<div class="cr">기둥 높이<input type="range" id="hh" min="1" max="6" step="0.1" value="3.6"><b id="hhO">3.6</b></div>
+<div class="cr">솟는 곳<select id="mode" style="flex:1"><option value="node">마디선 (모래가 모이는 곳)</option><option value="anti">배 (크게 흔들리는 곳)</option></select></div>
+<div class="cr">부호<select id="sg" style="flex:1"><option value="-1">빼기 (클래식)</option><option value="1">더하기</option></select></div>
+<div class="cr"><label style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="prev"> 시전 전 모래 무늬 미리보기</label></div>
+<div class="cr"><label style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="chr" checked> 캐릭터 표시 (키 1.8m)</label></div>
+</div>
+<div id="info"></div>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+const el=document.getElementById('view');
+const W=()=>el.clientWidth,H=()=>el.clientHeight;
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
+renderer.setSize(W(),H());el.appendChild(renderer.domElement);
+const scene=new THREE.Scene();
+const cam=new THREE.PerspectiveCamera(45,W()/H(),0.1,300);
+scene.add(new THREE.HemisphereLight(0xfff4e0,0x3a3028,0.85));
+const dl=new THREE.DirectionalLight(0xffffff,0.75);dl.position.set(12,24,8);scene.add(dl);
+const G=40,S=0.5,HALF=G*S/2;
+const under=new THREE.Mesh(new THREE.PlaneGeometry(G*S,G*S),new THREE.MeshBasicMaterial({color:0xe8892a}));
+under.rotation.x=-Math.PI/2;under.position.y=0.02;scene.add(under);
+const rim=new THREE.Mesh(new THREE.BoxGeometry(G*S+1.2,0.6,G*S+1.2),new THREE.MeshLambertMaterial({color:0x4a4038}));
+rim.position.y=-0.3;scene.add(rim);
+const geo=new THREE.BoxGeometry(1,1,1);geo.translate(0,0.5,0);
+const mat=new THREE.MeshLambertMaterial({color:0xffffff});
+const N=G*G,mesh=new THREE.InstancedMesh(geo,mat,N);scene.add(mesh);
+const hero=new THREE.Mesh(new THREE.CylinderGeometry(0.35,0.35,1.8,20),new THREE.MeshLambertMaterial({color:0x639922}));hero.position.set(HALF-1.2,0.9+0.3,HALF-1.2);scene.add(hero);
+const ring=new THREE.Mesh(new THREE.RingGeometry(0.35,0.55,32),new THREE.MeshBasicMaterial({color:0xffd27a,side:THREE.DoubleSide}));
+ring.rotation.x=-Math.PI/2;scene.add(ring);
+const px=new Float32Array(N),pz=new Float32Array(N),sc=new Float32Array(N),ph=new Float32Array(N);
+for(let i=0;i<G;i++)for(let j=0;j<G;j++){const k=i*G+j;px[k]=(i+0.5)*S-HALF;pz[k]=(j+0.5)*S-HALF;ph[k]=Math.random()*6.28;}
+const $=id=>document.getElementById(id);
+const P={n:3,m:5,w:0.22,sp:7,hh:3.6,mode:'node',sg:-1,prev:false};
+let ox=0,oz=0,t=-1,state='idle',back=0;
+function compute(){
+  let n=P.n,m=P.m,sg=P.sg;if(n===m&&sg===-1)sg=1;
+  const raw=new Float32Array(N);let mx=1e-6;
+  for(let i=0;i<G;i++)for(let j=0;j<G;j++){const u=(i+0.5)/G,v=(j+0.5)/G;
+    const f=Math.cos(n*Math.PI*u)*Math.cos(m*Math.PI*v)+sg*Math.cos(m*Math.PI*u)*Math.cos(n*Math.PI*v);
+    const a=Math.abs(f);raw[i*G+j]=a;if(a>mx)mx=a;}
+  let cnt=0;
+  for(let k=0;k<N;k++){const a=raw[k]/mx;let s=P.mode==='node'?1-a/P.w:(a-(1-P.w))/P.w;s=Math.max(0,Math.min(1,s));s=s*s*(3-2*s);sc[k]=s;if(s>0.05)cnt++;}
+  $('info').textContent='f(x,y) = cos('+n+'πx)·cos('+m+'πy) '+(sg<0?'−':'+')+' cos('+m+'πx)·cos('+n+'πy)'+(P.n===P.m&&P.sg===-1?' (n=m이면 빼기는 전부 0이라 더하기로 바꿈)':'')+' · 솟는 기둥 '+cnt+'개 / '+N+'칸';
+}
+const cG=new THREE.Color(0x8c7c68),cC=new THREE.Color(0x6e6152),cP=new THREE.Color(0xd2ab72),cS=new THREE.Color(0xe9dcc0),tmp=new THREE.Color(),dm=new THREE.Object3D();
+const eob=x=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2);};
+const cl=x=>x<0?0:x>1?1:x;
+function frame(dt,time){
+  if(state==='cast')t+=dt;
+  if(state==='back'){back+=dt*1.6;if(back>=1){state='idle';t=-1;back=0;}}
+  const R=t<0?-1:t*P.sp,rd=Math.max(0.6,P.sp*0.8),bk=state==='back'?1-back:1;
+  for(let k=0;k<N;k++){
+    const d=Math.hypot(px[k]-ox,pz[k]-oz),lead=R-d;
+    const crack=t<0?0:cl(lead/0.5);
+    const rx=cl((lead-0.8)/rd),rise=t<0?0:0.5-0.5*Math.cos(Math.PI*rx);
+    const after=t<0?-1:(lead-0.8-rd)/P.sp,wob=after>0&&after<1?1+0.08*Math.sin(after*11-d*1.3)*(1-after):1;
+    let shake=0;if(lead>0&&lead<1.6)shake=0.1*Math.sin(Math.PI*lead/1.6)+Math.sin(time*30+ph[k])*0.015;
+    const h=0.3+sc[k]*P.hh*rise*wob*bk;
+    const gap=1-0.13*crack*bk;
+    dm.position.set(px[k],shake,pz[k]);dm.scale.set(S*gap,h,S*gap);dm.updateMatrix();mesh.setMatrixAt(k,dm.matrix);
+    tmp.copy(cG);
+    if(P.prev&&t<0)tmp.lerp(cS,sc[k]*0.9);
+    tmp.lerp(cC,crack*0.6*bk);tmp.lerp(cP,sc[k]*cl(rise)*bk);
+    mesh.setColorAt(k,tmp);
+  }
+  mesh.instanceMatrix.needsUpdate=true;if(mesh.instanceColor)mesh.instanceColor.needsUpdate=true;
+  ring.position.set(ox,0.45,oz);ring.scale.setScalar(1+0.15*Math.sin(time*5));
+}
+let th=0.75,phi=0.95,rad=34,topV=false;
+function placeCam(){const p=topV?0.02:phi;cam.position.set(rad*Math.sin(p)*Math.sin(th),rad*Math.cos(p),rad*Math.sin(p)*Math.cos(th));cam.lookAt(0,1,0);}
+let down=null,moved=0;
+const cv=renderer.domElement;
+cv.addEventListener('pointerdown',e=>{down={x:e.clientX,y:e.clientY};moved=0;el.style.cursor='grabbing';cv.setPointerCapture(e.pointerId);});
+cv.addEventListener('pointermove',e=>{if(!down)return;const dx=e.clientX-down.x,dy=e.clientY-down.y;moved+=Math.abs(dx)+Math.abs(dy);th-=dx*0.008;phi=Math.max(0.15,Math.min(1.45,phi-dy*0.006));down={x:e.clientX,y:e.clientY};if(moved>4)topV=false;placeCam();});
+cv.addEventListener('pointerup',e=>{el.style.cursor='grab';if(down&&moved<5){const r=cv.getBoundingClientRect();
+  const v=new THREE.Vector2(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1);const rc=new THREE.Raycaster();rc.setFromCamera(v,cam);
+  const hit=new THREE.Vector3();if(rc.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0,1,0),0),hit)&&Math.abs(hit.x)<=HALF&&Math.abs(hit.z)<=HALF){ox=hit.x;oz=hit.z;cast();}}down=null;});
+cv.addEventListener('wheel',e=>{e.preventDefault();rad=Math.max(14,Math.min(70,rad+e.deltaY*0.03));placeCam();},{passive:false});
+function cast(){t=0;back=0;state='cast';}
+$('cast').onclick=cast;
+$('reset').onclick=()=>{if(t>=0){state='back';back=0;}};
+$('top').onclick=()=>{topV=!topV;placeCam();};
+$('phase').onclick=()=>{let n=P.n,m=P.m;if(m<9)m++;else if(n<8){n++;m=n+1;}else{n=1;m=2;}setNM(n,m);cast();};
+$('rand').onclick=()=>{let n=1+Math.floor(Math.random()*8),m=1+Math.floor(Math.random()*9);if(m===n)m=n%9+1;setNM(n,m);cast();};
+function setNM(n,m){P.n=n;P.m=m;$('n').value=n;$('m').value=m;$('nO').textContent=n;$('mO').textContent=m;compute();}
+[['n',0],['m',0],['w',2],['sp',0],['hh',1]].forEach(([id,dp])=>{$(id).addEventListener('input',e=>{P[id]=parseFloat(e.target.value);$(id+'O').textContent=P[id].toFixed(dp);if(id!=='sp'&&id!=='hh')compute();});});
+$('mode').onchange=e=>{P.mode=e.target.value;compute();};
+$('sg').onchange=e=>{P.sg=parseInt(e.target.value,10);compute();};
+$('prev').onchange=e=>{P.prev=e.target.checked;};
+$('chr').onchange=e=>{hero.visible=e.target.checked;};
+new ResizeObserver(()=>{renderer.setSize(W(),H());cam.aspect=W()/H();cam.updateProjectionMatrix();}).observe(el);
+compute();placeCam();
+let last=performance.now();
+(function loop(now){const dt=Math.min(0.05,(now-last)/1000);last=now;frame(dt,now/1000);renderer.render(scene,cam);requestAnimationFrame(loop);})(last);
+setTimeout(cast,400);
+})();
+</script>
+</body>
+</html>

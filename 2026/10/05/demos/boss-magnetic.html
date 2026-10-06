@@ -1,0 +1,846 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>자기력선 보스 패턴 데모 v2</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #e9edf2; --panel: #f7f9fc; --text: #202d3c; --muted: #5e6f81;
+      --border: #ccd5e0; --accent: #227b9a; --button: #263c51; --button-text: #fff;
+      --chip: #e6edf4; --hit: #bc3f44; --safe: #437b30;
+      --view: #0b121c; --overlay: #0b1424d9; --view-text: #e3edf8;
+      --view-muted: #a4b7cb; --north: #e24b4a; --south: #378add; --player: #639922;
+      --warning: #88dcff; --spike: #ffd9a0; --rest: #b3c3d3; --focus: #3da9cc;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+        --page: #101722; --panel: #17212e; --text: #e2eaf4; --muted: #99abc0;
+        --border: #2c3b4e; --accent: #76d0ea; --button: #3f829b; --button-text: #fff;
+        --chip: #202e3e; --hit: #ff8787; --safe: #aad783;
+      }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--page); color: var(--text); font-family: system-ui, -apple-system, "Malgun Gothic", sans-serif; }
+    main { max-width: 960px; margin: 0 auto; padding: 27px 16px 22px; }
+    .eyebrow { color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .12em; margin-bottom: 7px; }
+    h1 { font-size: clamp(24px, 4vw, 32px); letter-spacing: -.05em; margin: 0 0 7px; }
+    .intro { color: var(--muted); font-size: 13px; line-height: 1.65; margin: 0 0 19px; }
+    .view { position: relative; height: 520px; width: 100%; overflow: hidden; border: 1px solid var(--border); border-radius: 14px; background: var(--view); }
+    .view canvas { display: block; width: 100%; height: 100%; touch-action: none; outline: none; cursor: crosshair; }
+    .view:focus-within { outline: 2px solid var(--focus); outline-offset: 3px; }
+    .guide { position: absolute; left: 14px; top: 13px; padding: 9px 11px; border-radius: 8px; background: var(--overlay); color: var(--view-muted); font-size: 10px; line-height: 1.7; pointer-events: none; }
+    .guide strong { font-weight: 600; color: var(--view-text); }
+    .stage-badge { position: absolute; top: 15px; right: 15px; min-width: 82px; text-align: center; padding: 7px 10px; color: var(--warning); background: var(--overlay); border-radius: 7px; font-size: 12px; font-weight: 700; pointer-events: none; }
+    .stage-badge[data-stage="spike"] { color: var(--spike); }
+    .stage-badge[data-stage="rest"] { color: var(--rest); }
+    .legend { position: absolute; bottom: 15px; left: 15px; display: flex; gap: 13px; padding: 7px 10px; border-radius: 7px; color: var(--view-muted); background: var(--overlay); font-size: 10px; pointer-events: none; }
+    .legend span { display: inline-flex; align-items: center; gap: 5px; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--north); }
+    .dot.south { background: var(--south); } .dot.player { background: var(--player); }
+    .feedback { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); color: var(--view-text); font-size: 15px; font-weight: 700; opacity: 0; pointer-events: none; text-shadow: 0 2px 10px var(--view); transition: opacity .12s; white-space: nowrap; }
+    .hit-flash { position: absolute; inset: 0; background: radial-gradient(ellipse, #ff354522, #ff233ba6); opacity: 0; pointer-events: none; }
+    .error { position: absolute; inset: 0; display: grid; place-content: center; padding: 25px; text-align: center; color: var(--view-text); font-size: 14px; line-height: 1.8; background: var(--view); }
+    .error[hidden] { display: none; }
+    .toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 15px 0; }
+    button { border: 1px solid var(--border); background: var(--panel); color: var(--text); border-radius: 8px; padding: 10px 14px; font: inherit; font-size: 12px; font-weight: 650; cursor: pointer; }
+    button.primary { background: var(--button); color: var(--button-text); border-color: var(--button); }
+    button:hover { filter: brightness(1.1); } button:active { transform: translateY(1px); }
+    button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+    .scores { display: flex; gap: 13px; flex-wrap: wrap; margin-left: auto; font-size: 12px; color: var(--muted); }
+    .scores b { margin-left: 4px; font-size: 16px; color: var(--text); font-variant-numeric: tabular-nums; }
+    .scores .hits b { color: var(--hit); } .scores .dodges b { color: var(--safe); }
+    .controls { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+    .slider-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 17px 27px; }
+    .slider-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 8px; font-size: 12px; }
+    output { color: var(--accent); font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    input[type="range"] { width: 100%; margin: 0; display: block; accent-color: var(--accent); cursor: pointer; }
+    .options { display: flex; gap: 12px 19px; align-items: center; flex-wrap: wrap; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border); font-size: 12px; }
+    .options label { display: inline-flex; gap: 6px; align-items: center; }
+    input[type="checkbox"] { margin: 0; accent-color: var(--accent); }
+    select { min-width: 0; max-width: 100%; background: var(--chip); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 7px 8px; font: inherit; font-size: 12px; }
+    .status { color: var(--muted); margin-top: 12px; font-size: 11px; line-height: 1.7; font-variant-numeric: tabular-nums; }
+    @media (max-width: 560px) {
+      main { padding-top: 20px; } .slider-grid { grid-template-columns: 1fr; gap: 17px; }
+      .scores { width: 100%; margin-left: 0; padding-top: 4px; } .guide { font-size: 9px; left: 10px; top: 10px; padding: 7px 8px; }
+      .stage-badge { top: 12px; right: 10px; font-size: 10px; min-width: 68px; }
+      .legend { left: 10px; bottom: 10px; gap: 10px; } .feedback { bottom: 47px; }
+      .options { align-items: flex-start; } .options .layout-option { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div class="eyebrow">보스 패턴 시안 · 자기장</div>
+      <h1>자기력선 보스 패턴 데모 v2</h1>
+      <p class="intro">은빛 쇳가루 사이로 북극에서 남극으로 빛이 흐릅니다. 예고선을 읽고, 파도처럼 솟아오르는 가시를 피하세요.</p>
+    </header>
+    <div class="view" id="view">
+      <div class="guide"><strong>마우스 올리기 / 클릭</strong> 이동 · <strong>WASD</strong> 이동<br><strong>드래그</strong> 시점 회전 · <strong>휠</strong> 확대 / 축소</div>
+      <div class="stage-badge" id="stageBadge">준비</div>
+      <div class="legend"><span><i class="dot"></i>북극</span><span><i class="dot south"></i>남극</span><span><i class="dot player"></i>플레이어</span></div>
+      <div class="feedback" id="feedback" aria-live="polite"></div>
+      <div class="hit-flash" id="hitFlash" aria-hidden="true"></div>
+      <div class="error" id="error" hidden></div>
+    </div>
+    <div class="toolbar">
+      <button class="primary" id="nextPhase" type="button">다음 페이즈</button>
+      <button id="reset" type="button">처음부터</button>
+      <div class="scores"><span>페이즈<b id="phaseValue">1</b></span><span class="hits">맞음<b id="hitValue">0</b></span><span class="dodges">회피<b id="dodgeValue">0</b></span></div>
+    </div>
+    <div class="controls">
+      <div class="slider-grid">
+        <div><div class="slider-head"><label for="lineCount">선 개수 · 북극마다</label><output id="lineOutput" for="lineCount">8개</output></div><input id="lineCount" type="range" min="4" max="16" step="1" value="8"></div>
+        <div><div class="slider-head"><label for="warningTime">예고 시간</label><output id="warningOutput" for="warningTime">1.4초</output></div><input id="warningTime" type="range" min="0.5" max="3" step="0.1" value="1.4"></div>
+        <div><div class="slider-head"><label for="poleSpeed">극 이동 속도</label><output id="speedOutput" for="poleSpeed">15도/초</output></div><input id="poleSpeed" type="range" min="0" max="40" step="1" value="15"></div>
+        <div><div class="slider-head"><label for="hitWidth">가시 판정 폭</label><output id="widthOutput" for="hitWidth">0.55미터</output></div><input id="hitWidth" type="range" min="0.3" max="1.2" step="0.05" value="0.55"></div>
+      </div>
+      <div class="options">
+        <label class="layout-option" for="poleLayout">극 배치 <select id="poleLayout"><option value="2">북극 1 · 남극 1</option><option value="3">북극 1 · 남극 2</option><option value="4">북극 2 · 남극 2</option></select></label>
+        <label><input id="showPowder" type="checkbox" checked>쇳가루 보기</label>
+        <label><input id="bendLines" type="checkbox" checked>예고 중 선 휘어짐</label>
+      </div>
+    </div>
+    <div class="status" id="status" role="status">준비 · 극 2개 · 선 8개 · 맞음 0 / 회피 0 · FPS 0</div>
+  </main>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+  (() => {
+    'use strict';
+    const $ = id => document.getElementById(id);
+    const ui = {
+      view: $('view'), stage: $('stageBadge'), status: $('status'), error: $('error'), feedback: $('feedback'),
+      lines: $('lineCount'), warning: $('warningTime'), speed: $('poleSpeed'), width: $('hitWidth'),
+      layout: $('poleLayout'), powder: $('showPowder'), bend: $('bendLines'),
+      phase: $('phaseValue'), hit: $('hitValue'), dodge: $('dodgeValue'), hitFlash: $('hitFlash')
+    };
+    function fail(message) { ui.error.textContent = message; ui.error.hidden = false; ui.status.textContent = message; }
+    if (!window.THREE) { fail('삼차원 라이브러리를 불러오지 못했습니다. 인터넷 연결을 확인하고 새로고침해 주세요.'); return; }
+    let renderer;
+    try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' }); }
+    catch (error) { fail('삼차원 화면을 시작하지 못했습니다. 브라우저의 하드웨어 가속 설정을 확인해 주세요.'); return; }
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+    renderer.shadowMap.enabled = false;
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.setClearColor(0x0b121c);
+    const canvas = renderer.domElement;
+    canvas.tabIndex = 0;
+    canvas.setAttribute('aria-label', '자기력선 경기장. 마우스 올리기로 이동, 드래그로 회전, 클릭 후 이동 키로 이동합니다.');
+    ui.view.prepend(canvas);
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.Fog(0x0b121c, 36, 76);
+    const camera = new THREE.PerspectiveCamera(47, 1, 0.1, 100);
+    const orbit = { azimuth: 0.32, elevation: 0.86, radius: 36 };
+    const target = new THREE.Vector3(0, 0.25, 0);
+    const cameraBase = new THREE.Vector3();
+    function updateCamera() {
+      const flat = orbit.radius * Math.cos(orbit.elevation);
+      camera.position.set(Math.sin(orbit.azimuth) * flat, Math.sin(orbit.elevation) * orbit.radius, Math.cos(orbit.azimuth) * flat);
+      cameraBase.copy(camera.position); camera.lookAt(target); camera.updateMatrixWorld();
+    }
+    updateCamera();
+    function resize() {
+      const width = ui.view.clientWidth, height = ui.view.clientHeight;
+      renderer.setSize(width, height, false);
+      camera.aspect = width / height;
+      // Keep the entire arena in view on narrow screens without changing the 520px view.
+      camera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(47 / 2)) / Math.min(1, camera.aspect)));
+      camera.updateProjectionMatrix();
+    }
+    new ResizeObserver(resize).observe(ui.view);
+    resize();
+    scene.add(new THREE.HemisphereLight(0x9ebadb, 0x0b0e15, 0.27));
+    const keyLight = new THREE.DirectionalLight(0xc1d8f5, 0.62); keyLight.position.set(-8, 16, 10); scene.add(keyLight);
+    const rimLight = new THREE.DirectionalLight(0x4986b6, 0.3); rimLight.position.set(8, 5, -12); scene.add(rimLight);
+    const arenaRadius = 15;
+    const floor = new THREE.Mesh(new THREE.CylinderGeometry(15, 15, 0.32, 96), new THREE.MeshStandardMaterial({ color: 0x202a37, metalness: 0.78, roughness: 0.69 }));
+    floor.position.y = -0.16; scene.add(floor);
+    const plinth = new THREE.Mesh(new THREE.CylinderGeometry(15.25, 15.35, 0.4, 96), new THREE.MeshStandardMaterial({ color: 0x101a28, metalness: 0.8, roughness: 0.45 }));
+    plinth.position.y = -0.46; scene.add(plinth);
+    const glowMaterial = new THREE.MeshBasicMaterial({ color: 0x73ccf7, transparent: true, opacity: 0.34, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide });
+    const boundary = new THREE.Mesh(new THREE.RingGeometry(14.92, 15.03, 96), glowMaterial);
+    boundary.rotation.x = -Math.PI / 2; boundary.position.y = 0.017; scene.add(boundary);
+    // Engraving is drawn only once: one textured disc replaces all seam draw calls.
+    const floorCanvas = document.createElement('canvas'); floorCanvas.width = floorCanvas.height = 1024;
+    const floorContext = floorCanvas.getContext('2d');
+    floorContext.fillStyle = '#161e29'; floorContext.fillRect(0, 0, 1024, 1024);
+    floorContext.strokeStyle = '#344459'; floorContext.lineWidth = 1.2;
+    for (let r = 64; r < 510; r += 64) {
+      floorContext.beginPath(); floorContext.arc(512, 512, r, 0, Math.PI * 2); floorContext.stroke();
+    }
+    floorContext.strokeStyle = '#29394b'; floorContext.lineWidth = 1;
+    for (let i = 0; i < 48; i++) {
+      const angle = i * Math.PI / 24;
+      floorContext.beginPath(); floorContext.moveTo(512 + Math.cos(angle) * 34, 512 + Math.sin(angle) * 34);
+      floorContext.lineTo(512 + Math.cos(angle) * 511, 512 + Math.sin(angle) * 511); floorContext.stroke();
+    }
+    const floorTexture = new THREE.CanvasTexture(floorCanvas); floorTexture.encoding = THREE.sRGBEncoding;
+    const etchedFloor = new THREE.Mesh(new THREE.CircleGeometry(14.98, 96), new THREE.MeshStandardMaterial({ map: floorTexture, metalness: 0.82, roughness: 0.58 }));
+    etchedFloor.rotation.x = -Math.PI / 2; etchedFloor.position.y = 0.006; scene.add(etchedFloor);
+    const wall = new THREE.Mesh(new THREE.CylinderGeometry(15.1, 15.1, 0.55, 96, 1, true), new THREE.MeshStandardMaterial({ color: 0x1b2939, metalness: 0.85, roughness: 0.43, side: THREE.DoubleSide }));
+    wall.position.y = 0.22; scene.add(wall);
+    const dummy = new THREE.Object3D();
+    const color = new THREE.Color();
+    const axisY = new THREE.Vector3(0, 1, 0), direction = new THREE.Vector3();
+    const markers = new THREE.InstancedMesh(new THREE.BoxGeometry(0.045, 0.022, 0.25), glowMaterial, 72);
+    for (let i = 0; i < 72; i++) {
+      const angle = i * Math.PI * 2 / 72;
+      dummy.position.set(14.65 * Math.sin(angle), 0.022, 14.65 * Math.cos(angle));
+      dummy.rotation.set(0, angle, 0); dummy.scale.set(1, 1, 1); dummy.updateMatrix(); markers.setMatrixAt(i, dummy.matrix);
+    }
+    scene.add(markers);
+    const bossMaterial = new THREE.MeshStandardMaterial({ color: 0x858d98, metalness: 0.82, roughness: 0.32 });
+    const boss = new THREE.Mesh(new THREE.BoxGeometry(1.6, 1.6, 1.6), bossMaterial);
+    boss.position.y = 1.2; scene.add(boss);
+    const bossEdges = new THREE.LineSegments(new THREE.EdgesGeometry(boss.geometry), new THREE.LineBasicMaterial({ color: 0xb7c6d9, transparent: true, opacity: 0.5 }));
+    boss.add(bossEdges);
+    const coreLight = new THREE.PointLight(0x689bc7, 0.45, 6, 2); coreLight.position.set(0, 2, 0); scene.add(coreLight);
+    function labelSprite(text, tint) {
+      const image = document.createElement('canvas'); image.width = 128; image.height = 64;
+      const context = image.getContext('2d'); context.font = 'bold 26px sans-serif'; context.textAlign = 'center';
+      context.fillStyle = tint; context.shadowColor = '#000'; context.shadowBlur = 5; context.fillText(text, 64, 39);
+      const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(image), transparent: true, depthWrite: false }));
+      sprite.scale.set(1.6, 0.8, 1); sprite.position.y = 0.85; return sprite;
+    }
+    const poleGeometry = new THREE.BoxGeometry(0.9, 0.9, 0.9);
+    const poleMaterials = [
+      new THREE.MeshStandardMaterial({ color: 0xe24b4a, emissive: 0xe24b4a, emissiveIntensity: 0.25, metalness: 0.65, roughness: 0.32 }),
+      new THREE.MeshStandardMaterial({ color: 0x378add, emissive: 0x378add, emissiveIntensity: 0.25, metalness: 0.65, roughness: 0.32 })
+    ];
+    const northLabel = labelSprite('N · 북극', '#ffa09b'), southLabel = labelSprite('S · 남극', '#88c6ff');
+    const poleRingGeometry = new THREE.TorusGeometry(0.87, 0.026, 5, 48);
+    const poleGlowGeometry = new THREE.CircleGeometry(1.55, 48);
+    const poleGlowVertex = `varying vec2 vDisc; void main() { vDisc = uv * 2.0 - 1.0; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`;
+    const poleGlowFragment = `uniform vec3 uTint; uniform float uPulse; varying vec2 vDisc;
+      void main() { float r = length(vDisc); float glow = pow(max(0.0, 1.0 - r), 2.0);
+        glow += 0.2 * exp(-80.0 * abs(r - 0.59)); gl_FragColor = vec4(uTint, glow * uPulse); }`;
+    const poles = [];
+    for (let i = 0; i < 4; i++) {
+      const mesh = new THREE.Mesh(poleGeometry, poleMaterials[i % 2]);
+      const north = northLabel.clone(), south = southLabel.clone(); mesh.add(north, south);
+      scene.add(mesh);
+      const ringMaterial = new THREE.MeshBasicMaterial({ color: 0xe24b4a, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false });
+      const ringA = new THREE.Mesh(poleRingGeometry, ringMaterial), ringB = new THREE.Mesh(poleRingGeometry, ringMaterial);
+      scene.add(ringA, ringB);
+      const halo = new THREE.Mesh(poleGlowGeometry, new THREE.ShaderMaterial({
+        uniforms: { uTint: { value: new THREE.Color(0xe24b4a) }, uPulse: { value: 0.7 } },
+        vertexShader: poleGlowVertex, fragmentShader: poleGlowFragment,
+        transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide
+      }));
+      halo.rotation.x = -Math.PI / 2; halo.position.y = 0.035; scene.add(halo);
+      poles.push({ mesh, halo, ringA, ringB, north, south, x: 0, z: 0, q: 1, radius: 6 + i * 0.8 });
+    }
+    const playerMaterial = new THREE.MeshStandardMaterial({ color: 0x639922, emissive: 0x24400b, emissiveIntensity: 0.38, metalness: 0.35, roughness: 0.45 });
+    const player = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.38, 1.1, 18), playerMaterial);
+    player.position.set(6, 0.55, 8); scene.add(player);
+    const playerRing = new THREE.Mesh(new THREE.RingGeometry(0.46, 0.52, 32), new THREE.MeshBasicMaterial({ color: 0xa1d663, transparent: true, opacity: 0.8, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthWrite: false }));
+    playerRing.rotation.x = -Math.PI / 2; playerRing.position.set(6, 0.034, 8); scene.add(playerRing);
+    const hitRing = new THREE.Mesh(new THREE.RingGeometry(0.7, 0.79, 48), new THREE.MeshBasicMaterial({ color: 0xff3548, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide }));
+    hitRing.rotation.x = -Math.PI / 2; hitRing.visible = false; scene.add(hitRing);
+    const destination = new THREE.Mesh(new THREE.RingGeometry(0.25, 0.32, 24), new THREE.MeshBasicMaterial({ color: 0xbce78d, transparent: true, opacity: 0.55, side: THREE.DoubleSide, depthWrite: false }));
+    destination.rotation.x = -Math.PI / 2; destination.visible = false; scene.add(destination);
+    const enemy = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.9, 0.9), new THREE.MeshStandardMaterial({ color: 0xd85a30, metalness: 0.4, roughness: 0.5 }));
+    enemy.position.set(-7, 0.45, 5); scene.add(enemy);
+    const enemyMotion = { timer: 0, angle: 0, stopped: false };
+    // Bounded pools: two north poles × 16 lines × 160 RK2 steps.
+    const MAX_LINES = 32, MAX_STEPS = 160, MAX_SEGMENTS = MAX_LINES * MAX_STEPS;
+    const MAX_SPIKES = 4608, POWDER_COUNT = 3000, FLOW_PER_LINE = 8;
+    const WAVE_DURATION = 0.25, SPIKE_RISE = 0.055;
+    const lineX = new Float32Array(MAX_LINES * (MAX_STEPS + 1));
+    const lineZ = new Float32Array(lineX.length), lineLength = new Uint16Array(MAX_LINES);
+    const lineDistance = new Float32Array(lineX.length), lineTotal = new Float32Array(MAX_LINES);
+    const segmentX = new Float32Array(MAX_SEGMENTS), segmentZ = new Float32Array(MAX_SEGMENTS);
+    const segmentDX = new Float32Array(MAX_SEGMENTS), segmentDZ = new Float32Array(MAX_SEGMENTS);
+    const segmentLengthSq = new Float32Array(MAX_SEGMENTS), segmentStart = new Float32Array(MAX_SEGMENTS);
+    const segmentEnd = new Float32Array(MAX_SEGMENTS), segmentLine = new Uint8Array(MAX_SEGMENTS);
+    let actualLines = 0, segmentCount = 0, spikeCount = 0, activePerPole = 8;
+    const northColor = new THREE.Color(0xff453d), middleColor = new THREE.Color(0xa367ff), southColor = new THREE.Color(0x49b7ff);
+    function fieldColor(progress) {
+      if (progress < 0.5) color.copy(northColor).lerp(middleColor, progress * 2);
+      else color.copy(middleColor).lerp(southColor, progress * 2 - 1);
+    }
+    function uploadRange(attribute, count) {
+      attribute.updateRange.offset = 0; attribute.updateRange.count = count * attribute.itemSize; attribute.needsUpdate = true;
+    }
+    function initializeIdentityMatrices(mesh) {
+      // r128 starts these arrays at zero, including homogeneous w; initialise once.
+      const matrices = mesh.instanceMatrix.array;
+      for (let m = 0; m < matrices.length; m += 16) matrices[m] = matrices[m + 5] = matrices[m + 10] = matrices[m + 15] = 1;
+      mesh.instanceMatrix.needsUpdate = true;
+    }
+    const telegraphMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.65, blending: THREE.AdditiveBlending, depthWrite: false });
+    const telegraphs = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.032, 0.032, 1, 5), telegraphMaterial, MAX_SEGMENTS);
+    // Allocate matrix and colour storage once; calculateLines only overwrites the active range.
+    telegraphs.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(MAX_SEGMENTS * 3), 3).setUsage(THREE.DynamicDrawUsage);
+    telegraphs.instanceMatrix.setUsage(THREE.DynamicDrawUsage); telegraphs.frustumCulled = false; telegraphs.count = 0; scene.add(telegraphs);
+
+    const flowMaterial = new THREE.MeshBasicMaterial({ color: 0xe8f7ff, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false });
+    const flow = new THREE.InstancedMesh(new THREE.SphereGeometry(0.073, 6, 4), flowMaterial, MAX_LINES * FLOW_PER_LINE);
+    initializeIdentityMatrices(flow);
+    flow.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(MAX_LINES * FLOW_PER_LINE * 3), 3).setUsage(THREE.DynamicDrawUsage);
+    flow.instanceMatrix.setUsage(THREE.DynamicDrawUsage); flow.frustumCulled = false; flow.count = 0; scene.add(flow);
+
+    // The cone, tip flash and 2–3 fragments share one frozen spike attribute pool.
+    const spikeData = new THREE.InstancedBufferAttribute(new Float32Array(MAX_SPIKES * 4), 4).setUsage(THREE.DynamicDrawUsage);
+    const spikeSeed = new THREE.InstancedBufferAttribute(new Float32Array(MAX_SPIKES), 1).setUsage(THREE.DynamicDrawUsage);
+    const spikeUniforms = { uSpikeTime: { value: 0 }, uSink: { value: 1 } };
+    const spikeGLSL = `
+      attribute vec4 iSpike;
+      attribute float iSeed;
+      uniform float uSpikeTime;
+      uniform float uSink;
+      float spikeGrowth() { return smoothstep(0.0, 0.055, uSpikeTime - iSpike.w) * uSink; }
+    `;
+    const spikeMaterial = new THREE.MeshStandardMaterial({ color: 0x242a34, metalness: 0.95, roughness: 0.22, emissive: 0x152435, emissiveIntensity: 0.2 });
+    spikeMaterial.onBeforeCompile = shader => {
+      shader.uniforms.uSpikeTime = spikeUniforms.uSpikeTime; shader.uniforms.uSink = spikeUniforms.uSink;
+      shader.vertexShader = spikeGLSL + shader.vertexShader;
+      shader.vertexShader = shader.vertexShader.replace('#include <beginnormal_vertex>', `
+        #include <beginnormal_vertex>
+        float normalGrowth = max(0.001, spikeGrowth());
+        objectNormal /= vec3(normalGrowth, max(0.001, iSpike.z * normalGrowth), normalGrowth);
+      `).replace('#include <begin_vertex>', `
+        float growth = spikeGrowth();
+        vec3 transformed = vec3(position.x * growth + iSpike.x,
+          (position.y + 0.5) * iSpike.z * growth + 0.016, position.z * growth + iSpike.y);
+      `);
+    };
+    const spikeGeometry = new THREE.ConeGeometry(0.18, 1, 5);
+    spikeGeometry.setAttribute('iSpike', spikeData); spikeGeometry.setAttribute('iSeed', spikeSeed);
+    const spikes = new THREE.InstancedMesh(spikeGeometry, spikeMaterial, MAX_SPIKES);
+    initializeIdentityMatrices(spikes);
+    spikes.frustumCulled = false; spikes.count = 0; spikes.visible = false; scene.add(spikes);
+    const sparkleMaterial = new THREE.ShaderMaterial({
+      uniforms: spikeUniforms, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false,
+      vertexShader: spikeGLSL + `varying float vGlow;
+        void main() { float g = spikeGrowth(); float age = uSpikeTime - iSpike.w;
+          float flash = 1.0 + 2.0 * exp(-max(age, 0.0) * 22.0);
+          float pulse = 0.85 + 0.15 * sin(uSpikeTime * 26.0 + iSeed * 61.0);
+          vec3 p = position * g * flash;
+          p += vec3(iSpike.x, 0.025 + iSpike.z * g, iSpike.y); vGlow = g * pulse;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0); }`,
+      fragmentShader: `varying float vGlow; void main() { gl_FragColor = vec4(0.65, 0.86, 1.0, vGlow); }`
+    });
+    const tipGeometry = new THREE.SphereGeometry(0.065, 6, 4);
+    tipGeometry.setAttribute('iSpike', spikeData); tipGeometry.setAttribute('iSeed', spikeSeed);
+    const sparkles = new THREE.InstancedMesh(tipGeometry, sparkleMaterial, MAX_SPIKES);
+    sparkles.frustumCulled = false; sparkles.count = 0; sparkles.visible = false; scene.add(sparkles);
+    // Three fixed fragment draws, no CPU spawning, recycling or per-frame matrix writes.
+    const debrisMaterial = new THREE.ShaderMaterial({
+      uniforms: spikeUniforms, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false,
+      vertexShader: spikeGLSL + `attribute float aFragment; varying float vLife;
+        void main() { float age = uSpikeTime - iSpike.w;
+          float liveWin = step(0.0, age) * (1.0 - step(0.24, age));
+          float enabled = 1.0 - step(2.5, aFragment) * step(iSeed, 0.5);
+          vLife = liveWin * enabled * (1.0 - clamp(age / 0.24, 0.0, 1.0)) * uSink;
+          float t = clamp(age, 0.0, 0.24), angle = iSeed * 83.0 + aFragment * 2.39996;
+          float speed = 1.5 + fract(iSeed * 19.0) * 1.8;
+          vec3 p = position * vLife;
+          p += vec3(iSpike.x + cos(angle) * speed * t,
+            0.045 + max(0.0, 3.1 * t - 8.0 * t * t), iSpike.y + sin(angle) * speed * t);
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0); }`,
+      fragmentShader: `varying float vLife; void main() { gl_FragColor = vec4(1.0, 0.51, 0.14, vLife); }`
+    });
+    const fragments = [];
+    for (let j = 1; j <= 3; j++) {
+      const geometry = new THREE.TetrahedronGeometry(0.055);
+      const fragmentIds = new Float32Array(geometry.attributes.position.count); fragmentIds.fill(j);
+      geometry.setAttribute('aFragment', new THREE.BufferAttribute(fragmentIds, 1));
+      geometry.setAttribute('iSpike', spikeData); geometry.setAttribute('iSeed', spikeSeed);
+      const mesh = new THREE.InstancedMesh(geometry, debrisMaterial, MAX_SPIKES);
+      mesh.frustumCulled = false; mesh.visible = false; mesh.count = 0; fragments.push(mesh); scene.add(mesh);
+    }
+
+    // WebGL1 / GLSL ES 1.0: fixed loop bound, attributes, varyings and gl_FragColor.
+    const powderUniforms = { uPoles: { value: new Float32Array(16) }, uTime: { value: 0 }, uWarning: { value: 0 } };
+    const powderMaterial = new THREE.ShaderMaterial({
+      uniforms: powderUniforms,
+      vertexShader: `
+        attribute vec3 iNeedle;
+        uniform vec4 uPoles[4];
+        uniform float uTime;
+        uniform float uWarning;
+        varying vec3 vSilver;
+        void main() {
+          vec2 b = vec2(0.0); float nearest = 1000.0;
+          for (int i = 0; i < 4; i++) {
+            vec2 d = iNeedle.xy - uPoles[i].xy;
+            float d2 = max(dot(d, d), 0.035);
+            b += d * uPoles[i].z * inversesqrt(d2) / d2;
+            nearest = min(nearest, mix(1000.0, d2, abs(uPoles[i].z)));
+          }
+          float magnitude = length(b);
+          vec2 tangent = magnitude > 0.000001 ? b / magnitude : vec2(cos(iNeedle.z * 6.28318), sin(iNeedle.z * 6.28318));
+          float strength = magnitude / (magnitude + 0.06);
+          // Strong-field response approximates needles close to a telegraph, without distance queries.
+          float response = smoothstep(0.08, 0.72, strength);
+          float lift = strength * 0.34 + response * uWarning * 1.04;
+          float visible = step(0.64, nearest);
+          vec3 along = vec3(tangent.x * cos(lift), sin(lift), tangent.y * cos(lift));
+          vec3 side = vec3(-tangent.y, 0.0, tangent.x), up = cross(side, along);
+          vec3 p = (along * position.x + up * position.y + side * position.z) * visible;
+          p += vec3(iNeedle.x, 0.042 + 0.25 * sin(lift), iNeedle.y);
+          vec3 n = normalize(along * normal.x + up * normal.y + side * normal.z);
+          float gleam = pow(max(0.0, sin(uTime * (10.0 + uWarning * 9.0) + iNeedle.z * 73.0)), 16.0);
+          float light = 0.16 + 0.34 * max(0.0, dot(n, normalize(vec3(-0.4, 0.85, 0.3))));
+          float silver = light + strength * 0.28 + gleam * response * uWarning * 1.55;
+          vSilver = mix(vec3(0.30, 0.40, 0.52), vec3(0.88, 0.94, 1.0), strength) * silver;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
+        }`,
+      fragmentShader: `varying vec3 vSilver; void main() { gl_FragColor = vec4(vSilver, 1.0); }`
+    });
+    const powderGeometry = new THREE.BoxGeometry(0.5, 0.035, 0.035);
+    const needleData = new Float32Array(POWDER_COUNT * 3);
+    const powder = new THREE.InstancedMesh(powderGeometry, powderMaterial, POWDER_COUNT);
+    powder.frustumCulled = false; scene.add(powder);
+    let randomState = 134975;
+    function random() { randomState = (Math.imul(randomState, 1664525) + 1013904223) >>> 0; return randomState / 4294967296; }
+    let powderIndex = 0;
+    for (let z = -14.9; z <= 14.9 && powderIndex < POWDER_COUNT; z += 0.48) {
+      for (let x = -14.9; x <= 14.9 && powderIndex < POWDER_COUNT; x += 0.48) {
+        const px = x + (random() - 0.5) * 0.28, pz = z + (random() - 0.5) * 0.28;
+        if (px * px + pz * pz < 14.75 * 14.75) {
+          const index = powderIndex++ * 3; needleData[index] = px; needleData[index + 1] = pz; needleData[index + 2] = random();
+        }
+      }
+    }
+    powderGeometry.setAttribute('iNeedle', new THREE.InstancedBufferAttribute(needleData, 3)); powder.count = powderIndex;
+    // Fixed 32 × 32 one-metre cells, with bounded linked references to nearby segments.
+    const GRID_SIZE = 32, GRID_ORIGIN = 16, MAX_REFERENCES = 131072, GRID_PADDING = 1.25;
+    const cellHead = new Int32Array(GRID_SIZE * GRID_SIZE);
+    const refNext = new Int32Array(MAX_REFERENCES), refSegment = new Uint16Array(MAX_REFERENCES);
+    let referenceCount = 0;
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    const field = { x: 0, z: 0, magnitude: 0, nearest: 100 };
+    function sampleField(x, z) {
+      let bx = 0, bz = 0, nearest = 1000;
+      for (let i = 0; i < poleCount; i++) {
+        const pole = poles[i], dx = x - pole.x, dz = z - pole.z;
+        const d2 = dx * dx + dz * dz; nearest = Math.min(nearest, d2);
+        const softened = Math.max(d2, 0.035), inverse = pole.q / (softened * Math.sqrt(softened));
+        bx += dx * inverse; bz += dz * inverse;
+      }
+      const magnitude = Math.hypot(bx, bz);
+      field.x = magnitude > 1e-7 ? bx / magnitude : 0;
+      field.z = magnitude > 1e-7 ? bz / magnitude : 0;
+      field.magnitude = magnitude; field.nearest = nearest;
+    }
+    function nearSouth(x, z) {
+      for (let i = 0; i < poleCount; i++) if (poles[i].q < 0) {
+        const dx = x - poles[i].x, dz = z - poles[i].z;
+        if (dx * dx + dz * dz < 0.49) return true;
+      }
+      return false;
+    }
+    const nearestLine = { distanceSq: 10000 };
+    function queryLine(x, z) {
+      nearestLine.distanceSq = 10000;
+      const cx = Math.floor(x + GRID_ORIGIN), cz = Math.floor(z + GRID_ORIGIN);
+      if (cx < 0 || cz < 0 || cx >= GRID_SIZE || cz >= GRID_SIZE) return;
+      let reference = cellHead[cz * GRID_SIZE + cx];
+      while (reference >= 0) {
+        const s = refSegment[reference], dx = segmentDX[s], dz = segmentDZ[s];
+        // Collision follows the visible N → S wave, including its partially active leading segment.
+        if (stageTime <= segmentStart[s]) { reference = refNext[reference]; continue; }
+        const active = clamp((stageTime - segmentStart[s]) / Math.max(0.000001, segmentEnd[s] - segmentStart[s]), 0, 1);
+        const t = clamp(((x - segmentX[s]) * dx + (z - segmentZ[s]) * dz) / segmentLengthSq[s], 0, active);
+        const ox = x - segmentX[s] - dx * t, oz = z - segmentZ[s] - dz * t, d2 = ox * ox + oz * oz;
+        if (d2 < nearestLine.distanceSq) nearestLine.distanceSq = d2;
+        reference = refNext[reference];
+      }
+    }
+    function buildGrid() {
+      cellHead.fill(-1); referenceCount = 0;
+      for (let s = 0; s < segmentCount; s++) {
+        const x2 = segmentX[s] + segmentDX[s], z2 = segmentZ[s] + segmentDZ[s];
+        const minX = clamp(Math.floor(Math.min(segmentX[s], x2) - GRID_PADDING + GRID_ORIGIN), 0, GRID_SIZE - 1);
+        const maxX = clamp(Math.floor(Math.max(segmentX[s], x2) + GRID_PADDING + GRID_ORIGIN), 0, GRID_SIZE - 1);
+        const minZ = clamp(Math.floor(Math.min(segmentZ[s], z2) - GRID_PADDING + GRID_ORIGIN), 0, GRID_SIZE - 1);
+        const maxZ = clamp(Math.floor(Math.max(segmentZ[s], z2) + GRID_PADDING + GRID_ORIGIN), 0, GRID_SIZE - 1);
+        for (let z = minZ; z <= maxZ; z++) for (let x = minX; x <= maxX; x++) {
+          if (referenceCount >= MAX_REFERENCES) break;
+          const cell = z * GRID_SIZE + x;
+          refSegment[referenceCount] = s; refNext[referenceCount] = cellHead[cell]; cellHead[cell] = referenceCount++;
+        }
+      }
+    }
+    function calculateLines() {
+      actualLines = 0; segmentCount = 0;
+      const perPole = Math.round(+ui.lines.value);
+      activePerPole = perPole;
+      for (let p = 0; p < poleCount; p++) if (poles[p].q > 0) {
+        for (let seed = 0; seed < perPole && actualLines < MAX_LINES; seed++) {
+          const base = actualLines * (MAX_STEPS + 1), angle = seed * Math.PI * 2 / perPole;
+          let x = poles[p].x + Math.cos(angle) * 0.82, z = poles[p].z + Math.sin(angle) * 0.82;
+          let count = 1, travelled = 0; lineX[base] = x; lineZ[base] = z; lineDistance[base] = 0;
+          for (let step = 0; step < MAX_STEPS; step++) {
+            sampleField(x, z); if (field.magnitude < 1e-6) break;
+            const mx = x + field.x * 0.125, mz = z + field.z * 0.125;
+            sampleField(mx, mz); if (field.magnitude < 1e-6) break;
+            let nx = x + field.x * 0.25, nz = z + field.z * 0.25;
+            const radius = Math.hypot(nx, nz);
+            if (radius > arenaRadius) { nx *= arenaRadius / radius; nz *= arenaRadius / radius; }
+            lineX[base + count] = nx; lineZ[base + count] = nz; count++;
+            const dx = nx - x, dz = nz - z, d2 = dx * dx + dz * dz;
+            if (d2 > 1e-8 && segmentCount < MAX_SEGMENTS) {
+              const s = segmentCount++;
+              segmentX[s] = x; segmentZ[s] = z; segmentDX[s] = dx; segmentDZ[s] = dz; segmentLengthSq[s] = d2;
+              segmentLine[s] = actualLines; segmentStart[s] = travelled; travelled += Math.sqrt(d2); segmentEnd[s] = travelled;
+            }
+            lineDistance[base + count - 1] = travelled;
+            x = nx; z = nz;
+            if (radius >= arenaRadius || nearSouth(x, z)) break;
+          }
+          lineTotal[actualLines] = travelled; lineLength[actualLines++] = count;
+        }
+      }
+      let shown = 0;
+      for (let s = 0; s < segmentCount; s++) {
+        // Instanced cylinders stay continuous without a WebGL line-width extension.
+        const dx = segmentDX[s], dz = segmentDZ[s], length = Math.sqrt(segmentLengthSq[s]);
+        dummy.position.set(segmentX[s] + dx * 0.5, 0.084, segmentZ[s] + dz * 0.5);
+        direction.set(dx / length, 0, dz / length); dummy.quaternion.setFromUnitVectors(axisY, direction);
+        dummy.scale.set(1, length * 1.01, 1); dummy.updateMatrix(); telegraphs.setMatrixAt(shown, dummy.matrix);
+        const total = Math.max(0.001, lineTotal[segmentLine[s]]), progress = (segmentStart[s] + segmentEnd[s]) * 0.5 / total;
+        fieldColor(progress); telegraphs.setColorAt(shown++, color);
+        // The last tip finishes rising at 0.25 seconds.
+        segmentStart[s] = segmentStart[s] / total * (WAVE_DURATION - SPIKE_RISE);
+        segmentEnd[s] = segmentEnd[s] / total * (WAVE_DURATION - SPIKE_RISE);
+      }
+      telegraphs.count = shown; uploadRange(telegraphs.instanceMatrix, shown); uploadRange(telegraphs.instanceColor, shown);
+      flow.count = actualLines * FLOW_PER_LINE;
+    }
+    function updateFlow(time) {
+      flow.visible = stage === 'warning'; if (!flow.visible) return;
+      const matrices = flow.instanceMatrix.array;
+      for (let line = 0; line < actualLines; line++) {
+        const base = line * (MAX_STEPS + 1), total = lineTotal[line];
+        for (let j = 0; j < FLOW_PER_LINE; j++) {
+          const id = line * FLOW_PER_LINE + j, progress = (time * (0.55 + line * 0.003) + j / FLOW_PER_LINE) % 1;
+          const distance = total * progress; let low = 0, high = lineLength[line] - 1;
+          while (high - low > 1) { const mid = (low + high) >> 1; if (lineDistance[base + mid] < distance) low = mid; else high = mid; }
+          const fraction = clamp((distance - lineDistance[base + low]) / Math.max(0.00001, lineDistance[base + high] - lineDistance[base + low]), 0, 1);
+          const m = id * 16, scale = 0.85 + 0.25 * Math.sin(time * 15 + j);
+          matrices[m] = matrices[m + 5] = matrices[m + 10] = scale;
+          matrices[m + 12] = lineX[base + low] + (lineX[base + high] - lineX[base + low]) * fraction;
+          matrices[m + 13] = 0.15; matrices[m + 14] = lineZ[base + low] + (lineZ[base + high] - lineZ[base + low]) * fraction;
+          fieldColor(progress); color.lerp(southColor, 0.15); flow.setColorAt(id, color);
+        }
+      }
+      uploadRange(flow.instanceMatrix, flow.count); uploadRange(flow.instanceColor, flow.count);
+    }
+    function createSpikes() {
+      spikeCount = 0;
+      for (let line = 0; line < actualLines; line++) {
+        const base = line * (MAX_STEPS + 1);
+        let travelled = 0, next = 0;
+        for (let i = 1; i < lineLength[line]; i++) {
+          const x = lineX[base + i - 1], z = lineZ[base + i - 1];
+          const dx = lineX[base + i] - x, dz = lineZ[base + i] - z, length = Math.hypot(dx, dz);
+          if (length < 1e-7) continue;
+          while (next <= travelled + length && spikeCount < MAX_SPIKES) {
+            const fraction = clamp((next - travelled) / length, 0, 1), index = spikeCount++;
+            const offset = index * 4;
+            spikeData.array[offset] = x + dx * fraction; spikeData.array[offset + 1] = z + dz * fraction;
+            spikeData.array[offset + 2] = 1.2 + 0.6 * random();
+            spikeData.array[offset + 3] = next / Math.max(0.001, lineTotal[line]) * (WAVE_DURATION - SPIKE_RISE);
+            spikeSeed.array[index] = random(); next += 0.3;
+          }
+          travelled += length;
+        }
+      }
+      spikes.count = spikeCount; sparkles.count = spikeCount;
+      for (let j = 0; j < fragments.length; j++) fragments[j].count = spikeCount;
+      uploadRange(spikeData, spikeCount); uploadRange(spikeSeed, spikeCount);
+    }
+    function updateSpikes(sink) {
+      const active = stage === 'spike' || stage === 'rest';
+      spikes.visible = active && sink > 0.002; sparkles.visible = spikes.visible;
+      spikeUniforms.uSpikeTime.value = stage === 'spike' ? stageTime : 0.5 + stageTime;
+      spikeUniforms.uSink.value = sink;
+      const bursting = stage === 'spike' && stageTime < WAVE_DURATION + 0.24;
+      for (let j = 0; j < fragments.length; j++) fragments[j].visible = bursting;
+    }
+    function updatePowder(time) {
+      powder.visible = ui.powder.checked;
+      powderUniforms.uTime.value = time;
+      powderUniforms.uWarning.value = stage === 'warning' ? clamp(stageTime / warningDuration, 0, 1) : 0;
+      // Only 4 packed pole uniforms change. Needle attributes/matrices stay untouched.
+      const packed = powderUniforms.uPoles.value;
+      for (let i = 0; i < 4; i++) {
+        const offset = i * 4; packed[offset] = poles[i].x; packed[offset + 1] = poles[i].z;
+        packed[offset + 2] = i < poleCount ? poles[i].q : 0;
+      }
+    }
+    let phase = 1, hits = 0, dodges = 0, poleCount = 2, orbitAngle = 0;
+    let stage = 'ready', stageTime = 0, warningDuration = 1.4, lineTimer = 0, hitThisCycle = false, linesDirty = false;
+    let flashTime = 0, hitRingTime = 0, shakeTime = 0, feedbackTime = 0, autoStart = 0;
+    let fps = 0, fpsElapsed = 0, fpsFrames = 0;
+    function updatePoles(dt, time) {
+      orbitAngle += +ui.speed.value * Math.PI / 180 * dt;
+      const progress = stage === 'warning' ? clamp(stageTime / warningDuration, 0, 1) : 0;
+      // Integrate frequency so warning pulses accelerate smoothly from 4 to 20 Hz.
+      const pulsePhase = stage === 'warning' ? 4 * stageTime + 8 * stageTime * stageTime / warningDuration : time * 4;
+      const pulse = 0.5 + 0.5 * Math.sin(pulsePhase * Math.PI * 2);
+      for (let i = 0; i < 4; i++) {
+        const pole = poles[i], visible = i < poleCount;
+        pole.mesh.visible = pole.halo.visible = pole.ringA.visible = pole.ringB.visible = visible; if (!visible) continue;
+        // Three poles start with south so their signs alternate while keeping N1/S2.
+        pole.q = poleCount === 3 ? (i === 1 ? 1 : -1) : (i % 2 === 0 ? 1 : -1);
+        const angle = orbitAngle + i * Math.PI * 2 / poleCount;
+        pole.x = Math.cos(angle) * pole.radius; pole.z = Math.sin(angle) * pole.radius;
+        pole.mesh.position.set(pole.x, 0.9 + Math.sin(time * 1.4 + i) * 0.09, pole.z);
+        pole.mesh.rotation.set(time * 0.12, angle + 0.3, 0.1);
+        pole.mesh.material = poleMaterials[pole.q > 0 ? 0 : 1];
+        pole.north.visible = pole.q > 0; pole.south.visible = pole.q < 0;
+        const tint = pole.q > 0 ? 0xff443e : 0x328fff;
+        pole.halo.position.set(pole.x, 0.035, pole.z); pole.halo.material.uniforms.uTint.value.setHex(tint);
+        pole.halo.material.uniforms.uPulse.value = 0.55 + pulse * (0.3 + progress * 0.9);
+        pole.ringA.position.copy(pole.mesh.position); pole.ringB.position.copy(pole.mesh.position);
+        pole.ringA.rotation.set(Math.PI * 0.45 + Math.sin(time * 0.9 + i) * 0.35, time * 1.1 + i, time * 0.7);
+        pole.ringB.rotation.set(time * -0.85, Math.PI * 0.3, time * -1.2 + i);
+        pole.ringB.scale.setScalar(1.2);
+        pole.ringA.material.color.setHex(tint); pole.ringA.material.opacity = 0.6 + pulse * (0.2 + progress * 0.2);
+      }
+      boss.rotation.set(Math.sin(time * 0.5) * 0.09, time * 0.12, Math.cos(time * 0.6) * 0.08);
+      boss.position.y = 1.2 + Math.sin(time * 1.2) * 0.12;
+    }
+    function startWarning() {
+      stage = 'warning'; stageTime = 0; lineTimer = 0; linesDirty = false; warningDuration = +ui.warning.value; hitThisCycle = false;
+      telegraphs.visible = true; updateSpikes(0); calculateLines(); updateStatus();
+    }
+    function enterSpikes() {
+      // Keep exactly the last visible warning snapshot; the collision grid is built once per cycle.
+      stage = 'spike'; stageTime = 0; createSpikes(); buildGrid(); shakeTime = 0.15; updateStatus();
+    }
+    function showFeedback(message, tint) {
+      ui.feedback.textContent = message; ui.feedback.style.color = tint; ui.feedback.style.opacity = '1'; feedbackTime = 0.9;
+    }
+    function registerHit() {
+      if (hitThisCycle) return;
+      hitThisCycle = true; hits++; flashTime = 0.2; hitRingTime = 0.45;
+      hitRing.position.set(player.position.x, 0.055, player.position.z);
+      showFeedback('피격!', '#ff9393'); updateStatus();
+    }
+    function testPlayerHit(previousX, previousZ) {
+      if (stage !== 'spike' || hitThisCycle) return;
+      const width = +ui.width.value, dx = player.position.x - previousX, dz = player.position.z - previousZ;
+      const samples = Math.max(1, Math.ceil(Math.hypot(dx, dz) / (width * 0.5)));
+      for (let i = 0; i <= samples; i++) {
+        queryLine(previousX + dx * i / samples, previousZ + dz * i / samples);
+        if (nearestLine.distanceSq <= width * width) { registerHit(); break; }
+      }
+    }
+    function stepPattern(dt) {
+      if (stage === 'ready') return;
+      stageTime += dt;
+      if (stage === 'warning') {
+        lineTimer += dt;
+        if (lineTimer >= 0.15 && (ui.bend.checked || linesDirty)) { lineTimer %= 0.15; linesDirty = false; calculateLines(); }
+        if (stageTime >= warningDuration) { enterSpikes(); testPlayerHit(player.position.x, player.position.z); }
+      } else if (stage === 'spike') {
+        // A stationary player can be hit when the wave reaches them this frame.
+        testPlayerHit(player.position.x, player.position.z);
+        if (stageTime >= 0.5) {
+          if (!hitThisCycle) { dodges++; showFeedback('회피 성공', '#b4e48a'); }
+          stage = 'rest'; stageTime = 0; updateStatus();
+        }
+      } else if (stageTime >= 0.8) { startWarning(); }
+    }
+    function rounded(value, decimals) { return String(Math.round(value * Math.pow(10, decimals)) / Math.pow(10, decimals)); }
+    function updateOutputs() {
+      $('lineOutput').textContent = rounded(+ui.lines.value, 0) + '개';
+      $('warningOutput').textContent = rounded(+ui.warning.value, 1) + '초';
+      $('speedOutput').textContent = rounded(+ui.speed.value, 0) + '도/초';
+      $('widthOutput').textContent = rounded(+ui.width.value, 2) + '미터';
+    }
+    function updateStatus() {
+      const name = stage === 'warning' ? '예고 ' + rounded(Math.max(0, warningDuration - stageTime), 1) + '초' : stage === 'spike' ? '가시' : stage === 'rest' ? '휴식' : '준비';
+      ui.stage.textContent = name; ui.stage.dataset.stage = stage;
+      ui.phase.textContent = phase; ui.hit.textContent = hits; ui.dodge.textContent = dodges;
+      const total = actualLines || Math.round(+ui.lines.value) * (poleCount === 4 ? 2 : 1);
+      ui.status.textContent = name + ' · 극 ' + poleCount + '개 · 선 ' + (actualLines ? activePerPole : Math.round(+ui.lines.value)) + '개/북극 (전체 ' + total + '개) · 맞음 ' + hits + ' / 회피 ' + dodges + ' · FPS ' + fps;
+    }
+    const raycaster = new THREE.Raycaster(), pointerNDC = new THREE.Vector2(), groundPoint = new THREE.Vector3();
+    const groundPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+    const movementTarget = new THREE.Vector3();
+    const pointer = { inside: false, down: false, buttons: 0, dragging: false, x: 0, y: 0, startX: 0, startY: 0, lastX: 0, lastY: 0, id: -1, touch: false };
+    const keys = { w: false, a: false, s: false, d: false };
+    let hasMovementTarget = false, clickTarget = false;
+    function setGroundTarget(clientX, clientY) {
+      const bounds = canvas.getBoundingClientRect();
+      pointerNDC.set((clientX - bounds.left) / bounds.width * 2 - 1, -(clientY - bounds.top) / bounds.height * 2 + 1);
+      raycaster.setFromCamera(pointerNDC, camera);
+      if (!raycaster.ray.intersectPlane(groundPlane, groundPoint)) { hasMovementTarget = false; return; }
+      const length = Math.hypot(groundPoint.x, groundPoint.z);
+      if (length > 14.45) { groundPoint.x *= 14.45 / length; groundPoint.z *= 14.45 / length; }
+      movementTarget.copy(groundPoint); hasMovementTarget = true;
+      destination.position.set(groundPoint.x, 0.039, groundPoint.z);
+    }
+    canvas.addEventListener('pointerenter', event => {
+      pointer.inside = true; pointer.buttons = event.buttons; pointer.x = event.clientX; pointer.y = event.clientY;
+      if (!pointer.down && event.buttons === 0 && event.pointerType !== 'touch') { clickTarget = false; setGroundTarget(event.clientX, event.clientY); }
+    });
+    canvas.addEventListener('pointermove', event => {
+      pointer.x = event.clientX; pointer.y = event.clientY; pointer.buttons = event.buttons;
+      if (pointer.down && event.pointerId === pointer.id) {
+        if (Math.hypot(event.clientX - pointer.startX, event.clientY - pointer.startY) >= 5) pointer.dragging = true;
+        if (pointer.dragging) {
+          orbit.azimuth -= (event.clientX - pointer.lastX) * 0.007;
+          orbit.elevation = clamp(orbit.elevation + (event.clientY - pointer.lastY) * 0.006, 0.3, 1.35);
+          updateCamera(); hasMovementTarget = false; clickTarget = false;
+        }
+        pointer.lastX = event.clientX; pointer.lastY = event.clientY;
+      } else if (pointer.inside && event.buttons === 0 && event.pointerType !== 'touch') {
+        clickTarget = false; setGroundTarget(event.clientX, event.clientY);
+      } else if (event.buttons !== 0) {
+        hasMovementTarget = false;
+      }
+    });
+    canvas.addEventListener('pointerdown', event => {
+      if (pointer.down) return;
+      pointer.down = true; pointer.buttons = event.buttons; pointer.dragging = false; pointer.id = event.pointerId; pointer.touch = event.pointerType === 'touch';
+      pointer.startX = pointer.lastX = pointer.x = event.clientX; pointer.startY = pointer.lastY = pointer.y = event.clientY;
+      hasMovementTarget = false; clickTarget = false; canvas.setPointerCapture(event.pointerId); canvas.focus({ preventScroll: true });
+    });
+    canvas.addEventListener('pointerup', event => {
+      if (event.pointerId !== pointer.id) return;
+      const wasClick = !pointer.dragging && Math.hypot(event.clientX - pointer.startX, event.clientY - pointer.startY) < 5;
+      pointer.down = false; pointer.buttons = event.buttons; pointer.dragging = false;
+      if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
+      const bounds = canvas.getBoundingClientRect();
+      pointer.inside = event.clientX >= bounds.left && event.clientX <= bounds.right && event.clientY >= bounds.top && event.clientY <= bounds.bottom;
+      if (wasClick && pointer.inside) { setGroundTarget(event.clientX, event.clientY); clickTarget = true; }
+      pointer.id = -1;
+    });
+    function cancelPointer() { pointer.down = false; pointer.buttons = 0; pointer.dragging = false; pointer.id = -1; hasMovementTarget = false; clickTarget = false; }
+    canvas.addEventListener('pointercancel', cancelPointer);
+    canvas.addEventListener('lostpointercapture', () => { if (pointer.down) cancelPointer(); });
+    canvas.addEventListener('pointerleave', () => { pointer.inside = false; if (!pointer.down) hasMovementTarget = false; });
+    canvas.addEventListener('contextmenu', event => event.preventDefault());
+    canvas.addEventListener('wheel', event => { event.preventDefault(); orbit.radius = clamp(orbit.radius * Math.exp(event.deltaY * 0.001), 22, 65); updateCamera(); }, { passive: false });
+    const keyMap = { KeyW: 'w', KeyA: 'a', KeyS: 's', KeyD: 'd' };
+    canvas.addEventListener('keydown', event => { const key = keyMap[event.code]; if (key) { event.preventDefault(); keys[key] = true; clickTarget = false; hasMovementTarget = false; } });
+    window.addEventListener('keyup', event => { const key = keyMap[event.code]; if (key) keys[key] = false; });
+    function clearKeys() { keys.w = keys.a = keys.s = keys.d = false; }
+    canvas.addEventListener('blur', () => { clearKeys(); hasMovementTarget = false; });
+    window.addEventListener('blur', () => { clearKeys(); cancelPointer(); pointer.inside = false; });
+    function movePlayer(dt) {
+      const previousX = player.position.x, previousZ = player.position.z;
+      const forward = Number(keys.w) - Number(keys.s), right = Number(keys.d) - Number(keys.a);
+      if (forward || right) {
+        const length = Math.hypot(forward, right), speed = 4.5 * dt / length;
+        const sin = Math.sin(orbit.azimuth), cos = Math.cos(orbit.azimuth);
+        player.position.x += (-sin * forward + cos * right) * speed;
+        player.position.z += (-cos * forward - sin * right) * speed;
+        hasMovementTarget = false;
+      } else {
+        if (hasMovementTarget && !pointer.down && pointer.buttons === 0) {
+          const dx = movementTarget.x - player.position.x, dz = movementTarget.z - player.position.z, distance = Math.hypot(dx, dz);
+          if (distance > 0.025) {
+            const step = Math.min(distance, 4.5 * dt); player.position.x += dx / distance * step; player.position.z += dz / distance * step;
+          } else if (clickTarget) { hasMovementTarget = false; clickTarget = false; }
+        }
+      }
+      const radius = Math.hypot(player.position.x, player.position.z);
+      if (radius > 14.45) { player.position.x *= 14.45 / radius; player.position.z *= 14.45 / radius; }
+      playerRing.position.set(player.position.x, 0.034, player.position.z);
+      destination.visible = hasMovementTarget && !pointer.down && !(forward || right);
+      testPlayerHit(previousX, previousZ);
+    }
+    function moveEnemy(dt) {
+      enemyMotion.timer -= dt;
+      if (enemyMotion.timer <= 0) {
+        enemyMotion.timer = 0.8 + random() * 1.6; enemyMotion.stopped = random() < 0.3; enemyMotion.angle = random() * Math.PI * 2;
+      }
+      if (enemyMotion.stopped) return;
+      enemy.position.x += Math.cos(enemyMotion.angle) * dt * 0.8; enemy.position.z += Math.sin(enemyMotion.angle) * dt * 0.8;
+      const radius = Math.hypot(enemy.position.x, enemy.position.z);
+      if (radius > 12.5) { enemy.position.x *= 12.5 / radius; enemy.position.z *= 12.5 / radius; enemyMotion.angle += Math.PI; }
+      enemy.rotation.y = -enemyMotion.angle;
+    }
+    function scheduleStart() { clearTimeout(autoStart); autoStart = setTimeout(startWarning, 500); }
+    function resetDemo() {
+      clearTimeout(autoStart); phase = 1; hits = dodges = 0; poleCount = 2; orbitAngle = 0;
+      ui.lines.value = 8; ui.warning.value = 1.4; ui.speed.value = 15; ui.width.value = 0.55; ui.layout.value = 2;
+      ui.powder.checked = true; ui.bend.checked = true;
+      stage = 'ready'; stageTime = 0; flashTime = hitRingTime = shakeTime = feedbackTime = 0; actualLines = segmentCount = spikeCount = 0;
+      telegraphs.count = spikes.count = sparkles.count = flow.count = 0; cellHead.fill(-1); updateSpikes(0);
+      hitRing.visible = false; ui.hitFlash.style.opacity = '0';
+      player.position.set(6, 0.55, 8); enemy.position.set(-7, 0.45, 5); enemyMotion.timer = 0;
+      playerMaterial.color.setHex(0x639922); playerMaterial.emissive.setHex(0x24400b);
+      ui.feedback.style.opacity = '0'; cancelPointer(); pointer.inside = false; clearKeys();
+      orbit.azimuth = 0.32; orbit.elevation = 0.86; orbit.radius = 36; updateCamera();
+      updatePoles(0, 0); updateOutputs(); updateStatus(); scheduleStart();
+    }
+    $('reset').addEventListener('click', resetDemo);
+    $('nextPhase').addEventListener('click', () => {
+      clearTimeout(autoStart); phase++; poleCount = Math.min(4, phase + 1); ui.layout.value = poleCount;
+      ui.lines.value = Math.min(16, +ui.lines.value + 2); ui.speed.value = Math.min(40, +ui.speed.value + 5);
+      updatePoles(0, elapsed); updateOutputs(); startWarning();
+    });
+    ui.layout.addEventListener('change', () => { clearTimeout(autoStart); poleCount = +ui.layout.value; updatePoles(0, elapsed); startWarning(); });
+    ui.lines.addEventListener('input', () => { updateOutputs(); if (stage === 'warning') linesDirty = true; updateStatus(); });
+    ui.warning.addEventListener('input', () => { updateOutputs(); if (stage === 'warning') warningDuration = +ui.warning.value; });
+    ui.speed.addEventListener('input', updateOutputs); ui.width.addEventListener('input', updateOutputs);
+    ui.powder.addEventListener('change', () => { powder.visible = ui.powder.checked; });
+    ui.bend.addEventListener('change', () => { if (stage === 'warning') startWarning(); });
+    canvas.addEventListener('webglcontextlost', event => { event.preventDefault(); fail('삼차원 화면 연결이 끊겼습니다. 새로고침해 주세요.'); });
+    let elapsed = 0, lastTime = 0, statusTimer = 0;
+    document.addEventListener('visibilitychange', () => { lastTime = 0; fpsElapsed = 0; fpsFrames = 0; clearKeys(); });
+    function updateHitEffects(dt) {
+      flashTime = Math.max(0, flashTime - dt); hitRingTime = Math.max(0, hitRingTime - dt);
+      const flash = flashTime / 0.2;
+      playerMaterial.color.setHex(flash > 0 ? 0xff4545 : 0x639922);
+      playerMaterial.emissive.setHex(flash > 0 ? 0xb52121 : 0x24400b);
+      ui.hitFlash.style.opacity = String(flash * 0.8);
+      hitRing.visible = hitRingTime > 0;
+      if (hitRing.visible) {
+        hitRing.scale.setScalar(1 + (1 - hitRingTime / 0.45) * 4); hitRing.material.opacity = hitRingTime / 0.45;
+      }
+      shakeTime = Math.max(0, shakeTime - dt);
+      camera.position.copy(cameraBase);
+      if (shakeTime > 0) {
+        const amplitude = 0.075 * shakeTime / 0.15;
+        camera.position.x += Math.sin(elapsed * 117) * amplitude;
+        camera.position.y += Math.sin(elapsed * 143) * amplitude * 0.7;
+      }
+      camera.updateMatrixWorld();
+    }
+    function animate(timestamp) {
+      requestAnimationFrame(animate);
+      if (document.hidden || renderer.getContext().isContextLost()) { lastTime = 0; return; }
+      const rawDt = lastTime ? (timestamp - lastTime) / 1000 : 0;
+      const dt = Math.min(rawDt, 0.05);
+      if (rawDt > 0) {
+        fpsElapsed += rawDt; fpsFrames++;
+        if (fpsElapsed >= 0.5) { fps = Math.round(fpsFrames / fpsElapsed); fpsElapsed = 0; fpsFrames = 0; updateStatus(); }
+      }
+      lastTime = timestamp; elapsed += dt;
+      updatePoles(dt, elapsed); movePlayer(dt); moveEnemy(dt); stepPattern(dt);
+      if (stage === 'warning') {
+        const progress = clamp(stageTime / warningDuration, 0, 1);
+        telegraphs.visible = true; telegraphMaterial.opacity = (0.17 + progress * 0.7) * (0.8 + Math.sin(elapsed * 17) * 0.2);
+        updateSpikes(0);
+      } else if (stage === 'spike') {
+        telegraphs.visible = true; telegraphMaterial.opacity = 0.3;
+        updateSpikes(1);
+      } else if (stage === 'rest') {
+        const sink = Math.pow(clamp(1 - stageTime / 0.6, 0, 1), 2);
+        telegraphMaterial.opacity = 0.24 * sink; telegraphs.visible = sink > 0.002; updateSpikes(sink);
+      }
+      updatePowder(elapsed); updateFlow(elapsed); updateHitEffects(dt);
+      feedbackTime = Math.max(0, feedbackTime - dt); if (feedbackTime === 0) ui.feedback.style.opacity = '0';
+      statusTimer += dt; if (statusTimer >= 0.1) { statusTimer = 0; updateStatus(); }
+      renderer.render(scene, camera);
+    }
+    cellHead.fill(-1); updatePoles(0, 0); updateOutputs(); updatePowder(0); updateStatus();
+    // Automatic first demonstration; no click is needed to start the cycle.
+    scheduleStart(); requestAnimationFrame(animate);
+  })();
+  </script>
+</body>
+</html>

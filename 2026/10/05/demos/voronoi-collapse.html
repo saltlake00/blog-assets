@@ -1,0 +1,610 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>보로노이 지각 붕괴 데모</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #eeeae3; --panel: #fffdf8; --text: #29251f; --muted: #756d61;
+      --line: #d8d0c4; --accent: #bb4b21; --accent-soft: #f7e8da; --track: #d2c8b9;
+      --view: #161411; --overlay: #f3e8d7; --overlay-bg: #181410dd;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+        --page: #181613; --panel: #24211c; --text: #f0e7d9; --muted: #b1a492;
+        --line: #42392e; --accent: #f18545; --accent-soft: #39271d; --track: #635344;
+        --view: #11100e; --overlay: #f3e8d7; --overlay-bg: #181410dd;
+      }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--page); color: var(--text); font-family: system-ui, -apple-system, "Malgun Gothic", sans-serif; }
+    main { max-width: 960px; padding: 28px 16px 24px; margin: 0 auto; }
+    h1 { margin: 0 0 8px; font-size: clamp(23px, 4vw, 32px); letter-spacing: -.065em; font-weight: 800; }
+    .intro { margin: 0 0 20px; color: var(--muted); font-size: 14px; line-height: 1.7; }
+    .view { height: 520px; width: 100%; position: relative; overflow: hidden; border: 1px solid var(--line); border-radius: 14px; background: var(--view); }
+    canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+    .help { position: absolute; z-index: 1; left: 12px; top: 12px; max-width: calc(100% - 24px); padding: 8px 11px; border-radius: 8px; color: var(--overlay); background: var(--overlay-bg); font-size: 11px; line-height: 1.7; pointer-events: none; }
+    .help strong { color: #ffb16a; font-weight: 700; }
+    .legend { position: absolute; left: 12px; bottom: 12px; display: flex; gap: 12px; flex-wrap: wrap; padding: 7px 10px; border-radius: 7px; color: var(--overlay); background: var(--overlay-bg); font-size: 11px; pointer-events: none; }
+    .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 5px; }
+    .error { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; color: var(--overlay); background: var(--view); line-height: 1.8; }
+    .buttons { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+    button, select { font: inherit; color: var(--text); border: 1px solid var(--line); background: var(--panel); border-radius: 8px; }
+    button { min-height: 40px; padding: 9px 14px; cursor: pointer; font-size: 13px; font-weight: 650; }
+    button:first-child { background: var(--accent); border-color: var(--accent); color: var(--panel); }
+    button:hover { filter: brightness(1.08); }
+    button:active { transform: translateY(1px); }
+    button:disabled { opacity: .5; cursor: default; }
+    button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .controls { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px 22px; background: var(--panel); padding: 17px; border: 1px solid var(--line); border-radius: 12px; }
+    .control { min-width: 0; display: block; }
+    .control-top { display: flex; justify-content: space-between; gap: 6px; margin-bottom: 8px; font-size: 12px; }
+    output { color: var(--accent); font-variant-numeric: tabular-nums; font-weight: 700; white-space: nowrap; }
+    input[type="range"] { display: block; width: 100%; height: 16px; margin: 0; cursor: pointer; accent-color: var(--accent); }
+    .options { margin: 14px 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; font-size: 12px; }
+    .options label { display: inline-flex; align-items: center; gap: 6px; }
+    input[type="checkbox"] { accent-color: var(--accent); width: 15px; height: 15px; margin: 0; }
+    select { max-width: 135px; padding: 5px 8px; font-size: 12px; }
+    .status { display: flex; gap: 7px; align-items: center; flex-wrap: wrap; margin-top: 16px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 9px; background: var(--accent-soft); font-size: 12px; font-variant-numeric: tabular-nums; line-height: 1.5; }
+    .status .live { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex: 0 0 auto; }
+    @media (max-width: 640px) {
+      main { padding-top: 20px; }
+      .controls { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; padding: 15px; }
+      .buttons button { flex: 1 1 130px; padding-left: 9px; padding-right: 9px; }
+      .help { font-size: 10px; }
+      .intro { font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>보로노이 지각 붕괴</h1>
+  <p class="intro">지팡이 강화 · 연소 폭발 — 화상이 돌판을 깨우고, 무너진 지각을 따라 불길이 번집니다.</p>
+  <div class="view" id="view" aria-label="돌바닥에 파이어볼을 발사하는 입체 시연">
+    <div class="help"><strong>바닥 클릭</strong> 발사 · <strong>드래그</strong> 회전 · <strong>휠</strong> 확대<br>터치로 회전 · 짧게 누르면 발사</div>
+    <div class="legend"><span><i class="dot" style="background:#639922"></i>플레이어</span><span><i class="dot" style="background:#d85a30"></i>적</span><span><i class="dot" style="background:#ffb43e"></i>균열·화상</span><span>30 × 30미터</span></div>
+  </div>
+  <div class="buttons">
+    <button id="fire" type="button">적 무리 쪽에 발사</button>
+    <button id="redistribute" type="button">적 다시 배치</button>
+    <button id="rebuild" type="button">셀 다시 만들기</button>
+  </div>
+  <div class="controls">
+    <label class="control"><span class="control-top"><span>셀 수</span><output id="cellCountValue" for="cellCount">130개</output></span><input id="cellCount" type="range" min="60" max="220" step="1" value="130"></label>
+    <label class="control"><span class="control-top"><span>폭발 반경</span><output id="radiusValue" for="radius">3미터</output></span><input id="radius" type="range" min="1.5" max="5" step="0.1" value="3"></label>
+    <label class="control"><span class="control-top"><span>화상 지연</span><output id="burnDelayValue" for="burnDelay">0.8초</output></span><input id="burnDelay" type="range" min="0.2" max="2" step="0.05" value="0.8"></label>
+    <label class="control"><span class="control-top"><span>전파 단계</span><output id="stepsValue" for="steps">2단계</output></span><input id="steps" type="range" min="0" max="4" step="1" value="2"></label>
+    <label class="control"><span class="control-top"><span>전파 확률</span><output id="probabilityValue" for="probability">55%</output></span><input id="probability" type="range" min="0" max="1" step="0.01" value="0.55"></label>
+    <label class="control"><span class="control-top"><span>전파 간격</span><output id="intervalValue" for="interval">0.22초</output></span><input id="interval" type="range" min="0.05" max="0.6" step="0.01" value="0.22"></label>
+    <label class="control"><span class="control-top"><span>적 수</span><output id="enemyCountValue" for="enemyCount">12마리</output></span><input id="enemyCount" type="range" min="0" max="24" step="1" value="12"></label>
+    <label class="control"><span class="control-top"><span>복구 시간</span><output id="recoveryValue" for="recovery">3초</output></span><input id="recovery" type="range" min="1" max="6" step="0.1" value="3"></label>
+  </div>
+  <div class="options">
+    <label title="화상 적이 이동한 셀에도 지연 붕괴가 시작됩니다."><input id="chain" type="checkbox" checked>연쇄 연소</label>
+    <label><input id="boundaries" type="checkbox">셀 경계 보기</label>
+    <label><input id="moving" type="checkbox" checked>적 이동</label>
+    <label>시점 <select id="preset"><option value="oblique">비스듬히 보기</option><option value="high">위에서 보기</option><option value="low">낮게 보기</option></select></label>
+  </div>
+  <div class="status" role="status"><span class="live" aria-hidden="true"></span><span id="status">대기 · 화상 적 0마리 · 붕괴 셀 0개 · 맞은 적 0마리</span></div>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(() => {
+  'use strict';
+  const view = document.getElementById('view');
+  const status = document.getElementById('status');
+  const showError = message => {
+    const error = document.createElement('div'); error.className = 'error'; error.textContent = message;
+    view.appendChild(error); status.textContent = message;
+    document.querySelectorAll('button, input, select').forEach(element => { element.disabled = true; });
+  };
+  if (!window.THREE) { showError('입체 화면을 불러오지 못했습니다. 인터넷 연결 후 페이지를 다시 열어 주세요.'); return; }
+  const settings = { cellCount: 130, radius: 3, burnDelay: .8, steps: 2, probability: .55, interval: .22, enemyCount: 12, recovery: 3 };
+  const options = { chain: true, boundaries: false, moving: true };
+  const MAX_ENEMIES = 24, MAX_PARTICLES = 420, MAX_PROJECTILES = 6, MAX_PILLARS = 100;
+  const HALF = 15, THICKNESS = .5, GAP = .06;
+  const scene = new THREE.Scene(); scene.background = new THREE.Color(0x161411);
+  scene.fog = new THREE.FogExp2(0x161411, .011);
+  const camera = new THREE.PerspectiveCamera(44, 1, .1, 150);
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false }); }
+  catch (error) { showError('이 브라우저에서 입체 화면을 만들지 못했습니다. 하드웨어 가속과 입체 그래픽 지원을 확인해 주세요.'); return; }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.7));
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  view.appendChild(renderer.domElement);
+  scene.add(new THREE.HemisphereLight(0xb8aa91, 0x31231e, .68));
+  const keyLight = new THREE.DirectionalLight(0xffdbc0, .82); keyLight.position.set(-12, 24, 8);
+  keyLight.castShadow = true; keyLight.shadow.mapSize.set(1024, 1024);
+  keyLight.shadow.camera.left = -22; keyLight.shadow.camera.right = 22;
+  keyLight.shadow.camera.top = 22; keyLight.shadow.camera.bottom = -22;
+  keyLight.shadow.camera.near = 1; keyLight.shadow.camera.far = 60; keyLight.shadow.bias = -.001;
+  scene.add(keyLight);
+  const flashLight = new THREE.PointLight(0xff8a23, 0, 16, 2); scene.add(flashLight);
+  const lavaMaterial = new THREE.MeshBasicMaterial({ color: 0xdb360a, side: THREE.DoubleSide });
+  const lava = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), lavaMaterial);
+  lava.rotation.x = -Math.PI / 2; lava.position.y = -.4; scene.add(lava);
+  const foundationMaterial = new THREE.MeshStandardMaterial({ color: 0x29251f, roughness: 1 });
+  const foundation = new THREE.Mesh(new THREE.BoxGeometry(30.5, .9, 30.5), foundationMaterial);
+  foundation.position.y = -1.2; foundation.receiveShadow = true; scene.add(foundation);
+  const darkSides = new THREE.MeshStandardMaterial({ color: 0x393029, roughness: .96, flatShading: true });
+  const additive = (color, opacity) => new THREE.MeshBasicMaterial({ color, transparent: true, opacity, blending: THREE.AdditiveBlending, depthWrite: false });
+  const sphereGeometry = new THREE.SphereGeometry(1, 12, 8);
+  const pillarGeometry = new THREE.CylinderGeometry(.7, 1, 1, 8, 1, true);
+  const particleGeometry = new THREE.SphereGeometry(1, 5, 4);
+  const dummy = new THREE.Object3D(), tempMatrix = new THREE.Matrix4(), scratchColor = new THREE.Color();
+  const pointA = new THREE.Vector3(), pointB = new THREE.Vector3(), direction = new THREE.Vector3();
+  const up = new THREE.Vector3(0, 1, 0), worldPoint = new THREE.Vector3(), localPoint = new THREE.Vector3();
+  const topColor = new THREE.Color(), scorchColor = new THREE.Color(0x29221d), target = new THREE.Vector3();
+  const raycaster = new THREE.Raycaster(), pointer = new THREE.Vector2();
+  const floorPlane = new THREE.Plane(up, 0);
+  const playerPosition = new THREE.Vector3(-10.8, 0, 10.8);
+  const player = new THREE.Mesh(new THREE.CylinderGeometry(.43, .5, 1.5, 16), new THREE.MeshStandardMaterial({ color: 0x639922, roughness: .7 }));
+  player.position.copy(playerPosition); player.position.y = .75; player.castShadow = true; scene.add(player);
+  const playerRing = new THREE.Mesh(new THREE.RingGeometry(.68, .76, 40), additive(0x88bf34, .45));
+  playerRing.rotation.x = -Math.PI / 2; playerRing.position.set(playerPosition.x, .04, playerPosition.z); scene.add(playerRing);
+  const aimRing = new THREE.Mesh(new THREE.RingGeometry(.92, 1, 64), additive(0xffab4c, .55));
+  aimRing.rotation.x = -Math.PI / 2; aimRing.visible = false; scene.add(aimRing);
+  const enemyMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(.9, .9, .9), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .74 }), MAX_ENEMIES);
+  enemyMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage); enemyMesh.castShadow = true; enemyMesh.frustumCulled = false; scene.add(enemyMesh);
+  const flameMesh = new THREE.InstancedMesh(sphereGeometry, additive(0xffffff, .73), MAX_ENEMIES * 3);
+  flameMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage); flameMesh.frustumCulled = false; scene.add(flameMesh);
+  const pillarMesh = new THREE.InstancedMesh(pillarGeometry, additive(0xffffff, .58), MAX_PILLARS);
+  pillarMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage); pillarMesh.frustumCulled = false; scene.add(pillarMesh);
+  const particleMesh = new THREE.InstancedMesh(particleGeometry, additive(0xffffff, .84), MAX_PARTICLES);
+  particleMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage); particleMesh.frustumCulled = false; scene.add(particleMesh);
+  const borderGeometry = new THREE.EdgesGeometry(new THREE.BoxGeometry(.96, .96, .96));
+  const borderMaterial = new THREE.LineBasicMaterial({ color: 0xffa02e, transparent: true, opacity: .85 });
+  const enemies = Array.from({ length: MAX_ENEMIES }, (_, id) => {
+    const outline = new THREE.LineSegments(borderGeometry, borderMaterial); outline.visible = false; scene.add(outline);
+    return { id, x: 0, z: 0, heading: 0, turnAt: 0, paused: false, burnEnd: 0, burnDepth: 0, hitAt: -100, hit: false, cell: -1, outline };
+  });
+  const particles = Array.from({ length: MAX_PARTICLES }, () => ({ active: false, x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, life: 0, total: 1, size: .06, hue: .07 }));
+  const pillars = Array.from({ length: MAX_PILLARS }, () => ({ active: false, x: 0, z: 0, start: 0, duration: .8, height: 1, width: .1 }));
+  const projectiles = Array.from({ length: MAX_PROJECTILES }, () => {
+    const body = new THREE.Mesh(sphereGeometry, additive(0xff6e17, .94)); body.visible = false; scene.add(body);
+    const core = new THREE.Mesh(sphereGeometry, additive(0xffeb8e, 1)); core.visible = false; scene.add(core);
+    return { active: false, start: 0, x: 0, z: 0, radius: 3, body, core, trail: 0 };
+  });
+  const explosions = Array.from({ length: MAX_PROJECTILES }, () => {
+    const sphere = new THREE.Mesh(sphereGeometry, additive(0xff8a20, .35)); sphere.visible = false; scene.add(sphere);
+    const ring = new THREE.Mesh(new THREE.RingGeometry(.9, 1, 48), additive(0xffb04a, .85)); ring.rotation.x = -Math.PI / 2; ring.visible = false; scene.add(ring);
+    return { active: false, start: 0, radius: 3, x: 0, z: 0, sphere, ring };
+  });
+  let cells = [], seeds = [], edgeMesh = null, edgeGeometry = null, edgeMaterial = null;
+  const spatialBins = Array.from({ length: 36 }, () => []);
+  let particleCursor = 0, pillarCursor = 0, time = 0, lastFrame = 0, lastShot = -100, lastStatus = -1;
+  let cycleActive = false, collapsedTotal = 0, hitTotal = 0, hovered = false;
+  const orbit = { azimuth: -.25, polar: .73, distance: 43 };
+  const ease = t => t * t * (3 - 2 * t);
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  function updateCamera() {
+    camera.position.set(Math.sin(orbit.azimuth) * Math.sin(orbit.polar) * orbit.distance, Math.cos(orbit.polar) * orbit.distance, Math.cos(orbit.azimuth) * Math.sin(orbit.polar) * orbit.distance);
+    camera.lookAt(0, -.2, 0); camera.updateMatrixWorld();
+  }
+  function resize() {
+    const width = view.clientWidth, height = view.clientHeight;
+    camera.aspect = width / height; camera.updateProjectionMatrix(); renderer.setSize(width, height, false);
+  }
+  function clip(poly, nx, nz, limit) {
+    const result = [];
+    for (let i = 0; i < poly.length; i++) {
+      const a = poly[i], b = poly[(i + 1) % poly.length];
+      const da = nx * a.x + nz * a.z - limit, db = nx * b.x + nz * b.z - limit;
+      const insideA = da <= 1e-8, insideB = db <= 1e-8;
+      if (insideA) result.push(a);
+      if (insideA !== insideB) { const t = da / (da - db); result.push({ x: a.x + (b.x - a.x) * t, z: a.z + (b.z - a.z) * t }); }
+    }
+    return result;
+  }
+  function makePlate(poly, cx, cz) {
+    const vertices = [];
+    for (let i = 0; i < poly.length; i++) {
+      const a = poly[i], b = poly[(i + 1) % poly.length];
+      vertices.push(0, 0, 0, b.x - cx, 0, b.z - cz, a.x - cx, 0, a.z - cz);
+    }
+    const topCount = vertices.length / 3;
+    for (let i = 0; i < poly.length; i++) {
+      const a = poly[i], b = poly[(i + 1) % poly.length];
+      const ax = a.x - cx, az = a.z - cz, bx = b.x - cx, bz = b.z - cz;
+      vertices.push(ax, 0, az, bx, 0, bz, bx, -THICKNESS, bz, ax, 0, az, bx, -THICKNESS, bz, ax, -THICKNESS, az);
+      vertices.push(0, -THICKNESS, 0, ax, -THICKNESS, az, bx, -THICKNESS, bz);
+    }
+    const geometry = new THREE.BufferGeometry(); geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+    geometry.addGroup(0, topCount, 0); geometry.addGroup(topCount, vertices.length / 3 - topCount, 1); geometry.computeVertexNormals();
+    return geometry;
+  }
+  function makeCells() {
+    clearCycle(true);
+    for (const cell of cells) { scene.remove(cell.mesh); cell.mesh.geometry.dispose(); cell.material.dispose(); }
+    if (edgeMesh) { scene.remove(edgeMesh); edgeGeometry.dispose(); edgeMaterial.dispose(); }
+    cells = []; seeds = []; spatialBins.forEach(bin => { bin.length = 0; });
+    const count = settings.cellCount, rows = Math.round(Math.sqrt(count));
+    let remaining = count;
+    for (let row = 0; row < rows; row++) {
+      const columns = Math.ceil(remaining / (rows - row)); remaining -= columns;
+      for (let col = 0; col < columns; col++) seeds.push({ x: -HALF + (col + .5 + (Math.random() - .5) * .6) * 30 / columns, z: -HALF + (row + .5 + (Math.random() - .5) * .6) * 30 / rows });
+    }
+    let edgeCount = 0;
+    for (let i = 0; i < count; i++) {
+      const seed = seeds[i]; let poly = [{ x: -HALF, z: -HALF }, { x: HALF, z: -HALF }, { x: HALF, z: HALF }, { x: -HALF, z: HALF }];
+      for (let j = 0; j < count; j++) {
+        if (j === i) continue; const other = seeds[j];
+        poly = clip(poly, other.x - seed.x, other.z - seed.z, (other.x * other.x + other.z * other.z - seed.x * seed.x - seed.z * seed.z) * .5);
+      }
+      let area = 0, cx = 0, cz = 0;
+      for (let k = 0; k < poly.length; k++) { const a = poly[k], b = poly[(k + 1) % poly.length], cross = a.x * b.z - b.x * a.z; area += cross; cx += (a.x + b.x) * cross; cz += (a.z + b.z) * cross; }
+      cx /= 3 * area; cz /= 3 * area;
+      const neighbors = [];
+      for (let k = 0; k < poly.length; k++) {
+        const a = poly[k], b = poly[(k + 1) % poly.length], mx = (a.x + b.x) * .5, mz = (a.z + b.z) * .5;
+        const own = (mx - seed.x) ** 2 + (mz - seed.z) ** 2;
+        for (let j = 0; j < count; j++) {
+          if (j !== i && Math.abs((mx - seeds[j].x) ** 2 + (mz - seeds[j].z) ** 2 - own) < 1e-5) { if (!neighbors.includes(j)) neighbors.push(j); break; }
+        }
+      }
+      // A parallel half-plane inset keeps the visible shared gap at 0.06 metres.
+      let inset = poly;
+      for (let k = 0; k < poly.length; k++) {
+        const a = poly[k], b = poly[(k + 1) % poly.length], nx = b.z - a.z, nz = a.x - b.x;
+        inset = clip(inset, nx, nz, nx * a.x + nz * a.z - GAP * .5 * Math.hypot(nx, nz));
+      }
+      const material = new THREE.MeshStandardMaterial({ roughness: .96, flatShading: true });
+      material.color.setHSL(.085 + Math.random() * .025, .1 + Math.random() * .08, .31 + Math.random() * .09);
+      const mesh = new THREE.Mesh(makePlate(inset, cx, cz), [material, darkSides]); mesh.position.set(cx, 0, cz); mesh.castShadow = true; mesh.receiveShadow = true; scene.add(mesh);
+      const cell = { id: i, poly, inset, cx, cz, neighbors, mesh, material, baseColor: material.color.clone(), state: 0, warningAt: 0, collapseAt: 0, depth: 0, collapsed: false, dropAt: 0, recoverAt: 0, recoveryDuration: 1.15, angleX: 0, angleZ: 0, strength: 1, scorch: 0, edges: [], edgeStart: edgeCount };
+      for (let k = 0; k < inset.length; k++) {
+        const a = inset[k], b = inset[(k + 1) % inset.length];
+        pointA.set(a.x - cx, .026, a.z - cz); pointB.set(b.x - cx, .026, b.z - cz);
+        direction.subVectors(pointB, pointA); const length = direction.length();
+        dummy.position.copy(pointA).add(pointB).multiplyScalar(.5); dummy.quaternion.setFromUnitVectors(up, direction.normalize()); dummy.scale.set(1, length, 1); dummy.updateMatrix();
+        cell.edges.push(dummy.matrix.clone()); edgeCount++;
+      }
+      cells.push(cell);
+      let minX = HALF, maxX = -HALF, minZ = HALF, maxZ = -HALF;
+      for (const p of poly) { minX = Math.min(minX, p.x); maxX = Math.max(maxX, p.x); minZ = Math.min(minZ, p.z); maxZ = Math.max(maxZ, p.z); }
+      for (let bz = clamp(Math.floor((minZ + HALF) / 5), 0, 5); bz <= clamp(Math.floor((maxZ + HALF) / 5), 0, 5); bz++) {
+        for (let bx = clamp(Math.floor((minX + HALF) / 5), 0, 5); bx <= clamp(Math.floor((maxX + HALF) / 5), 0, 5); bx++) spatialBins[bz * 6 + bx].push(i);
+      }
+    }
+    for (const cell of cells) for (const neighbor of cell.neighbors) if (!cells[neighbor].neighbors.includes(cell.id)) cells[neighbor].neighbors.push(cell.id);
+    edgeGeometry = new THREE.CylinderGeometry(.025, .025, 1, 6);
+    edgeMaterial = additive(0xffffff, .88); edgeMesh = new THREE.InstancedMesh(edgeGeometry, edgeMaterial, edgeCount);
+    edgeMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage); edgeMesh.frustumCulled = false; scene.add(edgeMesh);
+    for (const cell of cells) updateEdges(cell, 0);
+    edgeMesh.instanceMatrix.needsUpdate = true; edgeMesh.instanceColor.needsUpdate = true;
+    dummy.quaternion.identity(); placeEnemies();
+  }
+  function cellAt(x, z) {
+    if (x < -HALF || x > HALF || z < -HALF || z > HALF) return -1;
+    const bin = spatialBins[clamp(Math.floor((z + HALF) / 5), 0, 5) * 6 + clamp(Math.floor((x + HALF) / 5), 0, 5)];
+    for (const id of bin) {
+      const poly = cells[id].poly; let inside = true;
+      for (let j = 0; j < poly.length; j++) { const a = poly[j], b = poly[(j + 1) % poly.length]; if ((b.x - a.x) * (z - a.z) - (b.z - a.z) * (x - a.x) < -1e-7) { inside = false; break; } }
+      if (inside) return id;
+    }
+    return -1;
+  }
+  function surfaceHeight(cell, x, z) {
+    if (!cell) return 0;
+    const elements = cell.mesh.matrix.elements;
+    const ny = elements[5];
+    return cell.mesh.position.y - (elements[4] * (x - cell.mesh.position.x) + elements[6] * (z - cell.mesh.position.z)) / Math.max(.1, ny);
+  }
+  function clearCycle(resetScorch) {
+    cycleActive = false; collapsedTotal = 0; hitTotal = 0;
+    for (const cell of cells) {
+      cell.state = 0; cell.collapsed = false;
+      if (resetScorch) cell.scorch = 0;
+      cell.mesh.position.set(cell.cx, 0, cell.cz); cell.mesh.rotation.set(0, 0, 0); cell.mesh.updateMatrix();
+      cell.material.color.copy(cell.baseColor).lerp(scorchColor, cell.scorch * .75);
+      if (edgeMesh) updateEdges(cell, 0);
+    }
+    for (const enemy of enemies) { enemy.burnEnd = 0; enemy.hitAt = -100; enemy.hit = false; enemy.outline.visible = false; }
+    for (const p of particles) p.active = false;
+    for (const p of pillars) p.active = false;
+    for (const p of projectiles) { p.active = false; p.body.visible = false; p.core.visible = false; }
+    for (const e of explosions) { e.active = false; e.sphere.visible = false; e.ring.visible = false; }
+    flashLight.intensity = 0;
+  }
+  function placeEnemies() {
+    clearCycle(false);
+    const clusterX = -2 + Math.random() * 5, clusterZ = -4 + Math.random() * 4;
+    for (let i = 0; i < MAX_ENEMIES; i++) {
+      const enemy = enemies[i], angle = i * 2.39996 + Math.random() * .2;
+      const radius = i < 8 ? .65 + Math.sqrt(i / 8) * 2.4 : 4 + Math.random() * 5;
+      enemy.x = clamp(clusterX + Math.cos(angle) * radius, -13.4, 13.4);
+      enemy.z = clamp(clusterZ + Math.sin(angle) * radius, -13.4, 13.4);
+      enemy.heading = Math.random() * Math.PI * 2; enemy.turnAt = time + .4 + Math.random() * 2;
+      enemy.paused = Math.random() < .3; enemy.cell = cellAt(enemy.x, enemy.z);
+    }
+    enemyMesh.count = settings.enemyCount; lastStatus = -1;
+  }
+  function beginCycle() {
+    if (cycleActive) return;
+    cycleActive = true; collapsedTotal = 0; hitTotal = 0;
+    for (const cell of cells) cell.collapsed = false;
+    for (const enemy of enemies) enemy.hit = false;
+  }
+  function scheduleCell(id, depth, delay) {
+    if (id < 0 || id >= cells.length) return;
+    const cell = cells[id]; if (cell.collapsed || cell.state >= 2) return;
+    if (cell.state === 1) { cell.collapseAt = Math.min(cell.collapseAt, time + delay); cell.depth = Math.min(cell.depth, depth); return; }
+    cell.state = 1; cell.warningAt = time; cell.collapseAt = time + delay; cell.depth = depth;
+  }
+  function burnEnemy(enemy, depth, initial) {
+    enemy.burnEnd = Math.max(enemy.burnEnd, time + 5.2); enemy.burnDepth = depth;
+    if (initial || options.chain) scheduleCell(enemy.cell, depth, settings.burnDelay);
+  }
+  function emit(x, y, z, count, strength) {
+    for (let i = 0; i < count; i++) {
+      const p = particles[particleCursor]; particleCursor = (particleCursor + 1) % MAX_PARTICLES;
+      p.active = true; p.x = x; p.y = y; p.z = z; p.vx = (Math.random() - .5) * 3.1 * strength;
+      p.vz = (Math.random() - .5) * 3.1 * strength; p.vy = (2 + Math.random() * 4) * strength;
+      p.life = p.total = .4 + Math.random() * .75; p.size = .035 + Math.random() * .065; p.hue = .035 + Math.random() * .085;
+    }
+  }
+  function collapseCell(cell) {
+    cell.state = 2; cell.collapsed = true; cell.dropAt = time; cell.recoverAt = time + settings.recovery;
+    cell.strength = Math.pow(.74, cell.depth);
+    const angle = (8 + Math.random() * 12) * Math.PI / 180 * cell.strength, axis = Math.random() * Math.PI * 2;
+    cell.angleX = Math.cos(axis) * angle; cell.angleZ = Math.sin(axis) * angle; cell.scorch = 1; collapsedTotal++;
+    for (let i = 0; i < settings.enemyCount; i++) {
+      const enemy = enemies[i]; enemy.cell = cellAt(enemy.x, enemy.z);
+      if (enemy.cell !== cell.id) continue;
+      enemy.hitAt = time; if (!enemy.hit) { enemy.hit = true; hitTotal++; }
+      burnEnemy(enemy, cell.depth, false); emit(enemy.x, .8, enemy.z, 8, .7);
+    }
+    const stride = Math.max(1, Math.floor(cell.inset.length / 4));
+    for (let i = 0; i < cell.inset.length; i += stride) {
+      const a = cell.inset[i], b = cell.inset[(i + 1) % cell.inset.length];
+      const p = pillars[pillarCursor]; pillarCursor = (pillarCursor + 1) % MAX_PILLARS;
+      p.active = true; p.x = (a.x + b.x) * .5; p.z = (a.z + b.z) * .5; p.start = time;
+      p.duration = .65 + Math.random() * .35; p.height = (1.1 + Math.random() * 1.2) * cell.strength; p.width = .1 + .11 * cell.strength;
+      emit(p.x, -.14, p.z, 7, cell.strength);
+    }
+    if (cell.depth < settings.steps) {
+      for (const id of cell.neighbors) if (Math.random() < settings.probability) scheduleCell(id, cell.depth + 1, settings.interval);
+    }
+  }
+  function updateEdges(cell, glow) {
+    if (!edgeMesh) return;
+    cell.mesh.updateMatrixWorld();
+    if (glow > 0) scratchColor.setRGB(1.1 * glow, .31 * glow, .035 * glow);
+    else scratchColor.setRGB(options.boundaries ? .18 : 0, options.boundaries ? .13 : 0, options.boundaries ? .08 : 0);
+    for (let i = 0; i < cell.edges.length; i++) {
+      tempMatrix.multiplyMatrices(cell.mesh.matrixWorld, cell.edges[i]); edgeMesh.setMatrixAt(cell.edgeStart + i, tempMatrix); edgeMesh.setColorAt(cell.edgeStart + i, scratchColor);
+    }
+    edgeMesh.instanceMatrix.needsUpdate = true; edgeMesh.instanceColor.needsUpdate = true;
+  }
+  function fireAt(x, z) {
+    if (time - lastShot < .2) return;
+    const p = projectiles.find(projectile => !projectile.active); if (!p) return;
+    beginCycle(); lastShot = time;
+    p.active = true; p.start = time; p.x = clamp(x, -14.8, 14.8); p.z = clamp(z, -14.8, 14.8); p.radius = settings.radius; p.trail = 0;
+    p.body.visible = true; p.core.visible = true; lastStatus = -1;
+  }
+  function fireAtGroup() {
+    if (!settings.enemyCount) { fireAt(0, 0); return; }
+    // Bounded 24-enemy density search happens only when the fire button is used.
+    let best = enemies[0], bestCount = -1;
+    for (let i = 0; i < settings.enemyCount; i++) {
+      let count = 0;
+      for (let j = 0; j < settings.enemyCount; j++) if ((enemies[i].x - enemies[j].x) ** 2 + (enemies[i].z - enemies[j].z) ** 2 <= settings.radius ** 2) count++;
+      if (count > bestCount) { bestCount = count; best = enemies[i]; }
+    }
+    fireAt(best.x, best.z);
+  }
+  function impact(projectile) {
+    projectile.active = false; projectile.body.visible = false; projectile.core.visible = false;
+    const e = explosions.find(explosion => !explosion.active) || explosions[0];
+    e.active = true; e.start = time; e.radius = projectile.radius; e.x = projectile.x; e.z = projectile.z;
+    e.sphere.position.set(e.x, .15, e.z); e.ring.position.set(e.x, .065, e.z); e.sphere.visible = true; e.ring.visible = true;
+    flashLight.position.set(e.x, 2, e.z); emit(e.x, .35, e.z, 38, 1.2);
+    for (let i = 0; i < settings.enemyCount; i++) {
+      const enemy = enemies[i];
+      if ((enemy.x - e.x) ** 2 + (enemy.z - e.z) ** 2 <= e.radius ** 2) {
+        enemy.cell = cellAt(enemy.x, enemy.z); burnEnemy(enemy, 0, true);
+        if (!enemy.hit) { enemy.hit = true; hitTotal++; }
+        enemy.hitAt = time;
+      }
+    }
+  }
+  function updateProjectiles(dt) {
+    for (const p of projectiles) {
+      if (!p.active) continue; const t = clamp((time - p.start) / .7, 0, 1);
+      // A single parabola with its analytic maximum at exactly six metres.
+      const y0 = 1.25, y1 = .12, rise = 6 - y0, fall = 6 - y1;
+      const apex = Math.sqrt(rise) / (Math.sqrt(rise) + Math.sqrt(fall));
+      const curve = rise / (apex * apex);
+      p.body.position.set(playerPosition.x + (p.x - playerPosition.x) * t, 6 - curve * (t - apex) ** 2, playerPosition.z + (p.z - playerPosition.z) * t);
+      p.body.scale.setScalar(.24 + .035 * Math.sin(time * 38)); p.core.position.copy(p.body.position); p.core.scale.setScalar(.11);
+      p.trail += dt;
+      if (p.trail >= .025) { p.trail %= .025; emit(p.body.position.x, p.body.position.y, p.body.position.z, 2, .13); }
+      if (t >= 1) impact(p);
+    }
+    let light = 0;
+    for (const e of explosions) {
+      if (!e.active) continue; const t = (time - e.start) / .65;
+      if (t >= 1) { e.active = false; e.sphere.visible = false; e.ring.visible = false; continue; }
+      e.sphere.scale.setScalar(e.radius * (.12 + .88 * Math.min(1, t * 2.2))); e.sphere.material.opacity = .44 * (1 - t) ** 2;
+      e.ring.scale.setScalar(e.radius * (.15 + 1.15 * t)); e.ring.material.opacity = .9 * (1 - t);
+      const flash = 20 * Math.exp(-t * 10); if (flash > light) { light = flash; flashLight.position.set(e.x, 2, e.z); }
+    }
+    flashLight.intensity = light;
+  }
+  function updateCells(dt) {
+    for (const cell of cells) {
+      let glow = 0, update = false;
+      if (cell.state === 1) {
+        const t = clamp((time - cell.warningAt) / Math.max(.01, cell.collapseAt - cell.warningAt), 0, 1);
+        glow = .15 + t * .95;
+        cell.mesh.position.x = cell.cx + Math.sin(time * 54 + cell.id) * .012 * t;
+        cell.mesh.position.z = cell.cz + Math.cos(time * 47 + cell.id) * .012 * t;
+        cell.mesh.position.y = Math.sin(time * 65 + cell.id) * .014 * t; update = true;
+        if (time >= cell.collapseAt) collapseCell(cell);
+      }
+      if (cell.state === 2) {
+        const t = ease(clamp((time - cell.dropAt) / .4, 0, 1));
+        cell.mesh.position.set(cell.cx, -.6 * t, cell.cz);
+        cell.mesh.rotation.set(cell.angleX * t, 0, cell.angleZ * t); glow = cell.strength * (.25 + .45 * Math.exp(-(time - cell.dropAt) * 2)); update = true;
+        if (time >= cell.recoverAt) cell.state = 3;
+      }
+      if (cell.state === 3) {
+        const t = ease(clamp((time - cell.recoverAt) / cell.recoveryDuration, 0, 1));
+        cell.mesh.position.set(cell.cx, -.6 * (1 - t), cell.cz);
+        cell.mesh.rotation.set(cell.angleX * (1 - t), 0, cell.angleZ * (1 - t)); glow = .18 * cell.strength * (1 - t); update = true;
+        if (t >= 1) { cell.state = 0; cell.mesh.position.set(cell.cx, 0, cell.cz); cell.mesh.rotation.set(0, 0, 0); glow = 0; }
+      }
+      if (cell.scorch > 0) {
+        if (cell.state === 0) cell.scorch = Math.max(0, cell.scorch - dt / 7);
+        topColor.copy(cell.baseColor).lerp(scorchColor, .75 * cell.scorch); cell.material.color.copy(topColor);
+      }
+      if (update) { cell.mesh.updateMatrix(); updateEdges(cell, glow); }
+    }
+  }
+  function updateEnemies(dt) {
+    let flameIndex = 0;
+    dummy.quaternion.identity();
+    for (let i = 0; i < settings.enemyCount; i++) {
+      const enemy = enemies[i];
+      if (options.moving) {
+        if (time >= enemy.turnAt) { enemy.heading += (Math.random() - .5) * 2.5; enemy.paused = Math.random() < .3; enemy.turnAt = time + .8 + Math.random() * 2; }
+        if (!enemy.paused) {
+          enemy.x += Math.sin(enemy.heading) * .55 * dt; enemy.z += Math.cos(enemy.heading) * .55 * dt;
+          if (Math.abs(enemy.x) > 13.7 || Math.abs(enemy.z) > 13.7) { enemy.heading += Math.PI; enemy.x = clamp(enemy.x, -13.7, 13.7); enemy.z = clamp(enemy.z, -13.7, 13.7); }
+        }
+      }
+      enemy.cell = cellAt(enemy.x, enemy.z);
+      const burning = enemy.burnEnd > time;
+      if (burning && options.chain) scheduleCell(enemy.cell, enemy.burnDepth, settings.burnDelay);
+      const hitAge = time - enemy.hitAt;
+      const jump = hitAge >= 0 && hitAge < .65 ? Math.sin(hitAge / .65 * Math.PI) * .95 : 0;
+      const y = surfaceHeight(cells[enemy.cell], enemy.x, enemy.z) + .46 + jump;
+      dummy.position.set(enemy.x, y, enemy.z); dummy.rotation.set(0, enemy.heading, 0); dummy.scale.set(1, 1, 1); dummy.updateMatrix(); enemyMesh.setMatrixAt(i, dummy.matrix);
+      scratchColor.setHex(hitAge < .4 && Math.sin(hitAge * 65) > 0 ? 0xffe9a8 : 0xd85a30); enemyMesh.setColorAt(i, scratchColor);
+      enemy.outline.visible = burning; enemy.outline.position.copy(dummy.position); enemy.outline.rotation.y = enemy.heading;
+      if (burning) {
+        for (let j = 0; j < 3; j++) {
+          const flicker = Math.sin(time * (12 + j * 3) + i * 2.7 + j), scale = .13 + .045 * flicker;
+          dummy.position.set(enemy.x + Math.sin(time * 4 + i + j * 2) * .16, y + .58 + j * .14 + flicker * .055, enemy.z + Math.cos(time * 5 + i + j * 2) * .14);
+          dummy.rotation.set(0, 0, 0); dummy.scale.set(scale, scale * 1.65, scale); dummy.updateMatrix(); flameMesh.setMatrixAt(flameIndex, dummy.matrix);
+          scratchColor.setHSL(.055 + j * .018, 1, .5); flameMesh.setColorAt(flameIndex++, scratchColor);
+        }
+      }
+    }
+    for (let i = settings.enemyCount; i < MAX_ENEMIES; i++) enemies[i].outline.visible = false;
+    enemyMesh.count = settings.enemyCount; enemyMesh.instanceMatrix.needsUpdate = true;
+    if (enemyMesh.instanceColor) enemyMesh.instanceColor.needsUpdate = true;
+    flameMesh.count = flameIndex; flameMesh.instanceMatrix.needsUpdate = true;
+    if (flameMesh.instanceColor) flameMesh.instanceColor.needsUpdate = true;
+    dummy.rotation.set(0, 0, 0);
+  }
+  function updateEffects(dt) {
+    let particleCount = 0;
+    for (const p of particles) {
+      if (!p.active) continue; p.life -= dt; if (p.life <= 0) { p.active = false; continue; }
+      p.x += p.vx * dt; p.y += p.vy * dt; p.z += p.vz * dt; p.vy -= 5 * dt;
+      const fade = p.life / p.total;
+      dummy.position.set(p.x, p.y, p.z); dummy.scale.setScalar(p.size * Math.sqrt(fade)); dummy.updateMatrix(); particleMesh.setMatrixAt(particleCount, dummy.matrix);
+      scratchColor.setHSL(p.hue, 1, .5 * fade); particleMesh.setColorAt(particleCount++, scratchColor);
+    }
+    particleMesh.count = particleCount; particleMesh.instanceMatrix.needsUpdate = true;
+    if (particleMesh.instanceColor) particleMesh.instanceColor.needsUpdate = true;
+    let pillarCount = 0;
+    for (const p of pillars) {
+      if (!p.active) continue; const t = (time - p.start) / p.duration;
+      if (t >= 1) { p.active = false; continue; }
+      const height = p.height * Math.sin(Math.PI * Math.max(.01, t)) ** .7;
+      dummy.position.set(p.x, -.3 + height * .5, p.z); dummy.scale.set(p.width * (1 - t * .4), height, p.width * (1 - t * .4)); dummy.updateMatrix(); pillarMesh.setMatrixAt(pillarCount, dummy.matrix);
+      scratchColor.setRGB(1.1 * (1 - t), .32 * (1 - t), .035); pillarMesh.setColorAt(pillarCount++, scratchColor);
+    }
+    pillarMesh.count = pillarCount; pillarMesh.instanceMatrix.needsUpdate = true;
+    if (pillarMesh.instanceColor) pillarMesh.instanceColor.needsUpdate = true;
+    const flicker = .68 + Math.sin(time * 2.7) * .08 + Math.sin(time * 6.1) * .035;
+    lavaMaterial.color.setRGB(flicker, .11 + Math.sin(time * 3.1) * .025, .008);
+  }
+  function updateStatus() {
+    if (time - lastStatus < .1) return; lastStatus = time;
+    let burning = 0, warning = 0, dropping = 0, recovering = 0;
+    for (let i = 0; i < settings.enemyCount; i++) if (enemies[i].burnEnd > time) burning++;
+    for (const cell of cells) { if (cell.state === 1) warning++; else if (cell.state === 2) dropping++; else if (cell.state === 3) recovering++; }
+    const flying = projectiles.some(p => p.active), exploding = explosions.some(e => e.active);
+    let phase = '대기';
+    if (flying) phase = '비행'; else if (exploding) phase = '폭발'; else if (warning && !dropping) phase = '균열 예고'; else if (dropping || warning) phase = '붕괴·전파'; else if (recovering) phase = '복구';
+    if (!flying && !exploding && !warning && !dropping && !recovering && !burning) cycleActive = false;
+    status.textContent = phase + ' · 화상 적 ' + burning + '마리 · 붕괴 셀 ' + collapsedTotal + '개 · 맞은 적 ' + hitTotal + '마리';
+  }
+  function pick(clientX, clientY) {
+    const rect = renderer.domElement.getBoundingClientRect();
+    pointer.set((clientX - rect.left) / rect.width * 2 - 1, -(clientY - rect.top) / rect.height * 2 + 1);
+    raycaster.setFromCamera(pointer, camera);
+    const hits = raycaster.intersectObject(lava, false);
+    if (!hits.length || Math.abs(hits[0].point.x) > HALF || Math.abs(hits[0].point.z) > HALF) return false;
+    target.copy(hits[0].point); return true;
+  }
+  let drag = null;
+  const canvas = renderer.domElement;
+  canvas.addEventListener('pointerdown', event => {
+    if (event.button !== 0 || drag) return;
+    drag = { id: event.pointerId, x: event.clientX, y: event.clientY, lastX: event.clientX, lastY: event.clientY, maxDistance: 0 };
+    canvas.setPointerCapture(event.pointerId);
+  });
+  canvas.addEventListener('pointermove', event => {
+    if (drag && event.pointerId === drag.id) {
+      drag.maxDistance = Math.max(drag.maxDistance, Math.hypot(event.clientX - drag.x, event.clientY - drag.y));
+      if (drag.maxDistance >= 5) { orbit.azimuth -= (event.clientX - drag.lastX) * .007; orbit.polar = clamp(orbit.polar + (event.clientY - drag.lastY) * .007, .14, 1.3); updateCamera(); }
+      drag.lastX = event.clientX; drag.lastY = event.clientY;
+    }
+    hovered = pick(event.clientX, event.clientY); aimRing.visible = hovered && !drag;
+    if (hovered) { aimRing.position.set(target.x, .09, target.z); aimRing.scale.setScalar(settings.radius); }
+  });
+  canvas.addEventListener('pointerup', event => {
+    if (!drag || event.pointerId !== drag.id) return;
+    const distance = Math.max(drag.maxDistance, Math.hypot(event.clientX - drag.x, event.clientY - drag.y));
+    if (distance < 5 && pick(event.clientX, event.clientY)) fireAt(target.x, target.z);
+    drag = null; if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
+    aimRing.visible = false;
+  });
+  const cancelDrag = () => { drag = null; aimRing.visible = false; };
+  canvas.addEventListener('pointercancel', cancelDrag); canvas.addEventListener('lostpointercapture', cancelDrag);
+  canvas.addEventListener('pointerleave', () => { aimRing.visible = false; hovered = false; });
+  canvas.addEventListener('wheel', event => { event.preventDefault(); orbit.distance = clamp(orbit.distance * Math.exp(clamp(event.deltaY, -200, 200) * .0012), 23, 69); updateCamera(); }, { passive: false });
+  const units = { cellCount: '개', radius: '미터', burnDelay: '초', steps: '단계', interval: '초', enemyCount: '마리', recovery: '초' };
+  for (const key of Object.keys(settings)) {
+    const input = document.getElementById(key), output = document.getElementById(key + 'Value');
+    input.addEventListener('input', () => {
+      settings[key] = Number(input.value);
+      output.textContent = key === 'probability' ? Math.round(settings[key] * 100) + '%' : (Math.round(settings[key] * 100) / 100) + units[key];
+      if (key === 'enemyCount') placeEnemies();
+    });
+    if (key === 'cellCount') input.addEventListener('change', makeCells);
+  }
+  for (const key of Object.keys(options)) document.getElementById(key).addEventListener('change', event => {
+    options[key] = event.target.checked;
+    if (key === 'boundaries') for (const cell of cells) if (!cell.state) updateEdges(cell, 0);
+  });
+  document.getElementById('preset').addEventListener('change', event => {
+    orbit.polar = event.target.value === 'high' ? .22 : event.target.value === 'low' ? 1.13 : .73;
+    orbit.distance = event.target.value === 'low' ? 38 : 43; updateCamera();
+  });
+  document.getElementById('fire').addEventListener('click', fireAtGroup);
+  document.getElementById('redistribute').addEventListener('click', placeEnemies);
+  document.getElementById('rebuild').addEventListener('click', makeCells);
+  window.addEventListener('resize', resize);
+  if (window.ResizeObserver) new ResizeObserver(resize).observe(view);
+  document.addEventListener('visibilitychange', () => { lastFrame = 0; });
+  function frame(milliseconds) {
+    requestAnimationFrame(frame);
+    const dt = lastFrame ? Math.min((milliseconds - lastFrame) / 1000, .05) : 0; lastFrame = milliseconds; time += dt;
+    updateProjectiles(dt); updateCells(dt); updateEnemies(dt); updateEffects(dt); updateStatus(); renderer.render(scene, camera);
+  }
+  makeCells(); updateCamera(); resize(); requestAnimationFrame(frame);
+  setTimeout(() => { if (lastShot < 0) fireAtGroup(); }, 500);
+})();
+</script>
+</body>
+</html>

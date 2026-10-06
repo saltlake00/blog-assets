@@ -1,0 +1,908 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>썬더형 번개 나무 데모 v2</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #eef1f5; --panel: #ffffff; --text: #1c2b3b; --muted: #526578;
+      --border: #ccd6e1; --accent: #1769a5; --button: #e8f3fc; --hover: #d3e9fa;
+      --view: #070c13; --overlay: #d2e7f7; --overlay-bg: #07111dc9;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+        --page: #101722; --panel: #192330; --text: #e5eef8; --muted: #a7bad0;
+        --border: #34465b; --accent: #84d4ff; --button: #203b50; --hover: #2b506b;
+      }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--page); color: var(--text); font-family: system-ui, sans-serif; }
+    main { width: 100%; max-width: 960px; margin: 24px auto; padding: 0 16px; }
+    h1 { font-size: clamp(22px, 4vw, 29px); margin: 0 0 8px; letter-spacing: -.035em; }
+    .intro { margin: 0 0 16px; color: var(--muted); line-height: 1.65; font-size: 14px; }
+    #view { height: 520px; width: 100%; position: relative; overflow: hidden; border: 1px solid var(--border); border-radius: 14px; background: var(--view); }
+    #view canvas { width: 100%; height: 100%; display: block; touch-action: none; cursor: crosshair; }
+    .hint { position: absolute; left: 12px; top: 12px; right: 12px; width: fit-content; max-width: calc(100% - 24px); pointer-events: none; background: var(--overlay-bg); color: var(--overlay); padding: 7px 10px; border-radius: 7px; font-size: 12px; line-height: 1.5; }
+    .panel { margin-top: 12px; padding: 16px; border: 1px solid var(--border); border-radius: 14px; background: var(--panel); }
+    .buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+    button { border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; background: var(--button); color: var(--text); font: inherit; font-size: 14px; cursor: pointer; max-width: 100%; }
+    button:hover { background: var(--hover); }
+    button:first-child { border-color: var(--accent); font-weight: 650; }
+    button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .sliders { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px 20px; }
+    .control { min-width: 0; }
+    .control label { display: flex; justify-content: space-between; align-items: center; gap: 6px; font-size: 13px; }
+    output { color: var(--accent); font-weight: 650; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    input[type="range"] { display: block; width: 100%; margin: 12px 0 0; accent-color: var(--accent); }
+    .checks { display: flex; flex-wrap: wrap; gap: 14px 22px; margin-top: 22px; font-size: 14px; }
+    .checks label { display: flex; align-items: center; gap: 7px; cursor: pointer; }
+    select { max-width: 100%; padding: 7px 9px; border: 1px solid var(--border); border-radius: 7px; background: var(--panel); color: var(--text); font: inherit; }
+    input[type="checkbox"] { width: 17px; height: 17px; margin: 0; accent-color: var(--accent); }
+    .note { margin: 12px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+    #status { margin: 12px 0 0; padding: 12px 14px; border: 1px solid var(--border); background: var(--panel); border-radius: 9px; font-size: 13px; line-height: 1.7; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+    @media (max-width: 760px) { .sliders { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 420px) { main { margin-top: 16px; } .panel { padding: 14px; } .sliders { grid-template-columns: minmax(0, 1fr); gap: 16px; } }
+  </style>
+</head>
+<body>
+<main>
+  <h1>썬더형 번개 나무 데모 v2</h1>
+  <p class="intro">감전된 적이 도망치면 전류 끈이 길어지고, 끈을 밟은 적에게 감전이 전파됩니다. 너무 긴 끈은 끊어져 적이 풀려납니다.</p>
+  <div id="view" aria-label="번개 마법 삼차원 장면">
+    <div class="hint">드래그로 회전 · 휠로 확대 · 바닥을 눌러 시전</div>
+  </div>
+  <div class="panel">
+    <div class="buttons">
+      <button id="cast" type="button">적 무리 쪽에 시전</button>
+      <button id="redistribute" type="button">적 다시 배치</button>
+      <button id="erase" type="button">탄 자국 지우기</button>
+    </div>
+    <div class="sliders">
+      <div class="control"><label for="chain">연쇄 수 <output id="chain-value" for="chain">3마리</output></label><input id="chain" type="range" min="1" max="8" step="1" value="3"></div>
+      <div class="control"><label for="range">사거리 <output id="range-value" for="range">11m</output></label><input id="range" type="range" min="5" max="18" step="1" value="11"></div>
+      <div class="control"><label for="density">가지 밀도 <output id="density-value" for="density">450개</output></label><input id="density" type="range" min="0" max="900" step="1" value="450"></div>
+      <div class="control"><label for="pull">적 끌림 <output id="pull-value" for="pull">2.5</output></label><input id="pull" type="range" min="0" max="6" step="0.1" value="2.5"></div>
+      <div class="control"><label for="speed">성장 속도 <output id="speed-value" for="speed">4단계/프레임</output></label><input id="speed" type="range" min="1" max="12" step="1" value="4"></div>
+      <div class="control"><label for="delay">낙뢰 지연 <output id="delay-value" for="delay">2.2초</output></label><input id="delay" type="range" min="0.3" max="3" step="0.1" value="2.2"></div>
+      <div class="control"><label for="interval">낙뢰 간격 <output id="interval-value" for="interval">0.12초</output></label><input id="interval" type="range" min="0" max="0.4" step="0.01" value="0.12"></div>
+      <div class="control"><label for="count">적 수 <output id="count-value" for="count">14마리</output></label><input id="count" type="range" min="0" max="20" step="1" value="14"></div>
+      <div class="control"><label for="spread">전파 최대 <output id="spread-value" for="spread">6마리</output></label><input id="spread" type="range" min="0" max="12" step="1" value="6"></div>
+      <div class="control"><label for="ropeLength">끈 최대 길이 <output id="ropeLength-value" for="ropeLength">22m</output></label><input id="ropeLength" type="range" min="8" max="40" step="1" value="22"></div>
+    </div>
+    <div class="checks">
+      <label for="reaction">감전 반응 <select id="reaction"><option value="rope" selected>끈 (도망치며 늘어남)</option><option value="stun">경직 (제자리)</option></select></label>
+      <label><input id="net" type="checkbox" checked>마무리 그물</label>
+      <label><input id="move" type="checkbox" checked>적 배회</label>
+    </div>
+    <p class="note">전파는 감전 지연 중에만 일어납니다. 청백색 고리는 직접 감전, 보라색 고리는 전파 감전입니다. 슬라이더는 다음 시전에, 감전 반응과 체크 항목은 즉시 적용됩니다. 적 수를 바꾸면 다시 배치됩니다.</p>
+  </div>
+  <p id="status" role="status" aria-live="polite">대기 · 가지 노드 0 · 감전 0 (직접 0 + 전파 0) · 끊김 0</p>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(() => {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const status = $('status');
+  if (!window.THREE) {
+    status.textContent = '삼차원 라이브러스를 불러오지 못했습니다. 인터넷 연결을 확인해 주세요.';
+    return;
+  }
+  const view = $('view');
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+  } catch (error) {
+    status.textContent = '삼차원 장면을 시작하지 못했습니다. 브라우저의 그래픽 가속을 확인해 주세요.';
+    return;
+  }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.8));
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  view.appendChild(renderer.domElement);
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x070c13);
+  scene.fog = new THREE.Fog(0x070c13, 43, 96);
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 160);
+  const orbit = { radius: 22, theta: 0.65, phi: 0.92, target: new THREE.Vector3(0, 1.2, 0) };
+  let cameraShift = null;
+  const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+  const random = (a, b) => a + Math.random() * (b - a);
+  function updateCamera() {
+    const r = orbit.radius, p = orbit.phi, t = orbit.theta;
+    camera.position.set(r * Math.sin(p) * Math.sin(t), r * Math.cos(p), r * Math.sin(p) * Math.cos(t)).add(orbit.target);
+    camera.lookAt(orbit.target);
+  }
+  function updateCameraShift(now) {
+    if (!cameraShift) return;
+    const t = clamp((now - cameraShift.start) / 0.5, 0, 1);
+    orbit.target.copy(cameraShift.from).lerp(cameraShift.to, t * t * (3 - 2 * t));
+    updateCamera();
+    if (t === 1) cameraShift = null;
+  }
+  function resize() {
+    const width = Math.max(1, view.clientWidth);
+    renderer.setSize(width, view.clientHeight, false);
+    camera.aspect = width / view.clientHeight;
+    camera.updateProjectionMatrix();
+  }
+  updateCamera();
+  resize();
+  if (window.ResizeObserver) new ResizeObserver(resize).observe(view);
+  else window.addEventListener('resize', resize);
+  scene.add(new THREE.AmbientLight(0x9ca8b8, 0.72));
+  const moon = new THREE.DirectionalLight(0xc1d7eb, 0.38);
+  moon.position.set(-8, 18, 9);
+  scene.add(moon);
+  const flashLight = new THREE.PointLight(0xb9eaff, 0, 32, 2);
+  scene.add(flashLight);
+
+  // 바닥과 모든 탄 자국은 같은 1024px 캔버스 텍스처에 그린다.
+  const FLOOR = 40, TEXTURE_SIZE = 1024, TEX_SCALE = TEXTURE_SIZE / FLOOR;
+  const baseCanvas = document.createElement('canvas');
+  baseCanvas.width = baseCanvas.height = TEXTURE_SIZE;
+  const base = baseCanvas.getContext('2d');
+  const stonePixels = base.createImageData(TEXTURE_SIZE, TEXTURE_SIZE);
+  for (let i = 0; i < stonePixels.data.length; i += 4) {
+    const n = Math.floor(random(-7, 8));
+    stonePixels.data[i] = 74 + n;
+    stonePixels.data[i + 1] = 77 + n;
+    stonePixels.data[i + 2] = 84 + n;
+    stonePixels.data[i + 3] = 255;
+  }
+  base.putImageData(stonePixels, 0, 0);
+  base.strokeStyle = '#10161dcc';
+  base.lineWidth = 2;
+  for (let row = 0; row < 17; row++) {
+    const y = row * 64;
+    base.beginPath(); base.moveTo(0, y); base.lineTo(TEXTURE_SIZE, y); base.stroke();
+    for (let col = 0; col < 17; col++) {
+      const x = col * 64 + (row % 2) * 32;
+      base.beginPath(); base.moveTo(x, y); base.lineTo(x + random(-5, 5), y + 64); base.stroke();
+    }
+  }
+  base.strokeStyle = '#3a434e55'; base.lineWidth = 0.8;
+  for (let i = 0; i < 480; i++) {
+    const x = random(0, TEXTURE_SIZE), y = random(0, TEXTURE_SIZE);
+    base.beginPath(); base.moveTo(x, y); base.lineTo(x + random(-14, 14), y + random(3, 20)); base.stroke();
+  }
+  const floorCanvas = document.createElement('canvas');
+  floorCanvas.width = floorCanvas.height = TEXTURE_SIZE;
+  const floorContext = floorCanvas.getContext('2d');
+  floorContext.drawImage(baseCanvas, 0, 0);
+  const floorTexture = new THREE.CanvasTexture(floorCanvas);
+  floorTexture.encoding = THREE.sRGBEncoding;
+  floorTexture.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(FLOOR, FLOOR), new THREE.MeshStandardMaterial({ map: floorTexture, roughness: 0.98, metalness: 0.02 }));
+  floor.rotation.x = -Math.PI / 2;
+  scene.add(floor);
+  const grid = new THREE.GridHelper(FLOOR, 40, 0x7391a6, 0x455c70);
+  grid.position.y = 0.014;
+  grid.material.transparent = true; grid.material.opacity = 0.13; grid.material.depthWrite = false;
+  scene.add(grid);
+  let floorDirty = false;
+  function texturePoint(p) { return { x: (p.x + 20) * TEX_SCALE, y: (p.z + 20) * TEX_SCALE }; }
+  function burnCircle(p, radius) {
+    const c = texturePoint(p), r = radius * TEX_SCALE;
+    const gradient = floorContext.createRadialGradient(c.x, c.y, r * 0.1, c.x, c.y, r);
+    gradient.addColorStop(0, 'rgba(0,0,0,0.96)');
+    gradient.addColorStop(0.52, 'rgba(1,1,2,0.94)');
+    gradient.addColorStop(1, 'rgba(0,0,0,0)');
+    floorContext.save(); floorContext.fillStyle = gradient;
+    floorContext.beginPath(); floorContext.arc(c.x, c.y, r, 0, Math.PI * 2); floorContext.fill();
+    floorContext.strokeStyle = '#090705b3'; floorContext.lineWidth = 1.3;
+    for (let i = 0; i < 10; i++) {
+      const a = random(0, Math.PI * 2), d = random(0.6, 1.15) * r;
+      floorContext.beginPath(); floorContext.moveTo(c.x, c.y);
+      floorContext.lineTo(c.x + Math.cos(a) * d, c.y + Math.sin(a) * d); floorContext.stroke();
+    }
+    floorContext.restore(); floorDirty = true;
+  }
+  function burnPath(path) {
+    if (path.length < 2) return;
+    floorContext.save(); floorContext.beginPath();
+    path.forEach((p, i) => { const q = texturePoint(p); if (i === 0) floorContext.moveTo(q.x, q.y); else floorContext.lineTo(q.x, q.y); });
+    floorContext.lineJoin = floorContext.lineCap = 'round';
+    floorContext.strokeStyle = '#010102f5'; floorContext.lineWidth = 0.22 * TEX_SCALE;
+    floorContext.shadowColor = '#000'; floorContext.shadowBlur = 7; floorContext.stroke();
+    floorContext.restore(); floorDirty = true;
+    addEmbers(path, performance.now() / 1000);
+  }
+  function burnRopePath(path) {
+    if (path.length < 2) return;
+    floorContext.save(); floorContext.beginPath();
+    path.forEach((p, i) => { const q = texturePoint(p); if (!i) floorContext.moveTo(q.x, q.y); else floorContext.lineTo(q.x, q.y); });
+    floorContext.lineJoin = floorContext.lineCap = 'round';
+    floorContext.strokeStyle = 'rgba(0,0,0,0.24)'; floorContext.lineWidth = 0.12 * TEX_SCALE;
+    floorContext.stroke(); floorContext.restore(); floorDirty = true;
+  }
+
+  const cylinderGeometry = new THREE.CylinderGeometry(1, 1, 1, 6, 1, true);
+  const cubeGeometry = new THREE.BoxGeometry(0.9, 0.9, 0.9);
+  const markerGeometry = new THREE.RingGeometry(0.48, 0.65, 48);
+  const arcGeometry = new THREE.RingGeometry(0.67, 0.79, 24, 1, 0, Math.PI * 0.65);
+  const warningGeometry = new THREE.RingGeometry(0.76, 0.9, 48);
+  const dotCanvas = document.createElement('canvas'); dotCanvas.width = dotCanvas.height = 32;
+  const dotContext = dotCanvas.getContext('2d');
+  const dotGradient = dotContext.createRadialGradient(16, 16, 0, 16, 16, 16);
+  dotGradient.addColorStop(0, '#fff'); dotGradient.addColorStop(0.2, '#d7f6ff'); dotGradient.addColorStop(1, 'rgba(110,201,255,0)');
+  dotContext.fillStyle = dotGradient; dotContext.fillRect(0, 0, 32, 32);
+  const dotTexture = new THREE.CanvasTexture(dotCanvas);
+  const axisY = new THREE.Vector3(0, 1, 0), matrix = new THREE.Matrix4(), quaternion = new THREE.Quaternion();
+  const delta = new THREE.Vector3(), midpoint = new THREE.Vector3(), scale = new THREE.Vector3();
+  // 적 20개 × 끈당 최대 72선분 = 1,440개. 공용 풀은 1,500개로 고정한다.
+  const MAX_ROPE_SEGMENTS = 1500, MAX_ROPE_POINTS = 72, ROPE_DOTS = 5, ROPE_Y = 0.085;
+  const ropeMaterial = new THREE.MeshBasicMaterial({ color: 0x9ce6ff, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending, depthWrite: false });
+  const ropeMesh = new THREE.InstancedMesh(cylinderGeometry, ropeMaterial, MAX_ROPE_SEGMENTS);
+  ropeMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage); ropeMesh.frustumCulled = false; ropeMesh.count = 0; scene.add(ropeMesh);
+  const MAX_EMBER_SEGMENTS = 600, MAX_SPARKS = 160;
+  const embers = [], sparks = [], emberColor = new THREE.Color();
+  const emberMesh = new THREE.InstancedMesh(cylinderGeometry, new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.95, blending: THREE.AdditiveBlending, depthWrite: false }), MAX_EMBER_SEGMENTS);
+  emberMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage); emberMesh.frustumCulled = false; emberMesh.count = 0; scene.add(emberMesh);
+  const sparkGeometry = new THREE.BufferGeometry();
+  sparkGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(MAX_SPARKS * 3), 3).setUsage(THREE.DynamicDrawUsage));
+  sparkGeometry.setAttribute('color', new THREE.BufferAttribute(new Float32Array(MAX_SPARKS * 3), 3).setUsage(THREE.DynamicDrawUsage));
+  sparkGeometry.setDrawRange(0, 0);
+  const sparkMesh = new THREE.Points(sparkGeometry, new THREE.PointsMaterial({ vertexColors: true, size: 0.22, map: dotTexture, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false }));
+  sparkMesh.frustumCulled = false; scene.add(sparkMesh);
+  function setSegment(mesh, index, a, b, radius) {
+    delta.subVectors(b, a);
+    const length = Math.max(0.0001, delta.length());
+    quaternion.setFromUnitVectors(axisY, delta.multiplyScalar(1 / length));
+    midpoint.addVectors(a, b).multiplyScalar(0.5);
+    scale.set(radius, length, radius); matrix.compose(midpoint, quaternion, scale); mesh.setMatrixAt(index, matrix);
+  }
+  function addEmbers(path, now) {
+    for (let i = 1; i < path.length; i++) {
+      const a = path[i - 1].clone(), b = path[i].clone(); a.y = b.y = 0.028;
+      embers.push({ a, b, start: now });
+    }
+    if (embers.length > MAX_EMBER_SEGMENTS) embers.splice(0, embers.length - MAX_EMBER_SEGMENTS);
+  }
+  function addSparks(p, now) {
+    for (let i = 0; i < 14; i++) {
+      const angle = random(0, Math.PI * 2), speed = random(0.8, 3.6);
+      sparks.push({ x: p.x, y: ROPE_Y, z: p.z, vx: Math.cos(angle) * speed, vy: random(1.7, 4.2), vz: Math.sin(angle) * speed, start: now, life: random(0.25, 0.55) });
+    }
+    if (sparks.length > MAX_SPARKS) sparks.splice(0, sparks.length - MAX_SPARKS);
+  }
+  function updateGroundEffects(now) {
+    let count = 0;
+    for (let i = embers.length - 1; i >= 0; i--) if (now - embers[i].start >= 8) embers.splice(i, 1);
+    for (const ember of embers) {
+      const fade = (1 - (now - ember.start) / 8) ** 1.35;
+      setSegment(emberMesh, count, ember.a, ember.b, 0.021);
+      emberColor.setRGB(fade, fade * 0.38, fade * 0.045); emberMesh.setColorAt(count++, emberColor);
+    }
+    emberMesh.count = count; emberMesh.instanceMatrix.needsUpdate = true;
+    if (emberMesh.instanceColor) emberMesh.instanceColor.needsUpdate = true;
+    const positions = sparkGeometry.attributes.position, colors = sparkGeometry.attributes.color;
+    for (let i = sparks.length - 1; i >= 0; i--) if (now - sparks[i].start >= sparks[i].life) sparks.splice(i, 1);
+    sparks.forEach((spark, i) => {
+      const age = now - spark.start, fade = 1 - age / spark.life;
+      positions.setXYZ(i, spark.x + spark.vx * age, Math.max(0.04, spark.y + spark.vy * age - 5 * age * age), spark.z + spark.vz * age);
+      colors.setXYZ(i, fade, fade * 0.72, fade * 0.3);
+    });
+    sparkGeometry.setDrawRange(0, sparks.length); positions.needsUpdate = colors.needsUpdate = true;
+  }
+  const bolts = [];
+  const MAX_BOLT_SEGMENTS = 2048, MAX_BOLTS = 24;
+  function removeBolt(bolt) {
+    scene.remove(bolt.group); bolt.core.material.dispose(); bolt.outer.material.dispose();
+    bolt.core.dispose(); bolt.outer.dispose();
+  }
+  function addBolt(path, duration, radius, now) {
+    const count = Math.min(path.length - 1, MAX_BOLT_SEGMENTS);
+    if (count <= 0) return;
+    if (bolts.length >= MAX_BOLTS) removeBolt(bolts.shift());
+    const coreMaterial = new THREE.MeshBasicMaterial({ color: 0xf5fcff, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false });
+    const outerMaterial = new THREE.MeshBasicMaterial({ color: 0x68c7ff, opacity: 0.32, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false });
+    const core = new THREE.InstancedMesh(cylinderGeometry, coreMaterial, count);
+    const outer = new THREE.InstancedMesh(cylinderGeometry, outerMaterial, count);
+    core.frustumCulled = outer.frustumCulled = false;
+    for (let i = 0; i < count; i++) {
+      delta.subVectors(path[i + 1], path[i]);
+      const length = Math.max(0.0001, delta.length());
+      quaternion.setFromUnitVectors(axisY, delta.multiplyScalar(1 / length));
+      midpoint.addVectors(path[i], path[i + 1]).multiplyScalar(0.5);
+      scale.set(radius, length, radius); matrix.compose(midpoint, quaternion, scale); core.setMatrixAt(i, matrix);
+      scale.set(radius * 5, length, radius * 5); matrix.compose(midpoint, quaternion, scale); outer.setMatrixAt(i, matrix);
+    }
+    core.instanceMatrix.needsUpdate = outer.instanceMatrix.needsUpdate = true;
+    const group = new THREE.Group(); group.add(outer, core); scene.add(group);
+    bolts.push({ group, core, outer, start: now, duration, seed: random(0, 20) });
+  }
+  function flashAt(p, strength) { flashLight.position.set(p.x, 2, p.z); flashLight.intensity = Math.max(flashLight.intensity, strength); }
+  function skyPath(p) {
+    const start = new THREE.Vector3(p.x + random(-0.8, 0.8), 24, p.z + random(-0.8, 0.8));
+    const end = new THREE.Vector3(p.x, 0.07, p.z), path = [start];
+    for (let i = 1; i < 26; i++) {
+      const t = i / 26, amplitude = 0.65 * Math.sin(Math.PI * t) + 0.08;
+      const q = start.clone().lerp(end, t); q.x += random(-amplitude, amplitude); q.z += random(-amplitude, amplitude); path.push(q);
+    }
+    path.push(end); return path;
+  }
+  function horizontalPath(a, b) {
+    const length = Math.hypot(b.x - a.x, b.z - a.z), pieces = Math.max(2, Math.ceil(length / 0.42));
+    const path = [new THREE.Vector3(a.x, 0.6, a.z)];
+    const nx = -(b.z - a.z) / Math.max(length, 0.001), nz = (b.x - a.x) / Math.max(length, 0.001);
+    for (let i = 1; i < pieces; i++) {
+      const t = i / pieces, jitter = random(-0.24, 0.24);
+      path.push(new THREE.Vector3(a.x + (b.x - a.x) * t + nx * jitter, 0.6, a.z + (b.z - a.z) * t + nz * jitter));
+    }
+    path.push(new THREE.Vector3(b.x, 0.6, b.z)); return path;
+  }
+  function updateBolts(now, dt) {
+    for (let i = bolts.length - 1; i >= 0; i--) {
+      const bolt = bolts[i], age = now - bolt.start;
+      if (age >= bolt.duration) { removeBolt(bolt); bolts.splice(i, 1); continue; }
+      const fade = Math.min(1, (bolt.duration - age) / 0.1);
+      const flicker = Math.sin(age * 113 + bolt.seed) > -0.42 ? 1 : 0.12;
+      bolt.core.material.opacity = 0.97 * fade * flicker;
+      bolt.outer.material.opacity = 0.34 * fade * flicker;
+    }
+    flashLight.intensity *= Math.exp(-18 * dt);
+  }
+
+  const sliderDefinitions = [
+    ['chain', 0, '마리'], ['range', 0, 'm'], ['density', 0, '개'], ['pull', 1, ''],
+    ['speed', 0, '단계/프레임'], ['delay', 1, '초'], ['interval', 2, '초'], ['count', 0, '마리'],
+    ['spread', 0, '마리'], ['ropeLength', 0, 'm']
+  ];
+  sliderDefinitions.forEach(([id, precision, unit]) => {
+    const input = $(id), output = $(id + '-value');
+    const display = () => { const factor = Math.pow(10, precision); output.value = String(Math.round(Number(input.value) * factor) / factor) + unit; };
+    input.addEventListener('input', () => { display(); if (id === 'count') redistributeEnemies(); }); display();
+  });
+  function settings() {
+    const result = {}; sliderDefinitions.forEach(([id]) => { result[id] = Number($(id).value); }); return result;
+  }
+  let enemies = [], cast = null;
+  function chooseWander(enemy) {
+    enemy.heading = random(0, Math.PI * 2); enemy.paused = Math.random() < 0.3; enemy.wanderTime = random(0.8, 2.6);
+  }
+  function resetEnemyAppearance(enemy) {
+    enemy.mesh.material.color.set(0xd85a30); enemy.mesh.material.emissive.set(0x641600); enemy.mesh.material.emissiveIntensity = 0.14;
+  }
+  function removeIndicator(mark) {
+    if (mark.removed) return;
+    mark.removed = true;
+    scene.remove(mark.marker, mark.warning);
+    mark.markerMaterials.forEach(material => material.dispose());
+    mark.warning.material.dispose();
+    if (mark.enemy.mark === mark) mark.enemy.mark = null;
+  }
+  function removeRope(mark) {
+    if (mark.ropeRemoved) return;
+    mark.ropeRemoved = true; scene.remove(mark.dots);
+    mark.dots.geometry.dispose(); mark.dots.material.dispose();
+  }
+  function disposeMark(mark) {
+    removeIndicator(mark); removeRope(mark);
+  }
+  function removeBranches(state) {
+    if (!state || !state.branches) return;
+    scene.remove(state.branches); state.branches.geometry.dispose(); state.branches.material.dispose(); state.branches = null;
+  }
+  function cancelCast() {
+    if (cast) { cast.shocked.forEach(disposeMark); removeBranches(cast); }
+    for (const bolt of bolts) removeBolt(bolt);
+    bolts.length = 0; flashLight.intensity = 0; ropeMesh.count = 0; sparks.length = 0; cameraShift = null; cast = null;
+    enemies.forEach(enemy => {
+      enemy.mark = null; enemy.jump = 0; enemy.velocityY = 0; enemy.flashUntil = 0; resetEnemyAppearance(enemy);
+    });
+  }
+  function redistributeEnemies() {
+    cancelCast();
+    enemies.forEach(enemy => { scene.remove(enemy.mesh); enemy.mesh.material.dispose(); }); enemies = [];
+    const center = { x: random(-4, 4), z: random(-4, 4) };
+    for (let i = 0, count = Number($('count').value); i < count; i++) {
+      let x = center.x, z = center.z;
+      for (let attempt = 0; attempt < 32; attempt++) {
+        const a = random(0, Math.PI * 2), r = Math.sqrt(Math.random()) * 4.7;
+        x = center.x + Math.cos(a) * r; z = center.z + Math.sin(a) * r;
+        if (!enemies.some(e => Math.hypot(e.pos.x - x, e.pos.z - z) < 1.15)) break;
+      }
+      const material = new THREE.MeshStandardMaterial({ color: 0xd85a30, emissive: 0x641600, emissiveIntensity: 0.14, roughness: 0.55 });
+      const mesh = new THREE.Mesh(cubeGeometry, material); mesh.position.set(x, 0.45, z); scene.add(mesh);
+      const enemy = { mesh, pos: new THREE.Vector3(x, 0, z), heading: 0, paused: false, wanderTime: 0, speed: 1.6, mark: null, jump: 0, velocityY: 0, flashUntil: 0 };
+      chooseWander(enemy); enemies.push(enemy);
+    }
+    updateStatus(performance.now() / 1000);
+  }
+  function updateEnemies(dt, now) {
+    for (let i = 0; i < enemies.length; i++) {
+      const enemy = enemies[i], marked = !!enemy.mark;
+      if (marked && cast && $('reaction').value === 'rope') {
+        const x = enemy.pos.x - cast.center.x, z = enemy.pos.z - cast.center.z;
+        const baseAngle = Math.hypot(x, z) > 0.01 ? Math.atan2(z, x) : enemy.heading;
+        const angle = baseAngle + Math.sin(now * 7 + i * 1.7) * 0.18;
+        enemy.pos.x = clamp(enemy.pos.x + Math.cos(angle) * 2.2 * dt, -18.8, 18.8);
+        enemy.pos.z = clamp(enemy.pos.z + Math.sin(angle) * 2.2 * dt, -18.8, 18.8);
+      } else if (!marked && $('move').checked) {
+        enemy.wanderTime -= dt;
+        if (enemy.wanderTime <= 0) chooseWander(enemy);
+        let dx = Math.cos(enemy.heading), dz = Math.sin(enemy.heading);
+        if (!enemy.paused) {
+          const speed = enemy.speed;
+          enemy.pos.x += dx * speed * dt; enemy.pos.z += dz * speed * dt;
+          if (Math.abs(enemy.pos.x) > 18.8 || Math.abs(enemy.pos.z) > 18.8) {
+            enemy.pos.x = clamp(enemy.pos.x, -18.8, 18.8); enemy.pos.z = clamp(enemy.pos.z, -18.8, 18.8);
+            enemy.heading += Math.PI;
+          }
+        }
+      }
+      if (enemy.jump > 0 || enemy.velocityY > 0) {
+        enemy.velocityY -= 18 * dt; enemy.jump = Math.max(0, enemy.jump + enemy.velocityY * dt);
+        if (enemy.jump === 0) enemy.velocityY = 0;
+      }
+      const jitter = marked ? 0.022 : 0;
+      enemy.mesh.position.set(enemy.pos.x + Math.sin(now * 67 + i) * jitter, 0.45 + enemy.jump + Math.sin(now * 81 + i) * jitter * 0.4, enemy.pos.z + Math.cos(now * 73 + i) * jitter);
+      enemy.mesh.rotation.y = marked ? Math.sin(now * 37 + i) * 0.035 : Math.sin(now * 0.5 + i) * 0.08;
+      if (now < enemy.flashUntil) {
+        enemy.mesh.material.color.set(0xf1fbff); enemy.mesh.material.emissive.set(0xc5f1ff); enemy.mesh.material.emissiveIntensity = 2.4;
+      } else if (marked) {
+        enemy.mesh.material.color.set(0xadddec); enemy.mesh.material.emissive.set(0x91d9ff); enemy.mesh.material.emissiveIntensity = 0.48 + 0.08 * Math.sin(now * 12);
+      } else resetEnemyAppearance(enemy);
+    }
+  }
+
+  // 노드 1,800개, 격자 2,500칸, 점유 칸 1,800개, 칸당 12개로 제한한다.
+  const MAX_NODES = 1800, CELL_SIZE = 0.8, GRID_SIDE = 50, MAX_CELLS = 2500;
+  const MAX_OCCUPIED_CELLS = 1800, MAX_NODES_PER_CELL = 12, MAX_NEW_PER_FRAME = 96;
+  const INFLUENCE_SQ = 3.2 * 3.2, KILL_SQ = 0.7 * 0.7, HIT_SQ = 0.85 * 0.85, STEP = 0.34;
+  const cellCoordinate = x => clamp(Math.floor((x + 20) / CELL_SIZE), 0, GRID_SIDE - 1);
+  function cellIndex(x, z) { return cellCoordinate(z) * GRID_SIDE + cellCoordinate(x); }
+  function insertGrid(state, index) {
+    const node = state.nodes[index], key = cellIndex(node.x, node.z);
+    if (!state.grid[key]) { state.grid[key] = []; state.occupiedCells++; }
+    state.grid[key].push(index);
+  }
+  function tooClose(state, x, z) {
+    const cx = cellCoordinate(x), cz = cellCoordinate(z);
+    for (let zz = Math.max(0, cz - 1); zz <= Math.min(GRID_SIDE - 1, cz + 1); zz++) {
+      for (let xx = Math.max(0, cx - 1); xx <= Math.min(GRID_SIDE - 1, cx + 1); xx++) {
+        const cell = state.grid[zz * GRID_SIDE + xx]; if (!cell) continue;
+        for (const index of cell) { const n = state.nodes[index]; if ((n.x - x) ** 2 + (n.z - z) ** 2 < 0.13 ** 2) return true; }
+      }
+    }
+    return false;
+  }
+  function nearestInGrid(state, point, leafOnly = false) {
+    const cx = cellCoordinate(point.x), cz = cellCoordinate(point.z);
+    let nearest = 0, distanceSq = Infinity;
+    const visit = (x, z) => {
+      if (x < 0 || z < 0 || x >= GRID_SIDE || z >= GRID_SIDE) return;
+      const cell = state.grid[z * GRID_SIDE + x]; if (!cell) return;
+      for (const index of cell) {
+        const node = state.nodes[index]; if (leafOnly && node.children > 0) continue;
+        const d = (node.x - point.x) ** 2 + (node.z - point.z) ** 2;
+        if (d < distanceSq) { distanceSq = d; nearest = index; }
+      }
+    };
+    for (let ring = 0; ring < GRID_SIDE; ring++) {
+      if (ring === 0) visit(cx, cz);
+      else {
+        for (let x = cx - ring; x <= cx + ring; x++) { visit(x, cz - ring); visit(x, cz + ring); }
+        for (let z = cz - ring + 1; z < cz + ring; z++) { visit(cx - ring, z); visit(cx + ring, z); }
+      }
+      const gap = Math.min(point.x - (-20 + (cx - ring) * CELL_SIZE), -20 + (cx + ring + 1) * CELL_SIZE - point.x, point.z - (-20 + (cz - ring) * CELL_SIZE), -20 + (cz + ring + 1) * CELL_SIZE - point.z);
+      if (distanceSq <= gap * gap) break;
+    }
+    return { nearest, distanceSq };
+  }
+  function refreshMovingTargets(state) {
+    for (const target of state.targets) {
+      if (target.shocked) continue;
+      const p = target.enemy.pos;
+      if (p.x !== target.cachedX || p.z !== target.cachedZ) {
+        const result = nearestInGrid(state, p); target.nearest = result.nearest; target.distanceSq = result.distanceSq;
+        target.cachedX = p.x; target.cachedZ = p.z;
+      }
+    }
+  }
+  function createBranches() {
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array((MAX_NODES - 1) * 6), 3).setUsage(THREE.DynamicDrawUsage));
+    geometry.setAttribute('color', new THREE.BufferAttribute(new Float32Array((MAX_NODES - 1) * 6), 3));
+    geometry.setDrawRange(0, 0);
+    const line = new THREE.LineSegments(geometry, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.78, blending: THREE.AdditiveBlending, depthWrite: false }));
+    line.frustumCulled = false; scene.add(line); return line;
+  }
+  function addNode(state, parentIndex, x, z) {
+    if (state.nodes.length >= MAX_NODES) return -1;
+    const key = cellIndex(x, z), cell = state.grid[key];
+    if ((cell && cell.length >= MAX_NODES_PER_CELL) || (!cell && state.occupiedCells >= MAX_OCCUPIED_CELLS)) return -1;
+    const index = state.nodes.length, parent = state.nodes[parentIndex];
+    const node = { x, z, parent: parentIndex, children: 0 }; state.nodes.push(node); parent.children++; insertGrid(state, index);
+    const offset = (index - 1) * 6, positions = state.branches.geometry.attributes.position.array, colors = state.branches.geometry.attributes.color.array;
+    positions.set([parent.x, 0.065, parent.z, x, 0.065, z], offset);
+    colors.set([0.14, 0.46, 0.78, 0.47, 0.83, 1], offset);
+    // 고정 끌개는 새 노드만 비교한다. 매 프레임 노드×끌개 탐색을 하지 않는다.
+    for (const attractor of state.attractors) {
+      if (!attractor.alive) continue;
+      const d = (x - attractor.x) ** 2 + (z - attractor.z) ** 2;
+      if (d < attractor.distanceSq) { attractor.distanceSq = d; attractor.nearest = index; }
+      if (attractor.distanceSq <= KILL_SQ) attractor.alive = false;
+    }
+    for (const target of state.targets) {
+      if (target.shocked) continue;
+      const d = (x - target.enemy.pos.x) ** 2 + (z - target.enemy.pos.z) ** 2;
+      if (d < target.distanceSq) { target.distanceSq = d; target.nearest = index; }
+    }
+    return index;
+  }
+  function nodePath(state, index, enemy) {
+    const path = [];
+    while (index >= 0) { const node = state.nodes[index]; path.push(new THREE.Vector3(node.x, 0.085, node.z)); index = node.parent; }
+    path.reverse(); path.push(new THREE.Vector3(enemy.pos.x, 0.085, enemy.pos.z)); return path;
+  }
+  function createMark(enemy, path, now, source) {
+    const marker = new THREE.Group();
+    const spread = source === 'spread';
+    const ringMaterial = new THREE.MeshBasicMaterial({ color: spread ? 0xc69bff : 0xa8eaff, side: THREE.DoubleSide, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false });
+    const arcMaterial = new THREE.MeshBasicMaterial({ color: spread ? 0xf0dfff : 0xf0fcff, side: THREE.DoubleSide, transparent: true, opacity: 1, blending: THREE.AdditiveBlending, depthWrite: false });
+    const ring = new THREE.Mesh(markerGeometry, ringMaterial); ring.rotation.x = -Math.PI / 2;
+    const arc = new THREE.Mesh(arcGeometry, arcMaterial); arc.rotation.x = -Math.PI / 2;
+    marker.add(ring, arc);
+    const warning = new THREE.Mesh(warningGeometry, new THREE.MeshBasicMaterial({ color: spread ? 0xbf94ff : 0xa5e9ff, side: THREE.DoubleSide, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false }));
+    warning.rotation.x = -Math.PI / 2; warning.visible = false;
+    const dotsGeometry = new THREE.BufferGeometry();
+    dotsGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(ROPE_DOTS * 3), 3).setUsage(THREE.DynamicDrawUsage));
+    const dots = new THREE.Points(dotsGeometry, new THREE.PointsMaterial({ color: 0xf1fcff, size: 0.3, map: dotTexture, transparent: true, opacity: 0.95, blending: THREE.AdditiveBlending, depthWrite: false }));
+    dots.frustumCulled = false;
+    scene.add(marker, warning, dots);
+    let fixedLength = 0;
+    for (let i = 1; i < path.length; i++) fixedLength += path[i].distanceTo(path[i - 1]);
+    // 처음의 긴 나무 경로도 점 상한 안에 넣되, 실제 누적 길이는 보존한다.
+    if (path.length > MAX_ROPE_POINTS) {
+      const original = path;
+      path = Array.from({ length: MAX_ROPE_POINTS }, (_, i) => original[Math.round(i * (original.length - 1) / (MAX_ROPE_POINTS - 1))].clone());
+    }
+    const mark = {
+      enemy, source, path, tip: path[path.length - 1].clone(), fixedLength, totalLength: fixedLength,
+      lengths: new Float32Array(MAX_ROPE_POINTS), visualLength: 0,
+      marker, warning, dots, markerMaterials: [ringMaterial, arcMaterial], start: now,
+      removed: false, ropeRemoved: false, broken: false, struck: false
+    };
+    enemy.mark = mark; return mark;
+  }
+  function compactRope(path) {
+    if (path.length <= MAX_ROPE_POINTS) return;
+    let best = Infinity, index = 1;
+    for (let i = 1; i < path.length - 1; i++) {
+      const error = path[i - 1].distanceTo(path[i]) + path[i].distanceTo(path[i + 1]) - path[i - 1].distanceTo(path[i + 1]);
+      if (error < best) { best = error; index = i; }
+    }
+    path.splice(index, 1);
+  }
+  function breakRope(state, mark, now) {
+    if (mark.broken || mark.struck) return;
+    mark.broken = true; state.brokenCount++;
+    const last = mark.path[mark.path.length - 1], p = last.clone().lerp(mark.tip, 0.7);
+    addSparks(p, now); flashAt(p, 4); disposeMark(mark); resetEnemyAppearance(mark.enemy);
+  }
+  function syncRope(state, mark, now) {
+    if (mark.ropeRemoved || mark.struck) return;
+    const p = mark.enemy.pos, path = mark.path, last = path[path.length - 1];
+    mark.tip.set(p.x, ROPE_Y, p.z);
+    const tailLength = last.distanceTo(mark.tip);
+    mark.totalLength = mark.fixedLength + tailLength;
+    if (mark.totalLength > state.cfg.ropeLength) { breakRope(state, mark, now); return; }
+    if (tailLength > 0.4) {
+      burnRopePath([last, mark.tip]); mark.fixedLength += tailLength;
+      path.push(mark.tip.clone()); compactRope(path);
+    }
+  }
+  function updateRopePaths(now) {
+    if (cast) for (const mark of cast.shocked) syncRope(cast, mark, now);
+  }
+  function shockEnemy(state, enemy, path, now, source) {
+    const mark = createMark(enemy, path, now, source);
+    state.shocked.push(mark); state.seenEnemies.add(enemy);
+    if (source === 'direct') state.directCount++; else state.spreadCount++;
+    burnRopePath(path); syncRope(state, mark, now); return mark;
+  }
+  function checkPropagation(state, now) {
+    if (!state || state.phase !== 'delay' || now >= state.phaseEnd || state.spreadCount >= state.cfg.spread) return;
+    for (const enemy of enemies) {
+      if (state.spreadCount >= state.cfg.spread) break;
+      if (state.seenEnemies.has(enemy)) continue;
+      let contact = null, bestSq = 0.6 * 0.6;
+      for (const mark of state.shocked) {
+        if (mark.broken || mark.ropeRemoved) continue;
+        for (let i = 1; i <= mark.path.length; i++) {
+          const a = mark.path[i - 1], b = mark.path[i] || mark.tip;
+          const dx = b.x - a.x, dz = b.z - a.z, lengthSq = dx * dx + dz * dz;
+          const t = lengthSq > 0.000001 ? clamp(((enemy.pos.x - a.x) * dx + (enemy.pos.z - a.z) * dz) / lengthSq, 0, 1) : 0;
+          const x = a.x + dx * t, z = a.z + dz * t;
+          const distanceSq = (enemy.pos.x - x) ** 2 + (enemy.pos.z - z) ** 2;
+          if (distanceSq <= bestSq) { bestSq = distanceSq; contact = new THREE.Vector3(x, ROPE_Y, z); }
+        }
+      }
+      if (contact) {
+        const path = [contact, new THREE.Vector3(enemy.pos.x, ROPE_Y, enemy.pos.z)];
+        shockEnemy(state, enemy, path, now, 'spread');
+        const arc = horizontalPath(contact, enemy.pos);
+        arc[0].copy(contact); arc[arc.length - 1].set(enemy.pos.x, 0.5, enemy.pos.z);
+        addBolt(arc, 0.25, 0.027, now); flashAt(enemy.pos, 6);
+      }
+    }
+  }
+  function checkHits(state, now, tipIndex = null) {
+    for (const target of state.targets) {
+      if (state.directCount >= state.cfg.chain) break;
+      if (target.shocked) continue;
+      let nearest = target.nearest, distanceSq = target.distanceSq;
+      if (tipIndex !== null) {
+        const tip = state.nodes[tipIndex]; nearest = tipIndex;
+        distanceSq = (tip.x - target.enemy.pos.x) ** 2 + (tip.z - target.enemy.pos.z) ** 2;
+      } else if (state.nodes[nearest].children > 0) {
+        const leaf = nearestInGrid(state, target.enemy.pos, true); nearest = leaf.nearest; distanceSq = leaf.distanceSq;
+      }
+      if (distanceSq <= HIT_SQ) {
+        target.shocked = true;
+        const path = nodePath(state, nearest, target.enemy);
+        shockEnemy(state, target.enemy, path, now, 'direct');
+        addBolt(path, 0.4, 0.028, now); burnPath(path); flashAt(target.enemy.pos, 9);
+      }
+    }
+  }
+  function growthStep(state, now, budget) {
+    const count = state.nodes.length;
+    state.sumX.fill(0, 0, count); state.sumZ.fill(0, 0, count); state.weights.fill(0, 0, count);
+    const accumulate = (index, x, z, weight) => {
+      const n = state.nodes[index], dx = x - n.x, dz = z - n.z, length = Math.hypot(dx, dz);
+      if (length < 0.0001 || weight <= 0) return;
+      state.sumX[index] += dx / length * weight; state.sumZ[index] += dz / length * weight; state.weights[index] += weight;
+    };
+    for (const a of state.attractors) {
+      if (!a.alive) continue;
+      if (a.distanceSq <= KILL_SQ) { a.alive = false; continue; }
+      if (a.distanceSq <= INFLUENCE_SQ) accumulate(a.nearest, a.x, a.z, 1);
+    }
+    for (const target of state.targets) {
+      if (target.shocked) continue;
+      const p = target.enemy.pos;
+      if (Math.hypot(p.x - state.center.x, p.z - state.center.z) <= state.cfg.range) {
+        const weight = state.cfg.pull * (1.5 - Math.sqrt(target.distanceSq) / state.cfg.range);
+        accumulate(target.nearest, p.x, p.z, Math.max(0, weight));
+      }
+    }
+    let added = 0;
+    for (let i = 0; i < count && added < budget; i++) {
+      const node = state.nodes[i];
+      if (!state.weights[i] || node.children >= 4) continue;
+      const length = Math.hypot(state.sumX[i], state.sumZ[i]); if (length < 0.0001) continue;
+      const angle = Math.atan2(state.sumZ[i], state.sumX[i]);
+      for (let attempt = 0; attempt < 3; attempt++) {
+        const direction = angle + random(-0.5, 0.5), x = node.x + Math.cos(direction) * STEP, z = node.z + Math.sin(direction) * STEP;
+        if (Math.abs(x) > 19.8 || Math.abs(z) > 19.8 || Math.hypot(x - state.center.x, z - state.center.z) > state.cfg.range || tooClose(state, x, z)) continue;
+        const newIndex = addNode(state, i, x, z);
+        if (newIndex >= 0) { added++; checkHits(state, now, newIndex); break; }
+      }
+      if (state.directCount >= state.cfg.chain || state.nodes.length >= MAX_NODES) break;
+    }
+    if (added) {
+      state.branches.geometry.setDrawRange(0, (state.nodes.length - 1) * 2);
+      state.branches.geometry.attributes.position.needsUpdate = true; state.branches.geometry.attributes.color.needsUpdate = true;
+    }
+    return added;
+  }
+  function castAt(point) {
+    cancelCast();
+    const now = performance.now() / 1000, cfg = settings();
+    const center = new THREE.Vector3(clamp(point.x, -19.7, 19.7), 0, clamp(point.z, -19.7, 19.7));
+    cameraShift = { from: orbit.target.clone(), to: new THREE.Vector3(center.x, 1.2, center.z), start: now };
+    // 시전마다 성장 배열, 격자, 감전 목록, 마감 시각을 새로 만든다.
+    cast = {
+      phase: 'primary', phaseStart: now, phaseEnd: now + 0.5, cfg, center,
+      nodes: [{ x: center.x, z: center.z, parent: -1, children: 0 }],
+      grid: new Array(MAX_CELLS), occupiedCells: 0, attractors: [], targets: [], shocked: [], seenEnemies: new Set(),
+      directCount: 0, spreadCount: 0, brokenCount: 0, guidedTargets: [], ropeFadeStart: null,
+      sumX: new Float32Array(MAX_NODES), sumZ: new Float32Array(MAX_NODES), weights: new Float32Array(MAX_NODES),
+      branches: createBranches(), branchFadeStart: null, guidedIndex: 0, guidedStart: 0, lastStrikeEnd: 0, noHit: false
+    };
+    insertGrid(cast, 0);
+    for (let i = 0; i < cfg.density; i++) {
+      for (let attempt = 0; attempt < 32; attempt++) {
+        const angle = random(0, Math.PI * 2), radius = Math.sqrt(Math.random()) * cfg.range;
+        const x = center.x + Math.cos(angle) * radius, z = center.z + Math.sin(angle) * radius;
+        if (Math.abs(x) > 19.8 || Math.abs(z) > 19.8) continue;
+        const distanceSq = (x - center.x) ** 2 + (z - center.z) ** 2;
+        cast.attractors.push({ x, z, nearest: 0, distanceSq, alive: distanceSq > KILL_SQ }); break;
+      }
+    }
+    for (const enemy of enemies) {
+      const distanceSq = (enemy.pos.x - center.x) ** 2 + (enemy.pos.z - center.z) ** 2;
+      if (distanceSq <= cfg.range * cfg.range) cast.targets.push({ enemy, nearest: 0, distanceSq, cachedX: enemy.pos.x, cachedZ: enemy.pos.z, shocked: false });
+    }
+    addBolt(skyPath(center), 0.5, 0.05, now); burnCircle(center, 1.05); flashAt(center, 30); updateStatus(now);
+  }
+  function castNearEnemies() {
+    if (!enemies.length) { castAt(new THREE.Vector3(0, 0, 0)); return; }
+    const average = new THREE.Vector3(); enemies.forEach(enemy => average.add(enemy.pos)); average.multiplyScalar(1 / enemies.length);
+    let nearest = enemies[0];
+    for (const enemy of enemies) if (enemy.pos.distanceToSquared(average) < nearest.pos.distanceToSquared(average)) nearest = enemy;
+    const angle = random(0, Math.PI * 2), radius = random(2.3, 3);
+    castAt(new THREE.Vector3(nearest.pos.x + Math.cos(angle) * radius, 0, nearest.pos.z + Math.sin(angle) * radius));
+  }
+  function finishGrowth(state, now) {
+    state.branchFadeStart = now;
+    if (!state.shocked.length) { state.phase = 'idle'; state.noHit = true; }
+    else { state.phase = 'delay'; state.phaseStart = now; state.phaseEnd = now + state.cfg.delay; }
+  }
+  function guidedStrike(state, mark, now) {
+    if (mark.broken || mark.struck) return;
+    const p = mark.enemy.pos.clone();
+    addBolt(skyPath(p), 0.4, 0.043, now); burnCircle(p, 1.15); flashAt(p, 30);
+    mark.struck = true; mark.enemy.velocityY = 6.4; mark.enemy.jump = 0.015; mark.enemy.flashUntil = now + 0.22;
+    // 낙뢰를 맞은 끈은 그 자리에 남고, 모든 유도 낙뢰가 끝난 뒤 함께 사라진다.
+    mark.tip.set(p.x, ROPE_Y, p.z); removeIndicator(mark); state.lastStrikeEnd = now + 0.4;
+  }
+  function startNet(state, now) {
+    // 프림 알고리즘: 실제 유도 낙뢰를 맞은 적만 그물의 정점으로 쓴다.
+    const points = state.shocked.filter(mark => mark.struck).map(mark => mark.enemy.pos.clone()), used = new Array(points.length).fill(false);
+    if (points.length < 2) { state.phase = 'fade'; return; }
+    used[0] = true;
+    for (let edge = 0; edge < points.length - 1; edge++) {
+      let best = Infinity, from = -1, to = -1;
+      for (let i = 0; i < points.length; i++) if (used[i]) {
+        for (let j = 0; j < points.length; j++) if (!used[j]) {
+          const d = points[i].distanceToSquared(points[j]); if (d < best) { best = d; from = i; to = j; }
+        }
+      }
+      if (to < 0) break;
+      used[to] = true; addBolt(horizontalPath(points[from], points[to]), 0.35, 0.033, now);
+    }
+    flashAt(points[0], 12); state.phase = 'net'; state.phaseStart = now; state.phaseEnd = now + 0.35;
+  }
+  function updateCast(now) {
+    const state = cast; if (!state) return;
+    if (state.phase === 'primary' && now >= state.phaseEnd) {
+      state.phase = 'growth'; state.phaseStart = now; refreshMovingTargets(state); checkHits(state, now);
+    }
+    if (state.phase === 'growth') {
+      refreshMovingTargets(state); checkHits(state, now);
+      if (state.directCount >= state.cfg.chain || now - state.phaseStart >= 2.2) finishGrowth(state, now);
+      else {
+        let budget = MAX_NEW_PER_FRAME;
+        for (let step = 0; step < state.cfg.speed && budget > 0; step++) {
+          const added = growthStep(state, now, budget); budget -= added;
+          if (!added || state.directCount >= state.cfg.chain || state.nodes.length >= MAX_NODES) { finishGrowth(state, now); break; }
+        }
+      }
+    }
+    if (state.branchFadeStart !== null && state.branches) {
+      const fade = clamp(1 - (now - state.branchFadeStart) / 0.7, 0, 1);
+      state.branches.material.opacity = 0.78 * fade; if (fade === 0) removeBranches(state);
+    }
+    if (state.phase === 'delay' && now >= state.phaseEnd) {
+      state.phase = 'guided'; state.guidedStart = state.phaseEnd; state.guidedIndex = 0;
+      state.guidedTargets = state.shocked.filter(mark => !mark.broken);
+    }
+    if (state.phase === 'guided') {
+      while (state.guidedIndex < state.guidedTargets.length && now >= state.guidedStart + state.guidedIndex * state.cfg.interval) {
+        guidedStrike(state, state.guidedTargets[state.guidedIndex], now); state.guidedIndex++;
+      }
+      if (state.guidedIndex === state.guidedTargets.length && now >= state.lastStrikeEnd) {
+        state.ropeFadeStart = now;
+        if ($('net').checked && state.shocked.filter(mark => mark.struck).length > 1) startNet(state, now);
+        else state.phase = 'fade';
+      }
+    }
+    if (state.phase === 'net' && now >= state.phaseEnd) state.phase = 'fade';
+    if (state.phase === 'fade' && now >= state.ropeFadeStart + 0.4) state.phase = 'idle';
+  }
+  function updateMarks(now, dt) {
+    if (!cast) { ropeMesh.count = 0; return; }
+    let progress = 0;
+    if (cast.phase === 'delay') progress = clamp((now - cast.phaseStart) / cast.cfg.delay, 0, 1);
+    else if (cast.phase === 'guided' || cast.ropeFadeStart !== null) progress = 1;
+    const fade = cast.ropeFadeStart === null ? 1 : clamp(1 - (now - cast.ropeFadeStart) / 0.4, 0, 1);
+    const radius = 0.035 * (1 + 0.8 * progress);
+    ropeMaterial.color.setRGB(0.4 + 0.42 * progress, 0.72 + 0.24 * progress, 1);
+    ropeMaterial.opacity = (0.68 + 0.32 * progress) * fade;
+    let segmentCount = 0;
+    for (const mark of cast.shocked) {
+      if (mark.ropeRemoved) continue;
+      if (fade === 0) { removeRope(mark); continue; }
+      const p = mark.enemy.pos, path = mark.path;
+      if (!mark.removed) {
+        mark.marker.position.set(p.x, 1.45 + mark.enemy.jump, p.z);
+        mark.marker.rotation.y += dt * (3 + 17 * progress * progress);
+        mark.markerMaterials[0].opacity = 0.86 + 0.14 * progress;
+        mark.markerMaterials[1].opacity = 0.94 + 0.06 * progress;
+        mark.warning.position.set(p.x, 0.03, p.z); mark.warning.visible = cast.phase === 'delay' || cast.phase === 'guided';
+        mark.warning.material.opacity = 0.2 + 0.65 * progress;
+      }
+      const lengths = mark.lengths;
+      let total = 0;
+      for (let i = 1; i <= path.length; i++) {
+        const a = path[i - 1], b = path[i] || mark.tip, length = a.distanceTo(b);
+        lengths[i - 1] = length; total += length;
+        if (length > 0.0001 && segmentCount < MAX_ROPE_SEGMENTS) setSegment(ropeMesh, segmentCount++, a, b, radius);
+      }
+      mark.visualLength = total;
+      const dots = mark.dots.geometry.attributes.position;
+      for (let dot = 0; dot < ROPE_DOTS; dot++) {
+        let distance = ((now - mark.start) * (4.5 + 4 * progress) + total * dot / ROPE_DOTS) % Math.max(total, 0.001), segment = 0;
+        while (segment < path.length - 1 && distance > lengths[segment]) { distance -= lengths[segment]; segment++; }
+        const a = path[segment], b = path[segment + 1] || mark.tip, t = clamp(distance / Math.max(lengths[segment], 0.001), 0, 1);
+        dots.setXYZ(dot, a.x + (b.x - a.x) * t, 0.13, a.z + (b.z - a.z) * t);
+      }
+      dots.needsUpdate = true; mark.dots.material.opacity = (0.82 + 0.18 * progress) * fade;
+      mark.dots.material.size = 0.3 + 0.12 * progress;
+    }
+    ropeMesh.count = segmentCount; ropeMesh.instanceMatrix.needsUpdate = true;
+  }
+  function updateStatus(now) {
+    let phase = '대기', nodes = 0, direct = 0, spread = 0, broken = 0;
+    if (cast) {
+      nodes = cast.nodes.length; broken = cast.brokenCount;
+      for (const mark of cast.shocked) if (!mark.broken) { if (mark.source === 'direct') direct++; else spread++; }
+      if (cast.phase === 'primary') phase = '1차 낙뢰';
+      else if (cast.phase === 'growth') phase = '가지 성장';
+      else if (cast.phase === 'delay') phase = '감전 지연 ' + (Math.round(Math.max(0, cast.phaseEnd - now) * 10) / 10).toFixed(1) + '초 남음';
+      else if (cast.phase === 'guided') phase = '유도 낙뢰 ' + cast.guidedIndex + '/' + cast.guidedTargets.length;
+      else if (cast.phase === 'net') phase = '마무리 그물';
+      else if (cast.phase === 'fade') phase = '끈 소멸';
+      if (cast.noHit) phase = '대기 (닿은 적 없음)';
+    }
+    const text = phase + ' · 가지 노드 ' + nodes + ' · 감전 ' + (direct + spread) + ' (직접 ' + direct + ' + 전파 ' + spread + ') · 끊김 ' + broken;
+    if (status.textContent !== text) status.textContent = text;
+  }
+  $('cast').addEventListener('click', castNearEnemies);
+  $('redistribute').addEventListener('click', redistributeEnemies);
+  $('erase').addEventListener('click', () => { floorContext.clearRect(0, 0, TEXTURE_SIZE, TEXTURE_SIZE); floorContext.drawImage(baseCanvas, 0, 0); embers.length = 0; emberMesh.count = 0; floorDirty = true; });
+
+  const raycaster = new THREE.Raycaster(), mouse = new THREE.Vector2();
+  let pointer = null;
+  const canvas = renderer.domElement;
+  canvas.addEventListener('pointerdown', event => {
+    if (event.button !== 0 || pointer) return;
+    pointer = { id: event.pointerId, x: event.clientX, y: event.clientY, lastX: event.clientX, lastY: event.clientY, distance: 0 };
+    canvas.setPointerCapture(event.pointerId);
+  });
+  canvas.addEventListener('pointermove', event => {
+    if (!pointer || pointer.id !== event.pointerId) return;
+    pointer.distance = Math.max(pointer.distance, Math.hypot(event.clientX - pointer.x, event.clientY - pointer.y));
+    const dx = event.clientX - pointer.lastX, dy = event.clientY - pointer.lastY;
+    if (pointer.distance >= 5) { orbit.theta -= dx * 0.006; orbit.phi = clamp(orbit.phi - dy * 0.005, 0.22, 1.33); updateCamera(); }
+    pointer.lastX = event.clientX; pointer.lastY = event.clientY;
+  });
+  canvas.addEventListener('pointerup', event => {
+    if (!pointer || pointer.id !== event.pointerId) return;
+    const movement = Math.max(pointer.distance, Math.hypot(event.clientX - pointer.x, event.clientY - pointer.y));
+    pointer = null;
+    if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
+    if (movement >= 5) return;
+    const rect = canvas.getBoundingClientRect();
+    mouse.set((event.clientX - rect.left) / rect.width * 2 - 1, -(event.clientY - rect.top) / rect.height * 2 + 1);
+    raycaster.setFromCamera(mouse, camera);
+    const intersections = raycaster.intersectObject(floor, false);
+    if (intersections.length) castAt(intersections[0].point);
+  });
+  canvas.addEventListener('pointercancel', () => { pointer = null; });
+  canvas.addEventListener('lostpointercapture', () => { pointer = null; });
+  canvas.addEventListener('wheel', event => { event.preventDefault(); orbit.radius = clamp(orbit.radius * Math.exp(event.deltaY * 0.001), 18, 68); updateCamera(); }, { passive: false });
+  canvas.addEventListener('contextmenu', event => event.preventDefault());
+  let previousTime = performance.now() / 1000, lastStatus = 0, lastFloorUpload = -Infinity;
+  function animate(timestamp) {
+    const now = timestamp / 1000, dt = clamp(now - previousTime, 0, 0.05); previousTime = now;
+    updateCameraShift(now); updateEnemies(dt, now); updateRopePaths(now); updateCast(now);
+    checkPropagation(cast, now); updateMarks(now, dt); updateBolts(now, dt); updateGroundEffects(now);
+    // 이동 자국이 계속 생겨도 1024px 텍스처의 GPU 업로드는 초당 약 12회로 제한한다.
+    if (floorDirty && now - lastFloorUpload >= 1 / 12) { floorTexture.needsUpdate = true; floorDirty = false; lastFloorUpload = now; }
+    if (now - lastStatus >= 0.1) { updateStatus(now); lastStatus = now; }
+    renderer.render(scene, camera); requestAnimationFrame(animate);
+  }
+  redistributeEnemies();
+  requestAnimationFrame(animate);
+  setTimeout(castNearEnemies, 500);
+})();
+</script>
+</body>
+</html>
