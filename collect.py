@@ -40,7 +40,9 @@ SOURCES = [
      [HOME / "Pictures" / "글감"]),
 ]
 # 워크플로 QA 캡처: <프로젝트>/.wf/issues/<이슈>/...
-PROJECT_ROOTS = [HOME / "Documents" / "UnityProject", HOME / "Documents" / "GitHub"]
+# PC마다 프로젝트 위치가 다르다(E:\UnityProject 등). 드라이브 바로 아래 UnityProject 도 본다.
+PROJECT_ROOTS = [HOME / "Documents" / "UnityProject", HOME / "Documents" / "GitHub"] + [
+    pathlib.Path(f"{d}:/UnityProject") for d in "CDEFG"]
 
 
 def wf_group(p):
