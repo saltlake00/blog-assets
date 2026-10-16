@@ -1,0 +1,641 @@
+<div class="dg-452-save">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&display=swap');
+
+.dg-452-save {
+  max-width: 960px !important;
+  margin: 0 auto !important;
+  background-color: #FFFFFF !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 12px !important;
+  padding: 28px 24px !important;
+  box-sizing: border-box !important;
+  font-family: 'Noto Sans KR', sans-serif !important;
+  color: #3D3D3A !important;
+  word-break: keep-all !important;
+  line-height: 1.5 !important;
+}
+
+.dg-452-save-header {
+  margin-bottom: 20px !important;
+  padding-bottom: 16px !important;
+  border-bottom: 1px solid #E8E6DC !important;
+}
+
+.dg-452-save-eyebrow {
+  display: inline-block !important;
+  background-color: #F5EDE6 !important;
+  color: #A9502F !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  padding: 3px 8px !important;
+  border-radius: 3px !important;
+  margin-bottom: 8px !important;
+  word-break: keep-all !important;
+}
+
+.dg-452-save-title {
+  margin: 0 0 6px 0 !important;
+  font-family: 'Noto Serif KR', serif !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  color: #141413 !important;
+  word-break: keep-all !important;
+  line-height: 1.35 !important;
+}
+
+.dg-452-save-subtitle {
+  margin: 0 !important;
+  font-size: 14px !important;
+  color: #5E5D59 !important;
+  word-break: keep-all !important;
+}
+
+.dg-452-save-col-heads {
+  display: grid !important;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr) 24px minmax(0, 1.2fr) !important;
+  gap: 10px !important;
+  margin-bottom: 10px !important;
+  align-items: stretch !important;
+}
+
+.dg-452-save-col-head {
+  background-color: #F0EEE6 !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 5px !important;
+  padding: 8px 12px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #141413 !important;
+  word-break: keep-all !important;
+  box-sizing: border-box !important;
+}
+
+.dg-452-save-col-head-bad {
+  border-left: 4px solid #B5402A !important;
+  color: #B5402A !important;
+}
+
+.dg-452-save-col-head-good {
+  border-left: 4px solid #5B7A4B !important;
+  color: #5B7A4B !important;
+}
+
+.dg-452-save-col-spacer {
+  display: block !important;
+}
+
+.dg-452-save-rows {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+}
+
+.dg-452-save-row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr) 24px minmax(0, 1.2fr) !important;
+  gap: 10px !important;
+  align-items: stretch !important;
+}
+
+.dg-452-save-cell {
+  background-color: #F5F3EC !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 5px !important;
+  padding: 14px !important;
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+}
+
+.dg-452-save-cell-bad {
+  border-left: 4px solid #B5402A !important;
+  background-color: #FFFFFF !important;
+}
+
+.dg-452-save-cell-good {
+  border-left: 4px solid #5B7A4B !important;
+  background-color: #FFFFFF !important;
+}
+
+.dg-452-save-top-group {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+.dg-452-save-meta-line {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 6px !important;
+  flex-wrap: wrap !important;
+}
+
+.dg-452-save-id-badge {
+  display: inline-block !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #141413 !important;
+  background-color: #F0EEE6 !important;
+  border: 1px solid #D1CFC5 !important;
+  border-radius: 3px !important;
+  padding: 2px 7px !important;
+}
+
+.dg-452-save-mobile-col-label {
+  display: none !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #87867F !important;
+  word-break: keep-all !important;
+}
+
+.dg-452-save-tag-bad {
+  display: inline-block !important;
+  align-self: flex-start !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #B5402A !important;
+  background-color: #F5EDE6 !important;
+  border: 1px solid #B5402A !important;
+  border-radius: 3px !important;
+  padding: 2px 8px !important;
+  word-break: keep-all !important;
+}
+
+.dg-452-save-tag-good {
+  display: inline-block !important;
+  align-self: flex-start !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #5B7A4B !important;
+  background-color: #F5F3EC !important;
+  border: 1px solid #5B7A4B !important;
+  border-radius: 3px !important;
+  padding: 2px 8px !important;
+  word-break: keep-all !important;
+}
+
+.dg-452-save-desc {
+  margin: 0 !important;
+  font-size: 14px !important;
+  color: #3D3D3A !important;
+  word-break: keep-all !important;
+}
+
+.dg-452-save-desc-strong {
+  margin: 0 !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #141413 !important;
+  word-break: keep-all !important;
+}
+
+.dg-452-save-inline-code {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 13px !important;
+  background-color: #F0EEE6 !important;
+  color: #141413 !important;
+  padding: 1px 5px !important;
+  border-radius: 3px !important;
+  overflow-wrap: anywhere !important;
+}
+
+.dg-452-save-arrow-box {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #87867F !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  user-select: none !important;
+}
+
+.dg-452-save-arrow-h {
+  display: inline !important;
+}
+
+.dg-452-save-arrow-v {
+  display: none !important;
+}
+
+.dg-452-save-test-box {
+  margin-top: 12px !important;
+  padding-top: 8px !important;
+  border-top: 1px solid #E8E6DC !important;
+  font-size: 12px !important;
+  color: #73716A !important;
+  word-break: keep-all !important;
+}
+
+.dg-452-save-test-name {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 12px !important;
+  color: #5E5D59 !important;
+  overflow-wrap: anywhere !important;
+}
+
+.dg-452-save-unit-diagram {
+  margin-top: 10px !important;
+  padding: 10px !important;
+  background-color: #F5F3EC !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 5px !important;
+  box-sizing: border-box !important;
+}
+
+.dg-452-save-unit-caption {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #5E5D59 !important;
+  margin-bottom: 6px !important;
+  word-break: keep-all !important;
+}
+
+.dg-452-save-pair-bar {
+  display: grid !important;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 2fr) !important;
+  gap: 4px !important;
+  margin-bottom: 4px !important;
+}
+
+.dg-452-save-pair-empty {
+  font-size: 12px !important;
+  color: #87867F !important;
+}
+
+.dg-452-save-pair-span {
+  text-align: center !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #A9502F !important;
+  background-color: #F5EDE6 !important;
+  border: 1px solid #D1CFC5 !important;
+  border-radius: 3px !important;
+  padding: 1px 4px !important;
+  word-break: keep-all !important;
+}
+
+.dg-452-save-unit-grid-bad {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) 6px minmax(0, 1fr) !important;
+  gap: 4px !important;
+  align-items: stretch !important;
+}
+
+.dg-452-save-unit-grid-good {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 6px minmax(0, 1fr) minmax(0, 1fr) !important;
+  gap: 4px !important;
+  align-items: stretch !important;
+}
+
+.dg-452-save-unit-cell {
+  background-color: #FFFFFF !important;
+  border: 1px solid #D1CFC5 !important;
+  border-radius: 3px !important;
+  padding: 5px 2px !important;
+  text-align: center !important;
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+}
+
+.dg-452-save-unit-cell-keep {
+  border-color: #5B7A4B !important;
+  background-color: #FFFFFF !important;
+}
+
+.dg-452-save-unit-cell-broken {
+  border: 2px solid #B5402A !important;
+  background-color: #F5EDE6 !important;
+}
+
+.dg-452-save-unit-cell-cut {
+  background-color: #F0EEE6 !important;
+  border: 1px dashed #D1CFC5 !important;
+}
+
+.dg-452-save-unit-idx {
+  display: block !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #141413 !important;
+}
+
+.dg-452-save-unit-idx-faint {
+  display: block !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #B0AEA5 !important;
+}
+
+.dg-452-save-unit-state {
+  display: block !important;
+  font-size: 12px !important;
+  color: #5E5D59 !important;
+  word-break: keep-all !important;
+}
+
+.dg-452-save-unit-state-bad {
+  display: block !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #B5402A !important;
+  word-break: keep-all !important;
+}
+
+.dg-452-save-unit-state-good {
+  display: block !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #5B7A4B !important;
+  word-break: keep-all !important;
+}
+
+.dg-452-save-unit-state-faint {
+  display: block !important;
+  font-size: 12px !important;
+  color: #B0AEA5 !important;
+  word-break: keep-all !important;
+}
+
+.dg-452-save-cut-line-bad {
+  background-color: #B5402A !important;
+  border-radius: 3px !important;
+  width: 4px !important;
+  margin: 0 auto !important;
+}
+
+.dg-452-save-cut-line-good {
+  background-color: #5B7A4B !important;
+  border-radius: 3px !important;
+  width: 4px !important;
+  margin: 0 auto !important;
+}
+
+.dg-452-save-footer {
+  margin-top: 20px !important;
+  padding-top: 16px !important;
+  border-top: 1px solid #E8E6DC !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+}
+
+.dg-452-save-pill {
+  display: inline-block !important;
+  background-color: #C6613F !important;
+  color: #FFFFFF !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  padding: 7px 16px !important;
+  border-radius: 999px !important;
+  word-break: keep-all !important;
+}
+
+.dg-452-save-footer-caption {
+  font-size: 12px !important;
+  color: #73716A !important;
+  word-break: keep-all !important;
+}
+
+@media (max-width: 760px) {
+  .dg-452-save {
+    padding: 20px 14px !important;
+  }
+
+  .dg-452-save-col-heads {
+    display: none !important;
+  }
+
+  .dg-452-save-row {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 6px !important;
+    background-color: #F5F3EC !important;
+    border: 1px solid #D1CFC5 !important;
+    border-radius: 5px !important;
+    padding: 12px !important;
+  }
+
+  .dg-452-save-cell {
+    background-color: #FFFFFF !important;
+  }
+
+  .dg-452-save-mobile-col-label {
+    display: inline-block !important;
+  }
+
+  .dg-452-save-arrow-box {
+    height: 18px !important;
+  }
+
+  .dg-452-save-arrow-h {
+    display: none !important;
+  }
+
+  .dg-452-save-arrow-v {
+    display: inline !important;
+  }
+}
+</style>
+
+  <div class="dg-452-save-header">
+    <span class="dg-452-save-eyebrow">NCAIFinal · DAY55 저장 안정성</span>
+    <h2 class="dg-452-save-title">외부 점검이 찾은 저장 결함 3건의 원인과 수정 내역</h2>
+    <p class="dg-452-save-subtitle">각 결함이 발생한 상황에서 무엇이 잘못 처리되었는지 짚고, 안전하게 바꾼 저장 규칙과 확인 시험을 비교합니다.</p>
+  </div>
+
+  <div class="dg-452-save-col-heads">
+    <div class="dg-452-save-col-head">상황</div>
+    <div class="dg-452-save-col-head dg-452-save-col-head-bad">× 수정 전 (잘못된 처리)</div>
+    <div class="dg-452-save-col-spacer"></div>
+    <div class="dg-452-save-col-head dg-452-save-col-head-good">✓ 수정 후 (개선된 처리)</div>
+  </div>
+
+  <div class="dg-452-save-rows">
+    <div class="dg-452-save-row">
+      <div class="dg-452-save-cell">
+        <div class="dg-452-save-top-group">
+          <div class="dg-452-save-meta-line">
+            <span class="dg-452-save-id-badge">L01</span>
+            <span class="dg-452-save-mobile-col-label">상황</span>
+          </div>
+          <p class="dg-452-save-desc-strong">클라우드에 올리는(Push) 도중 다른 기기의 저장과 충돌이 생깁니다.</p>
+        </div>
+      </div>
+
+      <div class="dg-452-save-cell dg-452-save-cell-bad">
+        <div class="dg-452-save-top-group">
+          <div class="dg-452-save-meta-line">
+            <span class="dg-452-save-tag-bad">× 충돌을 모름</span>
+            <span class="dg-452-save-mobile-col-label">× 수정 전</span>
+          </div>
+          <p class="dg-452-save-desc">충돌 수와 충돌 알림이 갱신되지 않아 플레이어가 충돌을 알 수 없습니다.</p>
+        </div>
+      </div>
+
+      <div class="dg-452-save-arrow-box" aria-hidden="true">
+        <span class="dg-452-save-arrow-h">→</span>
+        <span class="dg-452-save-arrow-v">↓</span>
+      </div>
+
+      <div class="dg-452-save-cell dg-452-save-cell-good">
+        <div class="dg-452-save-top-group">
+          <div class="dg-452-save-meta-line">
+            <span class="dg-452-save-tag-good">✓ 충돌 상태·알림 갱신</span>
+            <span class="dg-452-save-mobile-col-label">✓ 수정 후</span>
+          </div>
+          <p class="dg-452-save-desc">충돌이 있거나 충돌 수가 달라졌을 때만 상태를 고치고 알림을 보냅니다.</p>
+        </div>
+        <div class="dg-452-save-test-box">
+          확인한 시험: <span class="dg-452-save-test-name">PushConflictUpdatesPendingAndRaisesConflictsChanged</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dg-452-save-row">
+      <div class="dg-452-save-cell">
+        <div class="dg-452-save-top-group">
+          <div class="dg-452-save-meta-line">
+            <span class="dg-452-save-id-badge">L02</span>
+            <span class="dg-452-save-mobile-col-label">상황</span>
+          </div>
+          <p class="dg-452-save-desc-strong">더 새 버전 게임이 쓴 세이브를 옛 버전 게임이 엽니다.</p>
+        </div>
+      </div>
+
+      <div class="dg-452-save-cell dg-452-save-cell-bad">
+        <div class="dg-452-save-top-group">
+          <div class="dg-452-save-meta-line">
+            <span class="dg-452-save-tag-bad">× 원본을 격리함</span>
+            <span class="dg-452-save-mobile-col-label">× 수정 전</span>
+          </div>
+          <p class="dg-452-save-desc">모르는 값 때문에 읽기가 실패하면 손상으로 판단해 원본을 격리 폴더로 옮깁니다.</p>
+        </div>
+      </div>
+
+      <div class="dg-452-save-arrow-box" aria-hidden="true">
+        <span class="dg-452-save-arrow-h">→</span>
+        <span class="dg-452-save-arrow-v">↓</span>
+      </div>
+
+      <div class="dg-452-save-cell dg-452-save-cell-good">
+        <div class="dg-452-save-top-group">
+          <div class="dg-452-save-meta-line">
+            <span class="dg-452-save-tag-good">✓ 버전 확인 후 원본 보존</span>
+            <span class="dg-452-save-mobile-col-label">✓ 수정 후</span>
+          </div>
+          <p class="dg-452-save-desc">읽기 전에 파일의 <span class="dg-452-save-inline-code">version</span>부터 확인해 「지원하지 않는 버전」으로 돌려주고 원본은 그대로 둡니다.</p>
+        </div>
+        <div class="dg-452-save-test-box">
+          확인한 시험: <span class="dg-452-save-test-name">FutureVersionWithUnknownShapeIsPreserved</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dg-452-save-row">
+      <div class="dg-452-save-cell">
+        <div class="dg-452-save-top-group">
+          <div class="dg-452-save-meta-line">
+            <span class="dg-452-save-id-badge">L03</span>
+            <span class="dg-452-save-mobile-col-label">상황</span>
+          </div>
+          <p class="dg-452-save-desc-strong">오브 이름을 12 코드 유닛에서 자르는데 12번째에 이모지가 걸립니다.</p>
+        </div>
+      </div>
+
+      <div class="dg-452-save-cell dg-452-save-cell-bad">
+        <div class="dg-452-save-top-group">
+          <div class="dg-452-save-meta-line">
+            <span class="dg-452-save-tag-bad">× 서로게이트 쌍 분리</span>
+            <span class="dg-452-save-mobile-col-label">× 수정 전</span>
+          </div>
+          <p class="dg-452-save-desc">이모지(서로게이트 쌍 = 코드 유닛 2개)가 반으로 갈려 깨진 글자가 남습니다.</p>
+          <div class="dg-452-save-unit-diagram">
+            <div class="dg-452-save-unit-caption">× 12 뒤에서 절단 → 12번째가 깨짐</div>
+            <div class="dg-452-save-pair-bar">
+              <div class="dg-452-save-pair-empty"></div>
+              <div class="dg-452-save-pair-span">12·13: 이모지 1글자</div>
+            </div>
+            <div class="dg-452-save-unit-grid-bad">
+              <div class="dg-452-save-unit-cell">
+                <span class="dg-452-save-unit-idx">10</span>
+                <span class="dg-452-save-unit-state">일반</span>
+              </div>
+              <div class="dg-452-save-unit-cell">
+                <span class="dg-452-save-unit-idx">11</span>
+                <span class="dg-452-save-unit-state">일반</span>
+              </div>
+              <div class="dg-452-save-unit-cell dg-452-save-unit-cell-broken">
+                <span class="dg-452-save-unit-idx">12</span>
+                <span class="dg-452-save-unit-state-bad">× 깨짐</span>
+              </div>
+              <div class="dg-452-save-cut-line-bad" title="12 뒤에서 절단"></div>
+              <div class="dg-452-save-unit-cell dg-452-save-unit-cell-cut">
+                <span class="dg-452-save-unit-idx-faint">13</span>
+                <span class="dg-452-save-unit-state-faint">잘림</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dg-452-save-arrow-box" aria-hidden="true">
+        <span class="dg-452-save-arrow-h">→</span>
+        <span class="dg-452-save-arrow-v">↓</span>
+      </div>
+
+      <div class="dg-452-save-cell dg-452-save-cell-good">
+        <div class="dg-452-save-top-group">
+          <div class="dg-452-save-meta-line">
+            <span class="dg-452-save-tag-good">✓ 11번째 뒤에서 절단</span>
+            <span class="dg-452-save-mobile-col-label">✓ 수정 후</span>
+          </div>
+          <p class="dg-452-save-desc">쌍의 앞 절반에서 끊기면 그 앞(11번째)에서 자릅니다.</p>
+          <div class="dg-452-save-unit-diagram">
+            <div class="dg-452-save-unit-caption">✓ 11 뒤에서 절단 → 12·13 함께 제외</div>
+            <div class="dg-452-save-pair-bar">
+              <div class="dg-452-save-pair-empty"></div>
+              <div class="dg-452-save-pair-span">12·13: 이모지 1글자</div>
+            </div>
+            <div class="dg-452-save-unit-grid-good">
+              <div class="dg-452-save-unit-cell dg-452-save-unit-cell-keep">
+                <span class="dg-452-save-unit-idx">10</span>
+                <span class="dg-452-save-unit-state-good">✓ 유지</span>
+              </div>
+              <div class="dg-452-save-unit-cell dg-452-save-unit-cell-keep">
+                <span class="dg-452-save-unit-idx">11</span>
+                <span class="dg-452-save-unit-state-good">✓ 유지</span>
+              </div>
+              <div class="dg-452-save-cut-line-good" title="11 뒤에서 절단"></div>
+              <div class="dg-452-save-unit-cell dg-452-save-unit-cell-cut">
+                <span class="dg-452-save-unit-idx-faint">12</span>
+                <span class="dg-452-save-unit-state-faint">잘림</span>
+              </div>
+              <div class="dg-452-save-unit-cell dg-452-save-unit-cell-cut">
+                <span class="dg-452-save-unit-idx-faint">13</span>
+                <span class="dg-452-save-unit-state-faint">잘림</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="dg-452-save-test-box">
+          확인한 시험: <span class="dg-452-save-test-name">WithNameTruncatesWithoutSplittingSurrogatePair</span> (3사례)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dg-452-save-footer">
+    <span class="dg-452-save-pill">✓ 단위 시험 2,329개 모두 통과</span>
+    <span class="dg-452-save-footer-caption">EditMode 2,329 / 2,329 통과 · 화면 확인 없음</span>
+  </div>
+</div>
