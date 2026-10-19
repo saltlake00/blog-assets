@@ -1,0 +1,595 @@
+<div class="dg-kira-layout">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&display=swap');
+
+.dg-kira-layout {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 960px !important;
+  margin: 0 auto !important;
+  padding: clamp(12px, 2.5vw, 24px) !important;
+  background: #FAF9F5 !important;
+  color: #141413 !important;
+  font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.55 !important;
+  word-break: keep-all !important;
+  -webkit-text-size-adjust: 100% !important;
+}
+
+.dg-kira-layout .panel {
+  box-sizing: border-box !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 12px !important;
+  padding: clamp(14px, 2.7vw, 26px) !important;
+}
+
+.dg-kira-layout .head {
+  margin-bottom: 18px !important;
+}
+
+.dg-kira-layout .eyebrow {
+  margin-bottom: 6px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  color: #87867F !important;
+}
+
+.dg-kira-layout .title {
+  margin: 0 0 6px !important;
+  font-family: 'Noto Serif KR', serif !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+  color: #141413 !important;
+}
+
+.dg-kira-layout .sub {
+  margin: 0 !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  color: #5E5D59 !important;
+}
+
+.dg-kira-layout .main {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr) !important;
+  gap: 16px !important;
+  align-items: start !important;
+}
+
+.dg-kira-layout .flow,
+.dg-kira-layout .case {
+  min-width: 0 !important;
+}
+
+.dg-kira-layout .sec-head {
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  margin-bottom: 8px !important;
+}
+
+.dg-kira-layout .sec-k {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #141413 !important;
+}
+
+.dg-kira-layout .sec-note {
+  flex: 0 0 auto !important;
+  font-family: 'JetBrains Mono', 'Noto Sans KR', monospace !important;
+  font-size: 12px !important;
+  color: #87867F !important;
+  overflow-wrap: anywhere !important;
+}
+
+.dg-kira-layout .flow-card {
+  box-sizing: border-box !important;
+  background: #F5F3EC !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 5px !important;
+  padding: 6px 12px !important;
+}
+
+.dg-kira-layout .step {
+  position: relative !important;
+  padding: 10px 0 14px 38px !important;
+}
+
+.dg-kira-layout .step:last-child {
+  padding-bottom: 6px !important;
+}
+
+.dg-kira-layout .step:not(:last-child)::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 11px !important;
+  top: 34px !important;
+  bottom: -18px !important;
+  width: 1px !important;
+  background: #D1CFC5 !important;
+}
+
+.dg-kira-layout .num {
+  position: absolute !important;
+  left: 0 !important;
+  top: 9px !important;
+  box-sizing: border-box !important;
+  width: 24px !important;
+  height: 24px !important;
+  border: 1px solid #D1CFC5 !important;
+  border-radius: 3px !important;
+  background: #FFFFFF !important;
+  color: #3D3D3A !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  line-height: 22px !important;
+  text-align: center !important;
+}
+
+.dg-kira-layout .step-title {
+  margin: 0 !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 1.45 !important;
+  color: #141413 !important;
+}
+
+.dg-kira-layout .step-desc {
+  margin: 2px 0 0 !important;
+  font-size: 13px !important;
+  line-height: 1.55 !important;
+  color: #5E5D59 !important;
+}
+
+.dg-kira-layout .branch {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 4px !important;
+  margin-top: 7px !important;
+}
+
+.dg-kira-layout .branch-item {
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 5px !important;
+  padding: 4px 7px !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 5px !important;
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+  color: #3D3D3A !important;
+}
+
+.dg-kira-layout .b-arrow {
+  flex: 0 0 auto !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  color: #87867F !important;
+}
+
+.dg-kira-layout .checks {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 4px !important;
+  margin-top: 6px !important;
+}
+
+.dg-kira-layout .check {
+  box-sizing: border-box !important;
+  padding: 1px 5px !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 3px !important;
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+  color: #5E5D59 !important;
+}
+
+.dg-kira-layout .case {
+  box-sizing: border-box !important;
+  background: #F5F3EC !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 5px !important;
+  padding: 14px !important;
+}
+
+.dg-kira-layout .case-title {
+  margin: 0 0 4px !important;
+  font-family: 'Noto Serif KR', serif !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  line-height: 1.45 !important;
+  color: #141413 !important;
+}
+
+.dg-kira-layout .case-p {
+  margin: 0 0 12px !important;
+  font-size: 13px !important;
+  line-height: 1.55 !important;
+  color: #5E5D59 !important;
+}
+
+.dg-kira-layout .measure-label {
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  margin-bottom: 5px !important;
+  font-size: 13px !important;
+  color: #3D3D3A !important;
+}
+
+.dg-kira-layout .measure-label strong {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #141413 !important;
+}
+
+.dg-kira-layout .badge-bad {
+  flex: 0 0 auto !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #B5402A !important;
+}
+
+.dg-kira-layout .bar {
+  position: relative !important;
+  height: 24px !important;
+  background: #F0EEE6 !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 3px !important;
+  overflow: hidden !important;
+}
+
+.dg-kira-layout .bar-fill {
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  width: 90.46% !important;
+  background: #73716A !important;
+}
+
+.dg-kira-layout .bar-over {
+  position: absolute !important;
+  right: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  width: 9.54% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #B5402A !important;
+  color: #FFFFFF !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+}
+
+.dg-kira-layout .bar-base {
+  position: absolute !important;
+  left: 90.46% !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  width: 2px !important;
+  margin-left: -1px !important;
+  background: #141413 !important;
+}
+
+.dg-kira-layout .bar-legend {
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  margin-top: 6px !important;
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+  color: #73716A !important;
+}
+
+.dg-kira-layout .legend-tick {
+  flex: 0 0 auto !important;
+  width: 2px !important;
+  height: 10px !important;
+  background: #141413 !important;
+}
+
+.dg-kira-layout .split {
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  margin-top: 12px !important;
+  padding: 8px 10px !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E8E6DC !important;
+  border-left: 3px solid #5B7A4B !important;
+  border-radius: 5px !important;
+}
+
+.dg-kira-layout .split-label {
+  font-size: 12px !important;
+  color: #87867F !important;
+}
+
+.dg-kira-layout .split-value {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #3D3D3A !important;
+}
+
+.dg-kira-layout .sym {
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+.dg-kira-layout .split-value .sym {
+  margin-right: 4px !important;
+}
+
+.dg-kira-layout .good {
+  color: #5B7A4B !important;
+}
+
+.dg-kira-layout .case-note {
+  margin: 10px 0 0 !important;
+  font-size: 12px !important;
+  line-height: 1.55 !important;
+  color: #73716A !important;
+}
+
+.dg-kira-layout .results {
+  margin-top: 18px !important;
+}
+
+.dg-kira-layout .sheets {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+
+.dg-kira-layout .sheet {
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  min-height: 76px !important;
+  padding: 10px 12px !important;
+  background: #F5F3EC !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 5px !important;
+}
+
+.dg-kira-layout .sheet-code {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #141413 !important;
+  overflow-wrap: anywhere !important;
+}
+
+.dg-kira-layout .sheet-name {
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+  color: #5E5D59 !important;
+}
+
+.dg-kira-layout .verify {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 4px 8px !important;
+  margin-top: 10px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #3D3D3A !important;
+}
+
+.dg-kira-layout .verify-item {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+.dg-kira-layout .verify .good {
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+.dg-kira-layout .verify-dot {
+  color: #B0AEA5 !important;
+  font-weight: 400 !important;
+}
+
+.dg-kira-layout .fine {
+  margin: 8px 0 0 !important;
+  font-size: 12px !important;
+  line-height: 1.6 !important;
+  color: #73716A !important;
+}
+
+.dg-kira-layout .conclusion-wrap {
+  display: flex !important;
+  justify-content: center !important;
+  margin-top: 16px !important;
+}
+
+.dg-kira-layout .conclusion {
+  box-sizing: border-box !important;
+  max-width: 100% !important;
+  padding: 9px 18px !important;
+  background: #C6613F !important;
+  border-radius: 999px !important;
+  color: #FFFFFF !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 1.5 !important;
+  text-align: center !important;
+}
+
+@media (max-width: 760px) {
+  .dg-kira-layout .main {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .dg-kira-layout .sheets {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .dg-kira-layout .sheet {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    align-items: baseline !important;
+    justify-content: space-between !important;
+    gap: 3px 10px !important;
+    min-height: 0 !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .dg-kira-layout .step {
+    padding-left: 34px !important;
+  }
+
+  .dg-kira-layout .step:not(:last-child)::before {
+    left: 11px !important;
+  }
+}
+</style>
+
+<div class="panel">
+  <div class="head">
+    <div class="eyebrow">DAY56 · 도면 자동 배치</div>
+    <h2 class="title">넘치는 도면을 엔진이 다시 배치하는 순서</h2>
+    <p class="sub">CAD에서 글자가 칸을 넘치는 일을 사람이 고치지 않도록, 설정에서 검증까지 엔진이 맡습니다.</p>
+  </div>
+
+  <div class="main">
+    <section class="flow">
+      <div class="sec-head">
+        <span class="sec-k">처리 순서</span>
+        <span class="sec-note">1 → 6</span>
+      </div>
+
+      <div class="flow-card">
+        <div class="step">
+          <span class="num">1</span>
+          <div class="step-title">설정 → 형상 → 뷰 목록</div>
+          <div class="step-desc">치수 설정에서 형상을 계산하고 평면·단면·입면 뷰를 뽑습니다.</div>
+        </div>
+
+        <div class="step">
+          <span class="num">2</span>
+          <div class="step-title">글자 맞춤</div>
+          <div class="step-desc">돋움(폭 비율 0.9)의 실제 글자 폭을 재서 칸에 맞추고, 넘치면 글자를 줄입니다.</div>
+        </div>
+
+        <div class="step">
+          <span class="num">3</span>
+          <div class="step-title">정렬 배치</div>
+          <div class="step-desc">뷰를 축 기준으로 정렬하고 그리드·레벨선을 공유합니다.</div>
+        </div>
+
+        <div class="step">
+          <span class="num">4</span>
+          <div class="step-title">넘치면</div>
+          <div class="branch">
+            <div class="branch-item"><span class="b-arrow">→</span>다음 도면 장으로 넘김</div>
+            <div class="branch-item"><span class="b-arrow">↳</span>그래도 안 되면 축척 단계 변경</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <span class="num">5</span>
+          <div class="step-title">검증 5가지</div>
+          <div class="checks">
+            <span class="check">① 테두리</span>
+            <span class="check">② 칸 넘침</span>
+            <span class="check">③ 글자 겹침</span>
+            <span class="check">④ 뷰 겹침</span>
+            <span class="check">⑤ 치수 글자가 치수 간격보다 김</span>
+          </div>
+        </div>
+
+        <div class="step">
+          <span class="num">6</span>
+          <div class="step-title">CAD 렌더 확인</div>
+          <div class="step-desc">CADCraft로 열어 렌더를 확인합니다.</div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="case">
+      <div class="sec-head">
+        <span class="sec-k">실제 사례</span>
+        <span class="sec-note">A3 1/100</span>
+      </div>
+
+      <h3 class="case-title">빛의 교회 · 네 뷰를 한 장에</h3>
+      <p class="case-p">평면·단면·입면을 포함한 네 뷰를 A3 한 장에 놓으려 했습니다.</p>
+
+      <div class="measure-label">
+        <span>열 폭 <strong>386.9mm</strong></span>
+        <span class="badge-bad">× 넘침</span>
+      </div>
+
+      <div class="bar" role="img" aria-label="열 폭 386.9밀리미터 중 배치 가능 폭 350밀리미터를 넘는 부분">
+        <span class="bar-fill"></span>
+        <span class="bar-over">×</span>
+        <span class="bar-base"></span>
+      </div>
+      <div class="bar-legend"><span class="legend-tick"></span>세로선 기준 · 배치 가능 폭 350mm</div>
+
+      <div class="split">
+        <span class="split-label">엔진 처리</span>
+        <span class="split-value"><span class="sym good">✓</span>A31-002로 분리</span>
+      </div>
+
+      <p class="case-note">뷰 두 개를 나란히 놓은 열 폭이 배치 가능 폭을 넘어, 입면도를 두 번째 장으로 넘겼습니다.</p>
+    </aside>
+  </div>
+
+  <section class="results">
+    <div class="sec-head">
+      <span class="sec-k">결과 도면</span>
+      <span class="sec-note">3장</span>
+    </div>
+
+    <div class="sheets">
+      <div class="sheet">
+        <span class="sheet-code">A31-001</span>
+        <span class="sheet-name">평면 · 단면</span>
+      </div>
+      <div class="sheet">
+        <span class="sheet-code">A31-002</span>
+        <span class="sheet-name">입면</span>
+      </div>
+      <div class="sheet">
+        <span class="sheet-code">A52-001</span>
+        <span class="sheet-name">횡단면 + 십자 슬릿 1/20 상세</span>
+      </div>
+    </div>
+
+    <div class="verify">
+      <span class="verify-item"><span class="good">✓</span>검증 위반 0</span>
+      <span class="verify-dot">·</span>
+      <span class="verify-item"><span class="good">✓</span>변환 실패 0</span>
+    </div>
+
+    <p class="fine">검증기는 글자와 선의 겹침은 보지 않습니다. 글자–선 겹침은 CAD 렌더로 눈 확인합니다.</p>
+  </section>
+
+  <div class="conclusion-wrap">
+    <div class="conclusion">넘침을 고치지 않고 다시 배치합니다</div>
+  </div>
+</div>
+
+</div>

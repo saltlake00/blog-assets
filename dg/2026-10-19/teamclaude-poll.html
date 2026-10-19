@@ -1,0 +1,408 @@
+<div class="dg-teamclaude-poll">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&display=swap');
+.dg-teamclaude-poll {
+  box-sizing: border-box !important;
+  width: calc(100% - 32px) !important;
+  max-width: 960px !important;
+  margin: 24px auto !important;
+  padding: 28px !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 12px !important;
+  font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif !important;
+  color: #3D3D3A !important;
+  word-break: keep-all !important;
+  -webkit-font-smoothing: antialiased !important;
+}
+.dg-teamclaude-poll__head { max-width: 820px !important; }
+.dg-teamclaude-poll__eyebrow {
+  margin: 0 0 8px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  line-height: 1.5 !important;
+  color: #87867F !important;
+  letter-spacing: 0.04em !important;
+}
+.dg-teamclaude-poll__title {
+  margin: 0 !important;
+  font-family: 'Noto Serif KR', 'Nanum Myeongjo', serif !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  line-height: 1.5 !important;
+  letter-spacing: -0.01em !important;
+  color: #141413 !important;
+  word-break: keep-all !important;
+}
+.dg-teamclaude-poll__lede {
+  margin: 10px 0 0 !important;
+  font-size: 14px !important;
+  line-height: 1.75 !important;
+  color: #5E5D59 !important;
+  word-break: keep-all !important;
+}
+.dg-teamclaude-poll__panels {
+  display: grid !important;
+  gap: 12px !important;
+  margin-top: 20px !important;
+}
+.dg-teamclaude-poll__panel {
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+  padding: 14px 16px 12px !important;
+  background: #F5F3EC !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 5px !important;
+}
+.dg-teamclaude-poll__panel-head {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-wrap: wrap !important;
+}
+.dg-teamclaude-poll__badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 3px 8px !important;
+  border-radius: 3px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  line-height: 1.5 !important;
+  color: #FFFFFF !important;
+  white-space: nowrap !important;
+}
+.dg-teamclaude-poll__badge--bad { background: #B5402A !important; }
+.dg-teamclaude-poll__badge--good { background: #5B7A4B !important; }
+.dg-teamclaude-poll__panel-meta {
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+  color: #73716A !important;
+}
+.dg-teamclaude-poll__track {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  margin-top: 6px !important;
+  padding-top: 24px !important;
+}
+.dg-teamclaude-poll__rail {
+  position: absolute !important;
+  left: 12.5% !important;
+  right: 12.5% !important;
+  top: 32px !important;
+  height: 2px !important;
+  background: #D1CFC5 !important;
+}
+.dg-teamclaude-poll__delay {
+  position: absolute !important;
+  z-index: 1 !important;
+  left: calc(12.5% + 12px) !important;
+  width: 26px !important;
+  top: 31px !important;
+  height: 0 !important;
+  border-top: 2px dashed #C6613F !important;
+}
+.dg-teamclaude-poll__delay-label {
+  position: absolute !important;
+  z-index: 3 !important;
+  top: 0 !important;
+  left: calc(12.5% + 25px) !important;
+  transform: translateX(-50%) !important;
+  padding: 1px 5px !important;
+  border: 1px solid #C6613F !important;
+  border-radius: 3px !important;
+  background: #F5EDE6 !important;
+  color: #A9502F !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  line-height: 1.5 !important;
+  white-space: nowrap !important;
+}
+.dg-teamclaude-poll__node {
+  position: relative !important;
+  z-index: 2 !important;
+  display: grid !important;
+  grid-template-rows: 16px 20px !important;
+  justify-items: center !important;
+  align-items: center !important;
+}
+.dg-teamclaude-poll__dot {
+  display: grid !important;
+  place-items: center !important;
+  box-sizing: border-box !important;
+  width: 16px !important;
+  height: 16px !important;
+  border: 2px solid #87867F !important;
+  border-radius: 50% !important;
+  background: #FFFFFF !important;
+  color: #FFFFFF !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+}
+.dg-teamclaude-poll__dot--query {
+  background: #3D3D3A !important;
+  border-color: #3D3D3A !important;
+}
+.dg-teamclaude-poll__dot--bad {
+  background: #B5402A !important;
+  border-color: #B5402A !important;
+}
+.dg-teamclaude-poll__dot--good {
+  background: #5B7A4B !important;
+  border-color: #5B7A4B !important;
+}
+.dg-teamclaude-poll__dot--empty {
+  background: #FFFFFF !important;
+  border-color: #B0AEA5 !important;
+}
+.dg-teamclaude-poll__tick {
+  font-size: 12px !important;
+  line-height: 1 !important;
+  color: #87867F !important;
+  white-space: nowrap !important;
+}
+.dg-teamclaude-poll__flow {
+  margin: 8px 0 0 !important;
+  font-size: 13px !important;
+  line-height: 1.7 !important;
+  color: #5E5D59 !important;
+}
+.dg-teamclaude-poll__sym--bad {
+  color: #B5402A !important;
+  font-weight: 700 !important;
+}
+.dg-teamclaude-poll__sym--good {
+  color: #5B7A4B !important;
+  font-weight: 700 !important;
+}
+.dg-teamclaude-poll__note {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 8px !important;
+  margin-top: 10px !important;
+  padding-top: 10px !important;
+  border-top: 1px solid #E8E6DC !important;
+}
+.dg-teamclaude-poll__note-key {
+  flex: none !important;
+  padding: 1px 6px !important;
+  border-radius: 3px !important;
+  background: #FFFFFF !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  line-height: 1.5 !important;
+  white-space: nowrap !important;
+}
+.dg-teamclaude-poll__note-key--bad {
+  border: 1px solid #B5402A !important;
+  color: #B5402A !important;
+}
+.dg-teamclaude-poll__note-key--good {
+  border: 1px solid #5B7A4B !important;
+  color: #5B7A4B !important;
+}
+.dg-teamclaude-poll__note-text {
+  min-width: 0 !important;
+  margin: 0 !important;
+  font-size: 13px !important;
+  line-height: 1.75 !important;
+  color: #3D3D3A !important;
+}
+.dg-teamclaude-poll__formula {
+  padding: 1px 5px !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 3px !important;
+  background: #FFFFFF !important;
+  color: #3D3D3A !important;
+  font-family: 'JetBrains Mono', 'Noto Sans KR', monospace !important;
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+  overflow-wrap: anywhere !important;
+}
+.dg-teamclaude-poll__section-label {
+  margin: 22px 0 10px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1.5 !important;
+  letter-spacing: 0.02em !important;
+  color: #73716A !important;
+}
+.dg-teamclaude-poll__stats {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+}
+.dg-teamclaude-poll__stat {
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+  padding: 14px !important;
+  background: #F5F3EC !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 5px !important;
+}
+.dg-teamclaude-poll__stat-k {
+  margin: 0 !important;
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+  color: #73716A !important;
+}
+.dg-teamclaude-poll__stat-v {
+  margin: 6px 0 0 !important;
+  font-family: 'Noto Serif KR', 'Nanum Myeongjo', serif !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  color: #141413 !important;
+  word-break: keep-all !important;
+}
+.dg-teamclaude-poll__stat-n {
+  margin: 6px 0 0 !important;
+  font-size: 12px !important;
+  line-height: 1.6 !important;
+  color: #5E5D59 !important;
+}
+.dg-teamclaude-poll__conclusion {
+  display: flex !important;
+  justify-content: center !important;
+  margin-top: 18px !important;
+}
+.dg-teamclaude-poll__pill {
+  box-sizing: border-box !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 10px 22px !important;
+  border-radius: 999px !important;
+  background: #C6613F !important;
+  color: #FFFFFF !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 1.55 !important;
+  text-align: center !important;
+}
+@media (max-width: 720px) {
+  .dg-teamclaude-poll {
+    width: calc(100% - 24px) !important;
+    margin: 12px auto !important;
+    padding: 20px 18px !important;
+  }
+  .dg-teamclaude-poll__panel {
+    padding: 12px 12px 10px !important;
+  }
+  .dg-teamclaude-poll__stats {
+    grid-template-columns: 1fr !important;
+  }
+  .dg-teamclaude-poll__title {
+    line-height: 1.45 !important;
+  }
+  .dg-teamclaude-poll__conclusion {
+    margin-top: 16px !important;
+  }
+}
+@media (max-width: 380px) {
+  .dg-teamclaude-poll {
+    padding: 16px 14px !important;
+  }
+  .dg-teamclaude-poll__panel {
+    padding: 10px !important;
+  }
+  .dg-teamclaude-poll__stat {
+    padding: 12px !important;
+  }
+}
+</style>
+<header class="dg-teamclaude-poll__head">
+  <p class="dg-teamclaude-poll__eyebrow">DAY56 · 계정 사용량 도구</p>
+  <h2 class="dg-teamclaude-poll__title">60초로 정한 조회가 120초마다 돈 이유</h2>
+  <p class="dg-teamclaude-poll__lede">도구는 마지막 조회 후 60초가 지났는지 확인해 조회합니다. 그런데 시각을 응답이 끝난 뒤에 기록해, 확인할 때마다 경과가 60초에 모자랐습니다.</p>
+</header>
+
+<div class="dg-teamclaude-poll__panels">
+  <section class="dg-teamclaude-poll__panel">
+    <div class="dg-teamclaude-poll__panel-head">
+      <span class="dg-teamclaude-poll__badge dg-teamclaude-poll__badge--bad">수정 전 ×</span>
+      <span class="dg-teamclaude-poll__panel-meta">실서버 60초 설정 · 계정마다 2분에 한 번</span>
+    </div>
+    <div class="dg-teamclaude-poll__track">
+      <span class="dg-teamclaude-poll__rail"></span>
+      <span class="dg-teamclaude-poll__delay"></span>
+      <span class="dg-teamclaude-poll__delay-label">지연</span>
+      <div class="dg-teamclaude-poll__node">
+        <span class="dg-teamclaude-poll__dot dg-teamclaude-poll__dot--query"></span>
+        <span class="dg-teamclaude-poll__tick">0초</span>
+      </div>
+      <div class="dg-teamclaude-poll__node">
+        <span class="dg-teamclaude-poll__dot dg-teamclaude-poll__dot--bad">×</span>
+        <span class="dg-teamclaude-poll__tick">60초</span>
+      </div>
+      <div class="dg-teamclaude-poll__node">
+        <span class="dg-teamclaude-poll__dot dg-teamclaude-poll__dot--query"></span>
+        <span class="dg-teamclaude-poll__tick">120초</span>
+      </div>
+      <div class="dg-teamclaude-poll__node">
+        <span class="dg-teamclaude-poll__dot dg-teamclaude-poll__dot--empty"></span>
+        <span class="dg-teamclaude-poll__tick">180초</span>
+      </div>
+    </div>
+    <p class="dg-teamclaude-poll__flow">0초 조회 → 지연 후 시각 기록 → 60초 확인 건너뜀 <span class="dg-teamclaude-poll__sym--bad">×</span> → 120초 조회</p>
+    <div class="dg-teamclaude-poll__note">
+      <span class="dg-teamclaude-poll__note-key dg-teamclaude-poll__note-key--bad">원인</span>
+      <p class="dg-teamclaude-poll__note-text">응답이 끝난 뒤에 마지막 조회 시각을 기록했습니다. 60초 확인에서 <span class="dg-teamclaude-poll__formula">경과 60초 − 지연 &lt; 60초</span> → 건너뜀.</p>
+    </div>
+  </section>
+
+  <section class="dg-teamclaude-poll__panel">
+    <div class="dg-teamclaude-poll__panel-head">
+      <span class="dg-teamclaude-poll__badge dg-teamclaude-poll__badge--good">수정 후 ✓</span>
+      <span class="dg-teamclaude-poll__panel-meta">실서버 60초 설정 · 1분 간격 5회</span>
+    </div>
+    <div class="dg-teamclaude-poll__track">
+      <span class="dg-teamclaude-poll__rail"></span>
+      <div class="dg-teamclaude-poll__node">
+        <span class="dg-teamclaude-poll__dot dg-teamclaude-poll__dot--good">✓</span>
+        <span class="dg-teamclaude-poll__tick">0초</span>
+      </div>
+      <div class="dg-teamclaude-poll__node">
+        <span class="dg-teamclaude-poll__dot dg-teamclaude-poll__dot--good">✓</span>
+        <span class="dg-teamclaude-poll__tick">60초</span>
+      </div>
+      <div class="dg-teamclaude-poll__node">
+        <span class="dg-teamclaude-poll__dot dg-teamclaude-poll__dot--good">✓</span>
+        <span class="dg-teamclaude-poll__tick">120초</span>
+      </div>
+      <div class="dg-teamclaude-poll__node">
+        <span class="dg-teamclaude-poll__dot dg-teamclaude-poll__dot--good">✓</span>
+        <span class="dg-teamclaude-poll__tick">180초</span>
+      </div>
+    </div>
+    <p class="dg-teamclaude-poll__flow">0초 · 60초 · 120초 · 180초 모두 조회 <span class="dg-teamclaude-poll__sym--good">✓</span></p>
+    <div class="dg-teamclaude-poll__note">
+      <span class="dg-teamclaude-poll__note-key dg-teamclaude-poll__note-key--good">수정</span>
+      <p class="dg-teamclaude-poll__note-text">비교 기준에 응답 지연만큼 여유를 두었습니다. 0·60·120·180초 모두 조회합니다.</p>
+    </div>
+  </section>
+</div>
+
+<p class="dg-teamclaude-poll__section-label">확인한 수치</p>
+<div class="dg-teamclaude-poll__stats">
+  <div class="dg-teamclaude-poll__stat">
+    <p class="dg-teamclaude-poll__stat-k">가짜 응답 실험</p>
+    <p class="dg-teamclaude-poll__stat-v">10.5초에 5회</p>
+    <p class="dg-teamclaude-poll__stat-n">1초 주기 설정 · 약 2초 간격</p>
+  </div>
+  <div class="dg-teamclaude-poll__stat">
+    <p class="dg-teamclaude-poll__stat-k">실서버 수정 후</p>
+    <p class="dg-teamclaude-poll__stat-v">1분 간격 5회</p>
+    <p class="dg-teamclaude-poll__stat-n">네 계정 · 60초 설정</p>
+  </div>
+  <div class="dg-teamclaude-poll__stat">
+    <p class="dg-teamclaude-poll__stat-k">429 오류</p>
+    <p class="dg-teamclaude-poll__stat-v">0건</p>
+    <p class="dg-teamclaude-poll__stat-n">공식 화면과 차이 1%p 이내</p>
+  </div>
+</div>
+
+<div class="dg-teamclaude-poll__conclusion">
+  <div class="dg-teamclaude-poll__pill">기준 시각에 응답 지연이 섞이면 주기가 밀립니다</div>
+</div>
+</div>
