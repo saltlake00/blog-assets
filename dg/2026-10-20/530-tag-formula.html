@@ -1,0 +1,376 @@
+<div class="dg-530-tag-formula">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&display=swap');
+
+.dg-530-tag-formula {
+  max-width: 960px !important;
+  margin: 0 auto !important;
+  padding: 26px 24px 28px !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 12px !important;
+  box-sizing: border-box !important;
+  font-family: 'Noto Sans KR', sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  color: #3D3D3A !important;
+  word-break: keep-all !important;
+}
+
+.dg-530-tag-formula .dg-title {
+  font-family: 'Noto Serif KR', serif !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+  letter-spacing: -0.01em !important;
+  color: #141413 !important;
+}
+
+.dg-530-tag-formula .dg-lead {
+  margin-top: 7px !important;
+  font-size: 13px !important;
+  line-height: 1.6 !important;
+  color: #73716A !important;
+}
+
+.dg-530-tag-formula .dg-eq {
+  margin-top: 16px !important;
+  padding: 12px 14px !important;
+  background: #F5F3EC !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 5px !important;
+  box-sizing: border-box !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 1.7 !important;
+  color: #141413 !important;
+  overflow-wrap: anywhere !important;
+}
+
+.dg-530-tag-formula .dg-kicker {
+  margin-top: 16px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.02em !important;
+  color: #87867F !important;
+}
+
+.dg-530-tag-formula .dg-formula {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+  margin-top: 8px !important;
+}
+
+.dg-530-tag-formula .dg-piece {
+  padding: 12px 12px 13px !important;
+  background: #F5F3EC !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 5px !important;
+  box-sizing: border-box !important;
+}
+
+.dg-530-tag-formula .dg-piece-label {
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+  color: #73716A !important;
+}
+
+.dg-530-tag-formula .dg-piece-formula {
+  margin-top: 4px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 1.5 !important;
+  color: #141413 !important;
+  overflow-wrap: anywhere !important;
+}
+
+.dg-530-tag-formula .dg-piece-desc {
+  margin-top: 6px !important;
+  font-size: 12px !important;
+  line-height: 1.55 !important;
+  color: #73716A !important;
+}
+
+.dg-530-tag-formula .dg-piece.is-key {
+  background: #F5EDE6 !important;
+}
+
+.dg-530-tag-formula .dg-piece.is-key .dg-piece-label {
+  color: #A9502F !important;
+}
+
+.dg-530-tag-formula .dg-piece.is-key .dg-piece-formula {
+  color: #A9502F !important;
+}
+
+.dg-530-tag-formula .dg-consts {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 6px !important;
+  margin-top: 10px !important;
+}
+
+.dg-530-tag-formula .dg-const-label {
+  margin-right: 2px !important;
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+  color: #87867F !important;
+}
+
+.dg-530-tag-formula .dg-chip {
+  padding: 5px 9px !important;
+  background: #F0EEE6 !important;
+  border-radius: 3px !important;
+  box-sizing: border-box !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  color: #5E5D59 !important;
+}
+
+.dg-530-tag-formula .dg-rule {
+  height: 1px !important;
+  margin-top: 18px !important;
+  background: #E8E6DC !important;
+}
+
+.dg-530-tag-formula .dg-subtitle {
+  margin-top: 18px !important;
+  font-family: 'Noto Serif KR', serif !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  line-height: 1.5 !important;
+  color: #141413 !important;
+}
+
+.dg-530-tag-formula .dg-subnote {
+  margin-top: 3px !important;
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+  color: #73716A !important;
+}
+
+.dg-530-tag-formula .dg-scale {
+  position: relative !important;
+  height: 16px !important;
+  margin: 14px 66px 0 114px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 12px !important;
+  line-height: 16px !important;
+  color: #87867F !important;
+}
+
+.dg-530-tag-formula .dg-tick {
+  position: absolute !important;
+  top: 0 !important;
+  transform: translateX(-50%) !important;
+  white-space: nowrap !important;
+}
+
+.dg-530-tag-formula .dg-t0 { left: 0% !important; }
+.dg-530-tag-formula .dg-t20 { left: 20% !important; }
+.dg-530-tag-formula .dg-t40 { left: 40% !important; }
+.dg-530-tag-formula .dg-t60 { left: 60% !important; }
+.dg-530-tag-formula .dg-t80 { left: 80% !important; }
+.dg-530-tag-formula .dg-t100 { left: 100% !important; }
+
+.dg-530-tag-formula .dg-row {
+  display: grid !important;
+  grid-template-columns: 104px minmax(0, 1fr) 56px !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-top: 7px !important;
+}
+
+.dg-530-tag-formula .dg-name {
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  color: #3D3D3A !important;
+}
+
+.dg-530-tag-formula .dg-track {
+  height: 26px !important;
+  background: #F0EEE6 !important;
+  border-radius: 4px !important;
+  overflow: hidden !important;
+}
+
+.dg-530-tag-formula .dg-bar {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  height: 26px !important;
+  padding: 0 8px !important;
+  background: #3D3D3A !important;
+  border-radius: 4px !important;
+  box-sizing: border-box !important;
+}
+
+.dg-530-tag-formula .dg-w1 { width: 9.2% !important; }
+.dg-530-tag-formula .dg-w2 { width: 64% !important; }
+.dg-530-tag-formula .dg-w3 { width: 74% !important; }
+.dg-530-tag-formula .dg-w4 { width: 100% !important; }
+
+.dg-530-tag-formula .dg-note {
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+  color: #FFFFFF !important;
+  white-space: nowrap !important;
+}
+
+.dg-530-tag-formula .dg-val {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  color: #5E5D59 !important;
+  text-align: right !important;
+  white-space: nowrap !important;
+}
+
+.dg-530-tag-formula .dg-foot {
+  margin-top: 22px !important;
+  text-align: center !important;
+}
+
+.dg-530-tag-formula .dg-pill {
+  display: inline-block !important;
+  max-width: 100% !important;
+  padding: 10px 20px !important;
+  background: #C6613F !important;
+  border-radius: 999px !important;
+  box-sizing: border-box !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 1.5 !important;
+  color: #FFFFFF !important;
+}
+
+@media (max-width: 760px) {
+  .dg-530-tag-formula .dg-formula {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .dg-530-tag-formula {
+    padding: 20px 16px 22px !important;
+  }
+  .dg-530-tag-formula .dg-scale {
+    margin: 12px 0 0 !important;
+  }
+  .dg-530-tag-formula .dg-row {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    gap: 4px 10px !important;
+  }
+  .dg-530-tag-formula .dg-name {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+  }
+  .dg-530-tag-formula .dg-val {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+  }
+  .dg-530-tag-formula .dg-track {
+    grid-column: 1 / -1 !important;
+    grid-row: 2 !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .dg-530-tag-formula .dg-formula {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+</style>
+
+  <div class="dg-head">
+    <div class="dg-title">태그 값은 스킬 몫 위에 태그 몫을 얹어 정합니다</div>
+    <div class="dg-lead">빙결을 가진 스킬마다 기본 빙결 시간이 다르고, 태그가 그 위에 얹히는 구조입니다.</div>
+  </div>
+
+  <div class="dg-eq">값 = clamp(a·x + b, 하한, 상한) × (1 + p·L) + c·L</div>
+
+  <div class="dg-kicker">식을 네 조각으로 나누면</div>
+  <div class="dg-formula">
+    <div class="dg-piece">
+      <div class="dg-piece-label">스킬 몫</div>
+      <div class="dg-piece-formula">a·x + b</div>
+      <div class="dg-piece-desc">x는 그 스킬의 1발 충전 시간이나 적중 피해입니다.</div>
+    </div>
+    <div class="dg-piece">
+      <div class="dg-piece-label">범위</div>
+      <div class="dg-piece-formula">clamp(하한, 상한)</div>
+      <div class="dg-piece-desc">스킬 몫에만 범위를 겁니다.</div>
+    </div>
+    <div class="dg-piece is-key">
+      <div class="dg-piece-label">태그 비율</div>
+      <div class="dg-piece-formula">× (1 + p·L)</div>
+      <div class="dg-piece-desc">강화 단계 L만큼 비율로 올립니다. 기본 태그는 0입니다.</div>
+    </div>
+    <div class="dg-piece">
+      <div class="dg-piece-label">태그 상수</div>
+      <div class="dg-piece-formula">+ c·L</div>
+      <div class="dg-piece-desc">빙결은 c = 0이라 상수가 붙지 않습니다.</div>
+    </div>
+  </div>
+
+  <div class="dg-consts">
+    <div class="dg-const-label">빙결 계수</div>
+    <div class="dg-chip">a = 0.3</div>
+    <div class="dg-chip">b = 0.05</div>
+    <div class="dg-chip">범위 0.15 ~ 2.5초</div>
+    <div class="dg-chip">p = 0.6</div>
+    <div class="dg-chip">c = 0</div>
+  </div>
+
+  <div class="dg-rule"></div>
+
+  <div class="dg-subtitle">스킬별 빙결 시간</div>
+  <div class="dg-subnote">기본 태그(L = 0) 기준, 단위 초</div>
+
+  <div class="dg-scale">
+    <span class="dg-tick dg-t0">0</span>
+    <span class="dg-tick dg-t20">0.5</span>
+    <span class="dg-tick dg-t40">1</span>
+    <span class="dg-tick dg-t60">1.5</span>
+    <span class="dg-tick dg-t80">2</span>
+    <span class="dg-tick dg-t100">2.5</span>
+  </div>
+
+  <div class="dg-row">
+    <div class="dg-name">라이트닝볼트</div>
+    <div class="dg-track"><div class="dg-bar dg-w1"></div></div>
+    <div class="dg-val">0.23초</div>
+  </div>
+
+  <div class="dg-row">
+    <div class="dg-name">아이스 스피어</div>
+    <div class="dg-track"><div class="dg-bar dg-w2"><span class="dg-note">보정 ×2</span></div></div>
+    <div class="dg-val">1.6초</div>
+  </div>
+
+  <div class="dg-row">
+    <div class="dg-name">뇌옥</div>
+    <div class="dg-track"><div class="dg-bar dg-w3"></div></div>
+    <div class="dg-val">1.85초</div>
+  </div>
+
+  <div class="dg-row">
+    <div class="dg-name">아이스메테오</div>
+    <div class="dg-track"><div class="dg-bar dg-w4"><span class="dg-note">상한</span></div></div>
+    <div class="dg-val">2.5초</div>
+  </div>
+
+  <div class="dg-foot">
+    <div class="dg-pill">자주 쏘는 주문은 짧게, 느린 한 방은 길게 정해집니다.</div>
+  </div>
+
+</div>

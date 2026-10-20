@@ -1,0 +1,503 @@
+<div class="dg-167-ranking-loop">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&display=swap');
+
+.dg-167-ranking-loop {
+  box-sizing: border-box !important;
+  background: #FAF9F5 !important;
+  padding: 26px 16px 40px !important;
+  font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif !important;
+  color: #3D3D3A !important;
+  word-break: keep-all !important;
+  -webkit-font-smoothing: antialiased !important;
+}
+.dg-167-ranking-loop div,
+.dg-167-ranking-loop span {
+  box-sizing: border-box !important;
+}
+.dg-167-ranking-loop .sheet {
+  max-width: 960px !important;
+  margin: 0 auto !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 12px !important;
+  padding: 32px !important;
+}
+.dg-167-ranking-loop .head {
+  border-bottom: 1px solid #E8E6DC !important;
+  padding-bottom: 20px !important;
+}
+.dg-167-ranking-loop .eyebrow {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 12px !important;
+  letter-spacing: 0.06em !important;
+  color: #87867F !important;
+  overflow-wrap: anywhere !important;
+}
+.dg-167-ranking-loop .title {
+  margin-top: 10px !important;
+  font-family: 'Noto Serif KR', serif !important;
+  font-weight: 700 !important;
+  font-size: 22px !important;
+  line-height: 1.5 !important;
+  color: #141413 !important;
+}
+.dg-167-ranking-loop .lede {
+  margin-top: 8px !important;
+  font-size: 14px !important;
+  line-height: 1.7 !important;
+  color: #5E5D59 !important;
+}
+.dg-167-ranking-loop .flow {
+  display: flex !important;
+  align-items: stretch !important;
+  margin-top: 26px !important;
+}
+.dg-167-ranking-loop .stage {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background: #F5F3EC !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 5px !important;
+  padding: 16px !important;
+}
+.dg-167-ranking-loop .stage-head {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-bottom: 12px !important;
+}
+.dg-167-ranking-loop .num {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 11px !important;
+  letter-spacing: 0.06em !important;
+  color: #73716A !important;
+  background: #F0EEE6 !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 3px !important;
+  padding: 2px 6px !important;
+}
+.dg-167-ranking-loop .stage-title {
+  font-family: 'Noto Serif KR', serif !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  color: #141413 !important;
+}
+.dg-167-ranking-loop .lead {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 1.5 !important;
+  color: #141413 !important;
+}
+.dg-167-ranking-loop .sub {
+  margin-top: 4px !important;
+  font-size: 12px !important;
+  line-height: 1.6 !important;
+  color: #73716A !important;
+}
+.dg-167-ranking-loop .gate {
+  margin-top: 12px !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 5px !important;
+  padding: 10px 12px !important;
+}
+.dg-167-ranking-loop .gate-label {
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+  color: #87867F !important;
+}
+.dg-167-ranking-loop .gate-value {
+  margin-top: 4px !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 1.5 !important;
+  color: #141413 !important;
+}
+.dg-167-ranking-loop .gate-sub {
+  margin-top: 2px !important;
+  font-size: 12px !important;
+  line-height: 1.6 !important;
+  color: #73716A !important;
+}
+.dg-167-ranking-loop .reject {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 8px !important;
+  margin-top: 10px !important;
+  background: #F0EEE6 !important;
+  border: 1px dashed #D1CFC5 !important;
+  border-radius: 5px !important;
+  padding: 10px 12px !important;
+}
+.dg-167-ranking-loop .mark {
+  flex: 0 0 auto !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1.5 !important;
+}
+.dg-167-ranking-loop .mark-bad { color: #B5402A !important; }
+.dg-167-ranking-loop .mark-good { color: #5B7A4B !important; }
+.dg-167-ranking-loop .mark-mid { color: #A6781F !important; }
+.dg-167-ranking-loop .reject-title {
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  line-height: 1.5 !important;
+  color: #3D3D3A !important;
+}
+.dg-167-ranking-loop .reject-sub {
+  margin-top: 2px !important;
+  font-size: 12px !important;
+  line-height: 1.6 !important;
+  color: #73716A !important;
+}
+.dg-167-ranking-loop .hp {
+  display: inline-block !important;
+  margin-top: 8px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+  color: #3D3D3A !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 3px !important;
+  padding: 4px 8px !important;
+  overflow-wrap: anywhere !important;
+}
+.dg-167-ranking-loop .pressure {
+  margin-top: 12px !important;
+}
+.dg-167-ranking-loop .pressure-label {
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  line-height: 1.5 !important;
+  color: #3D3D3A !important;
+}
+.dg-167-ranking-loop .graph {
+  margin-top: 6px !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 5px !important;
+  padding: 10px 12px !important;
+}
+.dg-167-ranking-loop .graph-head {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: baseline !important;
+  justify-content: space-between !important;
+  gap: 4px 8px !important;
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+  color: #87867F !important;
+}
+.dg-167-ranking-loop .mono {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 12px !important;
+  color: #3D3D3A !important;
+  overflow-wrap: anywhere !important;
+}
+.dg-167-ranking-loop .graph svg {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  margin-top: 6px !important;
+}
+.dg-167-ranking-loop .graph-foot {
+  margin-top: 6px !important;
+  font-size: 12px !important;
+  line-height: 1.6 !important;
+  color: #73716A !important;
+}
+.dg-167-ranking-loop .chips {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  margin-top: 10px !important;
+}
+.dg-167-ranking-loop .chip {
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+  color: #5E5D59 !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 3px !important;
+  padding: 4px 8px !important;
+}
+.dg-167-ranking-loop .arrow {
+  flex: 0 0 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #B0AEA5 !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
+}
+.dg-167-ranking-loop .arrow span {
+  display: inline-block !important;
+}
+.dg-167-ranking-loop .stage-note {
+  margin-bottom: 10px !important;
+  font-size: 12px !important;
+  line-height: 1.6 !important;
+  color: #73716A !important;
+}
+.dg-167-ranking-loop .outcome {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 8px !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 5px !important;
+  padding: 10px 12px !important;
+}
+.dg-167-ranking-loop .outcome + .outcome {
+  margin-top: 8px !important;
+}
+.dg-167-ranking-loop .outcome-title {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1.5 !important;
+  color: #141413 !important;
+}
+.dg-167-ranking-loop .outcome-sub {
+  margin-top: 2px !important;
+  font-size: 12px !important;
+  line-height: 1.6 !important;
+  color: #73716A !important;
+}
+.dg-167-ranking-loop .records {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 14px 18px !important;
+  margin-top: 16px !important;
+  background: #F5F3EC !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 5px !important;
+  padding: 16px !important;
+}
+.dg-167-ranking-loop .records-main {
+  flex: 1 1 240px !important;
+  min-width: 0 !important;
+}
+.dg-167-ranking-loop .records-title {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 1.5 !important;
+  color: #141413 !important;
+}
+.dg-167-ranking-loop .badge {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.02em !important;
+  color: #3D3D3A !important;
+  background: #FFFFFF !important;
+  border: 1px solid #D1CFC5 !important;
+  border-radius: 3px !important;
+  padding: 2px 8px !important;
+}
+.dg-167-ranking-loop .records-sub {
+  margin-top: 4px !important;
+  font-size: 12px !important;
+  line-height: 1.7 !important;
+  color: #73716A !important;
+}
+.dg-167-ranking-loop .records-chips {
+  flex: 1 1 320px !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+.dg-167-ranking-loop .records-chips .chip {
+  padding: 6px 10px !important;
+  color: #3D3D3A !important;
+}
+.dg-167-ranking-loop .foot {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 14px !important;
+  margin-top: 18px !important;
+}
+.dg-167-ranking-loop .memo {
+  flex: 1 1 300px !important;
+  font-size: 12px !important;
+  line-height: 1.8 !important;
+  color: #73716A !important;
+}
+.dg-167-ranking-loop .pill {
+  display: inline-block !important;
+  flex: 0 0 auto !important;
+  background: #C6613F !important;
+  color: #FFFFFF !important;
+  border-radius: 999px !important;
+  padding: 10px 20px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 1.5 !important;
+}
+@media (max-width: 760px) {
+  .dg-167-ranking-loop .sheet {
+    padding: 22px 16px !important;
+    border-radius: 10px !important;
+  }
+  .dg-167-ranking-loop .flow {
+    flex-direction: column !important;
+  }
+  .dg-167-ranking-loop .stage {
+    width: 100% !important;
+  }
+  .dg-167-ranking-loop .arrow {
+    flex: 0 0 30px !important;
+    height: 30px !important;
+  }
+  .dg-167-ranking-loop .arrow span {
+    transform: rotate(90deg) !important;
+  }
+  .dg-167-ranking-loop .foot {
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+  }
+}
+@media (max-width: 420px) {
+  .dg-167-ranking-loop {
+    padding: 12px 8px 28px !important;
+  }
+  .dg-167-ranking-loop .sheet {
+    padding: 16px 12px !important;
+  }
+  .dg-167-ranking-loop .title {
+    font-size: 19px !important;
+  }
+  .dg-167-ranking-loop .stage {
+    padding: 12px !important;
+  }
+  .dg-167-ranking-loop .records {
+    padding: 12px !important;
+  }
+  .dg-167-ranking-loop .pill {
+    width: 100% !important;
+    text-align: center !important;
+    padding: 10px 14px !important;
+  }
+}
+</style>
+
+<div class="sheet">
+  <div class="head">
+    <div class="eyebrow">NCAIFinal &middot; DAY57 &middot; 랭킹 던전</div>
+    <div class="title">랭킹 던전은 완성 오브로 들어가, 기록을 남기고 끝납니다</div>
+    <div class="lede">입장 조건과 종료 방식, 그리고 무엇이 기록되는지를 한 흐름으로 정리했습니다.</div>
+  </div>
+
+  <div class="flow">
+    <div class="stage">
+      <div class="stage-head">
+        <span class="num">01</span>
+        <span class="stage-title">입장</span>
+      </div>
+      <div class="lead">필드의 네 번째 포털</div>
+      <div class="sub">이 포털만 랭킹 던전으로 이어집니다.</div>
+      <div class="gate">
+        <div class="gate-label">입장 조건 &middot; 완성 오브?</div>
+        <div class="gate-value">완성 오브 장착 중</div>
+        <div class="gate-sub">강화 3칸이 모두 찬 오브입니다.</div>
+      </div>
+      <div class="reject">
+        <span class="mark mark-bad">&times;</span>
+        <div>
+          <div class="reject-title">완성 오브가 아니면</div>
+          <div class="reject-sub">입장이 거부됩니다. 열쇠는 필요 없습니다.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow" aria-hidden="true"><span>&rarr;</span></div>
+
+    <div class="stage">
+      <div class="stage-head">
+        <span class="num">02</span>
+        <span class="stage-title">던전</span>
+      </div>
+      <div class="lead">고정 큐브 보스</div>
+      <div class="sub">움직이지 않고 공격하지 않습니다.</div>
+      <div class="hp">체력 100줄 &times; 줄당 60 = 6,000</div>
+      <div class="pressure">
+        <div class="pressure-label">살상 자폭 큐브</div>
+        <div class="graph">
+          <div class="graph-head">
+            <span>생성 간격</span>
+            <span class="mono">8초 &rarr; 2초</span>
+          </div>
+          <svg viewBox="0 0 300 88" role="img" aria-label="생성 간격이 8초에서 2초까지 0.5초씩 줄어드는 계단 그래프">
+            <line x1="10" y1="72" x2="290" y2="72" stroke="#E8E6DC" stroke-width="1"></line>
+            <path d="M10 14 H36 V18 H62 V22 H88 V26 H114" fill="none" stroke="#3D3D3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M114 26 L198 52" fill="none" stroke="#D1CFC5" stroke-width="2" stroke-dasharray="4 5" stroke-linecap="round"></path>
+            <path d="M198 52 H226 V56 H254 V62 H282" fill="none" stroke="#3D3D3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            <circle cx="282" cy="62" r="3" fill="#B0AEA5"></circle>
+          </svg>
+          <div class="graph-foot">3초 뒤 첫 생성, 웨이브마다 0.5초씩 줄어 최소 2초입니다.</div>
+        </div>
+        <div class="chips">
+          <span class="chip">동시 최대 12마리</span>
+          <span class="chip">자폭 예고 0.5초</span>
+          <span class="chip">피해 15</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow" aria-hidden="true"><span>&rarr;</span></div>
+
+    <div class="stage">
+      <div class="stage-head">
+        <span class="num">03</span>
+        <span class="stage-title">종료</span>
+      </div>
+      <div class="stage-note">던전이 끝나면 두 갈래로 나뉩니다.</div>
+      <div class="outcome">
+        <span class="mark mark-good">&check;</span>
+        <div>
+          <div class="outcome-title">고정 큐브 처치</div>
+          <div class="outcome-sub">기록 저장 &rarr; 귀환 포털이 열립니다.</div>
+        </div>
+      </div>
+      <div class="outcome">
+        <span class="mark mark-bad">&times;</span>
+        <div>
+          <div class="outcome-title">사망</div>
+          <div class="outcome-sub">기록 없이 바로 필드로 돌아갑니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="records">
+    <div class="records-main">
+      <div class="records-title">
+        <span>클리어 기록</span>
+        <span class="badge">상위 20</span>
+      </div>
+      <div class="records-sub">상위 20개 기록에 들어가면 알림이 오고, 세 항목이 함께 남습니다.</div>
+    </div>
+    <div class="records-chips">
+      <span class="chip">걸린 시간</span>
+      <span class="chip">보스와 작은 큐브에 준 총 피해</span>
+      <span class="chip">그때의 오브 정보</span>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="memo">&mdash; 수치는 플레이 시험 전 임시값입니다. 보스원정 진행은 이 던전에서 바뀌지 않습니다.</div>
+    <span class="pill">원정과 따로, 오브를 겨루는 던전</span>
+  </div>
+</div>
+</div>

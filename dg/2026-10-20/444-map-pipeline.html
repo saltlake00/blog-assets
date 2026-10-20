@@ -1,0 +1,397 @@
+<div class="dg-444-map-pipeline">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&family=JetBrains+Mono:wght@500&display=swap');
+
+  .dg-444-map-pipeline {
+    box-sizing: border-box !important;
+    max-width: 960px !important;
+    margin: 0 auto !important;
+    padding: 16px 12px 28px !important;
+    background: transparent !important;
+    color: #3D3D3A !important;
+    font-family: 'Noto Sans KR', system-ui, sans-serif !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    word-break: keep-all !important;
+  }
+  .dg-444-map-pipeline div,
+  .dg-444-map-pipeline span {
+    box-sizing: border-box !important;
+  }
+  .dg-444-map-pipeline .plate {
+    background: #FFFFFF !important;
+    border: 1px solid #E8E6DC !important;
+    border-radius: 12px !important;
+    padding: 20px 18px 18px !important;
+  }
+  .dg-444-map-pipeline .head {
+    margin-bottom: 14px !important;
+  }
+  .dg-444-map-pipeline .kicker {
+    font-size: 12px !important;
+    letter-spacing: 0.08em !important;
+    color: #87867F !important;
+  }
+  .dg-444-map-pipeline .title {
+    margin-top: 5px !important;
+    font-family: 'Noto Serif KR', serif !important;
+    font-weight: 700 !important;
+    font-size: 22px !important;
+    line-height: 1.35 !important;
+    color: #141413 !important;
+  }
+  .dg-444-map-pipeline .sub {
+    margin-top: 6px !important;
+    max-width: 720px !important;
+    font-size: 13px !important;
+    line-height: 1.55 !important;
+    color: #73716A !important;
+  }
+  .dg-444-map-pipeline .flow {
+    display: flex !important;
+    align-items: stretch !important;
+    margin-top: 12px !important;
+  }
+  .dg-444-map-pipeline .col {
+    min-width: 0 !important;
+    padding: 0 2px !important;
+  }
+  .dg-444-map-pipeline .col-in { flex: 1.08 1 0 !important; }
+  .dg-444-map-pipeline .col-bake { flex: 1.32 1 0 !important; }
+  .dg-444-map-pipeline .col-out { flex: 1.06 1 0 !important; }
+  .dg-444-map-pipeline .col-frame { flex: 0.96 1 0 !important; }
+  .dg-444-map-pipeline .col-mini { flex: 0.96 1 0 !important; }
+  .dg-444-map-pipeline .arrow {
+    flex: 0 0 18px !important;
+    align-self: center !important;
+    padding-bottom: 16px !important;
+    text-align: center !important;
+    font-size: 15px !important;
+    line-height: 1 !important;
+    color: #D1CFC5 !important;
+  }
+  .dg-444-map-pipeline .col-head {
+    display: flex !important;
+    align-items: baseline !important;
+    gap: 6px !important;
+    margin-bottom: 8px !important;
+    padding-bottom: 6px !important;
+    border-bottom: 1px solid #E8E6DC !important;
+  }
+  .dg-444-map-pipeline .eyebrow {
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 12px !important;
+    color: #B0AEA5 !important;
+  }
+  .dg-444-map-pipeline .col-title {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.02em !important;
+    color: #5E5D59 !important;
+  }
+  .dg-444-map-pipeline .card {
+    background: #F5F3EC !important;
+    border: 1px solid #E8E6DC !important;
+    border-radius: 5px !important;
+    padding: 8px 9px !important;
+  }
+  .dg-444-map-pipeline .card + .card {
+    margin-top: 6px !important;
+  }
+  .dg-444-map-pipeline .card-name {
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    line-height: 1.4 !important;
+    color: #3D3D3A !important;
+  }
+  .dg-444-map-pipeline .card-meta {
+    margin-top: 3px !important;
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+    color: #73716A !important;
+  }
+  .dg-444-map-pipeline .code {
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 12px !important;
+    color: #5E5D59 !important;
+    overflow-wrap: anywhere !important;
+  }
+  .dg-444-map-pipeline .bake-note {
+    margin-bottom: 5px !important;
+    font-size: 12px !important;
+    color: #87867F !important;
+  }
+  .dg-444-map-pipeline .band {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 6px !important;
+    padding: 4px 7px !important;
+    background: #FFFFFF !important;
+    border: 1px solid #E8E6DC !important;
+    border-radius: 3px !important;
+  }
+  .dg-444-map-pipeline .band + .band {
+    margin-top: 4px !important;
+  }
+  .dg-444-map-pipeline .band-num {
+    flex: 0 0 12px !important;
+    padding-top: 1px !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 12px !important;
+    color: #B0AEA5 !important;
+  }
+  .dg-444-map-pipeline .band-body {
+    min-width: 0 !important;
+  }
+  .dg-444-map-pipeline .band-name {
+    font-size: 13px !important;
+    line-height: 1.35 !important;
+    color: #3D3D3A !important;
+  }
+  .dg-444-map-pipeline .band-meta {
+    margin-top: 1px !important;
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+    color: #73716A !important;
+  }
+  .dg-444-map-pipeline .band-shade {
+    padding-left: 5px !important;
+    background: #F5EDE6 !important;
+    border-left: 3px solid #C6613F !important;
+  }
+  .dg-444-map-pipeline .band-water {
+    padding-left: 5px !important;
+    background: #F0EEE6 !important;
+    border-left: 3px solid #5E5D59 !important;
+  }
+  .dg-444-map-pipeline .bake-foot {
+    margin-top: 6px !important;
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+    color: #87867F !important;
+  }
+  .dg-444-map-pipeline .mini-wrap {
+    padding: 8px 4px 4px !important;
+    text-align: center !important;
+  }
+  .dg-444-map-pipeline .mini-svg {
+    display: block !important;
+    width: 100% !important;
+    max-width: 118px !important;
+    height: auto !important;
+    margin: 0 auto !important;
+  }
+  .dg-444-map-pipeline .foot {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+    margin-top: 14px !important;
+    padding-top: 12px !important;
+    border-top: 1px solid #E8E6DC !important;
+  }
+  .dg-444-map-pipeline .note {
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+    color: #73716A !important;
+  }
+  .dg-444-map-pipeline .pill {
+    display: inline-block !important;
+    padding: 8px 16px !important;
+    background: #C6613F !important;
+    border-radius: 999px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    line-height: 1.4 !important;
+    color: #FFFFFF !important;
+  }
+  .dg-444-map-pipeline .fx-line {
+    margin-top: 4px !important;
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+    color: #73716A !important;
+  }
+  .dg-444-map-pipeline .fx-line .code {
+    color: #3D3D3A !important;
+  }
+
+  @media (max-width: 840px) {
+    .dg-444-map-pipeline .flow {
+      flex-direction: column !important;
+    }
+    .dg-444-map-pipeline .col {
+      width: 100% !important;
+      padding: 0 !important;
+    }
+    .dg-444-map-pipeline .arrow {
+      width: 18px !important;
+      margin: 3px auto !important;
+      padding: 0 !important;
+      transform: rotate(90deg) !important;
+    }
+    .dg-444-map-pipeline .foot {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+    }
+    .dg-444-map-pipeline .pill {
+      align-self: flex-start !important;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .dg-444-map-pipeline .plate {
+      padding: 16px 12px 14px !important;
+    }
+    .dg-444-map-pipeline .title {
+      font-size: 20px !important;
+    }
+  }
+</style>
+
+  <div class="plate">
+    <div class="head">
+      <div class="kicker">DAY57 · 지도 굽기</div>
+      <div class="title">GIS 데이터를 일곱 층으로 구워 미니맵까지 보냅니다</div>
+      <div class="sub">입력 3개가 굽기 스크립트를 거쳐 지도 PNG와 범위 JSON이 되고, 좌표 변환을 지나 미니맵에 올라갑니다.</div>
+    </div>
+
+    <div class="flow">
+      <div class="col col-in">
+        <div class="col-head">
+          <span class="eyebrow">01</span>
+          <span class="col-title">입력</span>
+        </div>
+        <div class="card">
+          <div class="card-name">필드 GIS 데이터 <span class="code">(JSON)</span></div>
+          <div class="card-meta">건물·물·공원 경계</div>
+        </div>
+        <div class="card">
+          <div class="card-name">확장 지형 GIS 데이터 <span class="code">(JSON)</span></div>
+          <div class="card-meta">공원 전체로 넓힌 지형의 경계</div>
+        </div>
+        <div class="card">
+          <div class="card-name">지형 타일 재질 맵 <span class="code">(Splat)</span></div>
+          <div class="card-meta">잔디·흙길·바위·진흙 비율 · 높이</div>
+        </div>
+      </div>
+
+      <div class="arrow">→</div>
+
+      <div class="col col-bake">
+        <div class="col-head">
+          <span class="eyebrow">02</span>
+          <span class="col-title">굽기 스크립트</span>
+        </div>
+        <div class="bake-note">위에서 아래로 쌓입니다</div>
+
+        <div class="band">
+          <span class="band-num">1</span>
+          <div class="band-body">
+            <div class="band-name">바탕</div>
+          </div>
+        </div>
+        <div class="band">
+          <span class="band-num">2</span>
+          <div class="band-body">
+            <div class="band-name">공원 밖 건물</div>
+          </div>
+        </div>
+        <div class="band">
+          <span class="band-num">3</span>
+          <div class="band-body">
+            <div class="band-name">공원 안 지면 재질 혼합</div>
+            <div class="band-meta">흙길이 길이 됩니다</div>
+          </div>
+        </div>
+        <div class="band band-shade">
+          <span class="band-num">4</span>
+          <div class="band-body">
+            <div class="band-name">음영 15%</div>
+            <div class="band-meta">빛 방향 북서 315° · 고도 45°</div>
+          </div>
+        </div>
+        <div class="band band-water">
+          <span class="band-num">5</span>
+          <div class="band-body">
+            <div class="band-name">물</div>
+            <div class="band-meta">필드 GIS의 물 경계</div>
+          </div>
+        </div>
+        <div class="band">
+          <span class="band-num">6</span>
+          <div class="band-body">
+            <div class="band-name">공원 안 건물</div>
+            <div class="band-meta">1px 윤곽</div>
+          </div>
+        </div>
+        <div class="band">
+          <span class="band-num">7</span>
+          <div class="band-body">
+            <div class="band-name">공원 외곽선</div>
+          </div>
+        </div>
+
+        <div class="bake-foot">나무와 지명은 그리지 않습니다.</div>
+      </div>
+
+      <div class="arrow">→</div>
+
+      <div class="col col-out">
+        <div class="col-head">
+          <span class="eyebrow">03</span>
+          <span class="col-title">출력</span>
+        </div>
+        <div class="card">
+          <div class="card-name">지도 PNG</div>
+          <div class="card-meta"><span class="code">924 × 4192 px</span> · 1 m/px · 북쪽이 위</div>
+        </div>
+        <div class="card">
+          <div class="card-name">범위 정보 JSON</div>
+          <div class="card-meta">x·z 최소·최대, m/px</div>
+        </div>
+      </div>
+
+      <div class="arrow">→</div>
+
+      <div class="col col-frame">
+        <div class="col-head">
+          <span class="eyebrow">04</span>
+          <span class="col-title">좌표 변환</span>
+        </div>
+        <div class="card">
+          <div class="card-name">좌표 변환 <span class="code">(MapFrame)</span></div>
+          <div class="fx-line">필드 좌표 <span class="code">(X, Z)</span> ↔ 지도 좌표</div>
+          <div class="fx-line">북쪽(−Z)이 위, −X가 오른쪽</div>
+        </div>
+      </div>
+
+      <div class="arrow">→</div>
+
+      <div class="col col-mini">
+        <div class="col-head">
+          <span class="eyebrow">05</span>
+          <span class="col-title">미니맵</span>
+        </div>
+        <div class="card">
+          <div class="mini-wrap">
+            <svg class="mini-svg" viewBox="0 0 120 120" role="img" aria-label="미니맵 모식도">
+              <circle cx="60" cy="60" r="52" fill="#F0EEE6" stroke="#D1CFC5" stroke-width="1.5"></circle>
+              <line x1="60" y1="8" x2="60" y2="112" stroke="#E8E6DC" stroke-width="1"></line>
+              <line x1="8" y1="60" x2="112" y2="60" stroke="#E8E6DC" stroke-width="1"></line>
+              <text x="60" y="18" text-anchor="middle" font-family="Noto Sans KR, sans-serif" font-size="9" fill="#87867F">N</text>
+              <polygon points="60,45 67,66 60,61 53,66" fill="#C6613F"></polygon>
+            </svg>
+          </div>
+          <div class="card-meta">지름 176px 원, 반경 100m를 보여 줍니다 (약 0.88 px/m)</div>
+          <div class="card-meta">지도는 돌리지 않고 플레이어 화살표만 돕니다</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot">
+      <div class="note">924 = 4의 배수로 맞춤 — 텍스처 압축이 4px 블록 단위</div>
+      <div class="pill">손으로 고친 그림 없이, 다시 구우면 같은 바이트</div>
+    </div>
+  </div>
+</div>
