@@ -1,0 +1,225 @@
+<div class="dg-494-expedition-flow">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&display=swap');
+
+.dg-494-expedition-flow{box-sizing:border-box !important;max-width:960px !important;margin:0 auto !important;padding:0 !important;font-family:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif !important;color:#3D3D3A !important;line-height:1.6 !important;}
+.dg-494-expedition-flow div,
+.dg-494-expedition-flow span,
+.dg-494-expedition-flow svg{box-sizing:border-box !important;}
+
+.dg-494-expedition-flow .board{max-width:960px !important;margin:0 auto !important;padding:28px 28px 26px !important;background:#FFFFFF !important;border:1px solid #E8E6DC !important;border-radius:12px !important;}
+
+.dg-494-expedition-flow .head{padding:0 0 18px !important;border-bottom:1px solid #E8E6DC !important;}
+.dg-494-expedition-flow .eyebrow{font-family:"JetBrains Mono",monospace !important;font-size:11px !important;font-weight:500 !important;letter-spacing:.07em !important;color:#87867F !important;}
+.dg-494-expedition-flow .title{margin:7px 0 0 !important;font-family:"Noto Serif KR",Georgia,serif !important;font-size:22px !important;font-weight:700 !important;line-height:1.45 !important;color:#141413 !important;word-break:keep-all !important;overflow-wrap:anywhere !important;}
+.dg-494-expedition-flow .lede{margin:8px 0 0 !important;font-size:14px !important;line-height:1.75 !important;color:#5E5D59 !important;word-break:keep-all !important;}
+
+.dg-494-expedition-flow .band{display:flex !important;align-items:center !important;gap:10px !important;margin:20px 0 9px !important;}
+.dg-494-expedition-flow .band-t{flex:0 0 auto !important;font-size:12px !important;font-weight:500 !important;letter-spacing:.05em !important;color:#73716A !important;white-space:nowrap !important;word-break:keep-all !important;}
+.dg-494-expedition-flow .band-rule{flex:1 1 auto !important;min-width:8px !important;height:1px !important;background:#E8E6DC !important;}
+
+.dg-494-expedition-flow .row{display:flex !important;align-items:stretch !important;gap:8px !important;}
+.dg-494-expedition-flow .card{flex:1 1 0 !important;min-width:0 !important;display:flex !important;flex-direction:column !important;gap:7px !important;padding:11px 12px 12px !important;background:#F5F3EC !important;border:1px solid #E8E6DC !important;border-radius:5px !important;}
+.dg-494-expedition-flow .arrow{flex:0 0 16px !important;align-self:center !important;display:flex !important;align-items:center !important;justify-content:center !important;color:#B0AEA5 !important;font-size:14px !important;line-height:1 !important;}
+.dg-494-expedition-flow .arrow::before{content:"\2192" !important;}
+
+.dg-494-expedition-flow .meta{display:flex !important;align-items:center !important;justify-content:space-between !important;flex-wrap:wrap !important;gap:5px !important;}
+.dg-494-expedition-flow .num{font-family:"JetBrains Mono",monospace !important;font-size:11px !important;font-weight:500 !important;letter-spacing:.04em !important;color:#B0AEA5 !important;}
+.dg-494-expedition-flow .state{display:inline-block !important;padding:2px 6px !important;font-size:11px !important;font-weight:500 !important;line-height:1.35 !important;color:#73716A !important;background:#FFFFFF !important;border:1px solid #E8E6DC !important;border-radius:3px !important;white-space:nowrap !important;word-break:keep-all !important;}
+.dg-494-expedition-flow .is-off{color:#73716A !important;}
+.dg-494-expedition-flow .is-live{color:#5B7A4B !important;border-color:#5B7A4B !important;}
+.dg-494-expedition-flow .is-wait{color:#A6781F !important;border-color:#A6781F !important;}
+.dg-494-expedition-flow .is-key{color:#A9502F !important;border-color:#C6613F !important;}
+
+.dg-494-expedition-flow .ct{font-size:14px !important;font-weight:700 !important;line-height:1.45 !important;color:#141413 !important;word-break:keep-all !important;overflow-wrap:anywhere !important;}
+.dg-494-expedition-flow .cb{font-size:13px !important;line-height:1.65 !important;color:#5E5D59 !important;word-break:keep-all !important;}
+
+.dg-494-expedition-flow .gate{background:#F5EDE6 !important;border-color:#C6613F !important;}
+
+.dg-494-expedition-flow .loop{display:flex !important;flex-direction:column !important;gap:8px !important;padding:14px 16px 13px !important;background:#F5F3EC !important;border:1px solid #E8E6DC !important;border-radius:5px !important;}
+.dg-494-expedition-flow .loop .ct{font-size:15px !important;}
+.dg-494-expedition-flow .gauges{display:flex !important;align-items:flex-end !important;gap:8px !important;margin-top:2px !important;}
+.dg-494-expedition-flow .g{flex:1 1 0 !important;min-width:0 !important;}
+.dg-494-expedition-flow .gl{display:flex !important;align-items:baseline !important;justify-content:space-between !important;gap:4px !important;margin-bottom:4px !important;font-size:11px !important;color:#73716A !important;white-space:nowrap !important;}
+.dg-494-expedition-flow .gv{font-family:"JetBrains Mono",monospace !important;font-size:12px !important;font-weight:500 !important;color:#5B7A4B !important;}
+.dg-494-expedition-flow .cells{display:flex !important;gap:3px !important;height:9px !important;}
+.dg-494-expedition-flow .cell{flex:1 1 0 !important;min-width:0 !important;background:#F0EEE6 !important;border:1px solid #E8E6DC !important;border-radius:2px !important;}
+.dg-494-expedition-flow .cell.on{background:#5B7A4B !important;border-color:#5B7A4B !important;}
+.dg-494-expedition-flow .garrow{flex:0 0 10px !important;padding-bottom:1px !important;color:#D1CFC5 !important;font-size:12px !important;line-height:1 !important;}
+.dg-494-expedition-flow .garrow::before{content:"\2192" !important;}
+
+.dg-494-expedition-flow .loopfoot{display:flex !important;flex-wrap:wrap !important;align-items:center !important;gap:6px 10px !important;margin-top:4px !important;padding-top:9px !important;border-top:1px solid #E8E6DC !important;}
+.dg-494-expedition-flow .lf-t{font-size:12px !important;color:#87867F !important;word-break:keep-all !important;}
+.dg-494-expedition-flow .chips{display:flex !important;flex-wrap:wrap !important;gap:5px !important;}
+.dg-494-expedition-flow .chip{display:inline-flex !important;align-items:center !important;gap:4px !important;padding:3px 7px !important;font-size:12px !important;line-height:1.35 !important;color:#3D3D3A !important;background:#FFFFFF !important;border:1px solid #E8E6DC !important;border-radius:3px !important;word-break:keep-all !important;}
+.dg-494-expedition-flow .mono{font-family:"JetBrains Mono",monospace !important;font-size:11px !important;font-weight:500 !important;color:#5E5D59 !important;overflow-wrap:anywhere !important;}
+
+.dg-494-expedition-flow .locknote{display:flex !important;align-items:flex-start !important;gap:5px !important;margin-top:auto !important;padding-top:7px !important;border-top:1px dashed #D1CFC5 !important;}
+.dg-494-expedition-flow .locknote svg{flex:0 0 auto !important;margin-top:2px !important;display:block !important;}
+.dg-494-expedition-flow .lk{font-size:11px !important;line-height:1.55 !important;color:#A6781F !important;word-break:keep-all !important;}
+
+.dg-494-expedition-flow .loopback{display:flex !important;align-items:center !important;flex-wrap:wrap !important;gap:7px !important;margin-top:14px !important;padding:10px 12px !important;background:#F5F3EC !important;border:1px dashed #D1CFC5 !important;border-radius:5px !important;}
+.dg-494-expedition-flow .lb-arrow{font-size:15px !important;line-height:1 !important;color:#5B7A4B !important;}
+.dg-494-expedition-flow .lb-text{flex:1 1 220px !important;min-width:0 !important;font-size:13px !important;line-height:1.6 !important;color:#5E5D59 !important;word-break:keep-all !important;}
+.dg-494-expedition-flow .lb-chip{display:inline-block !important;padding:3px 8px !important;font-size:12px !important;font-weight:500 !important;line-height:1.35 !important;color:#5B7A4B !important;background:#FFFFFF !important;border:1px solid #5B7A4B !important;border-radius:3px !important;white-space:nowrap !important;word-break:keep-all !important;}
+
+.dg-494-expedition-flow .pill{width:fit-content !important;max-width:100% !important;margin:18px auto 0 !important;padding:10px 20px !important;font-size:14px !important;font-weight:500 !important;line-height:1.5 !important;color:#FFFFFF !important;background:#C6613F !important;border-radius:999px !important;text-align:center !important;word-break:keep-all !important;}
+
+@media (max-width:820px){
+  .dg-494-expedition-flow .board{padding:22px 20px !important;}
+  .dg-494-expedition-flow .title{font-size:20px !important;}
+  .dg-494-expedition-flow .row{flex-direction:column !important;gap:0 !important;}
+  .dg-494-expedition-flow .arrow{flex:0 0 auto !important;width:100% !important;height:16px !important;align-self:stretch !important;}
+  .dg-494-expedition-flow .arrow::before{content:"\2193" !important;}
+  .dg-494-expedition-flow .card{flex:0 0 auto !important;width:100% !important;min-height:0 !important;}
+}
+@media (max-width:520px){
+  .dg-494-expedition-flow .board{padding:18px 14px !important;}
+  .dg-494-expedition-flow .title{font-size:19px !important;}
+  .dg-494-expedition-flow .lede{font-size:13px !important;}
+  .dg-494-expedition-flow .loop{padding:12px !important;}
+  .dg-494-expedition-flow .gauges{gap:6px !important;}
+  .dg-494-expedition-flow .gl{font-size:10px !important;}
+  .dg-494-expedition-flow .gv{font-size:11px !important;}
+  .dg-494-expedition-flow .garrow{flex:0 0 8px !important;font-size:11px !important;}
+  .dg-494-expedition-flow .chip{font-size:11px !important;padding:3px 6px !important;}
+  .dg-494-expedition-flow .pill{font-size:13px !important;padding:9px 16px !important;border-radius:14px !important;}
+  .dg-494-expedition-flow .lb-text{flex:1 1 100% !important;}
+}
+</style>
+
+<div class="board">
+
+  <div class="head">
+    <div class="eyebrow">NCAIFinal · DAY58 · 보스원정</div>
+    <div class="title">보스원정 한 판은 시작부터 정산까지 아홉 단계로 이어집니다</div>
+    <div class="lede">별도 작전대 없이 필드 원정 포털 세 곳의 F 상호작용만으로 시작과 진행, 완료가 처리됩니다.</div>
+  </div>
+
+  <div class="band">
+    <div class="band-t">01–03 시작 준비</div>
+    <div class="band-rule"></div>
+  </div>
+  <div class="row">
+
+    <div class="card">
+      <div class="meta"><span class="num">01</span><span class="state is-off">― 닫힘</span></div>
+      <div class="ct">포털 세 곳이 닫혀 있습니다</div>
+      <div class="cb">보스는 판을 만들 때 이미 뽑혀 있지만, 이름은 「닫힘」으로 숨겨 둡니다.</div>
+    </div>
+
+    <span class="arrow" aria-hidden="true"></span>
+
+    <div class="card">
+      <div class="meta"><span class="num">02</span><span class="state is-key">열쇠 1</span></div>
+      <div class="ct">닫힌 포털에서 F를 누릅니다</div>
+      <div class="cb">시작 창에서 「보스원정 시작 · 열쇠 1」을 고르면 열쇠를 한 개 씁니다.</div>
+    </div>
+
+    <span class="arrow" aria-hidden="true"></span>
+
+    <div class="card">
+      <div class="meta"><span class="num">03</span><span class="state is-live">✓ 공개</span></div>
+      <div class="ct">배정 연출 뒤 포털이 열립니다</div>
+      <div class="cb">포털 세 곳이 활성화되고, 숨겨 둔 보스가 공개됩니다.</div>
+    </div>
+
+  </div>
+
+  <div class="band">
+    <div class="band-t">04 진행</div>
+    <div class="band-rule"></div>
+  </div>
+
+  <div class="loop">
+    <div class="meta"><span class="num">04</span><span class="state is-live">✓ 순서 자유</span></div>
+    <div class="ct">포털마다 보스 하나, 셋을 모두 봉인합니다</div>
+    <div class="cb">처치한 포털은 봉인되고 남은 보스는 한 단계 강해집니다. HUD 게이지와 포털 표식이 함께 바뀝니다.</div>
+
+    <div class="gauges">
+      <div class="g">
+        <div class="gl"><span>봉인</span><span class="gv">1/3</span></div>
+        <div class="cells"><span class="cell on"></span><span class="cell"></span><span class="cell"></span></div>
+      </div>
+      <span class="garrow" aria-hidden="true"></span>
+      <div class="g">
+        <div class="gl"><span>봉인</span><span class="gv">2/3</span></div>
+        <div class="cells"><span class="cell on"></span><span class="cell on"></span><span class="cell"></span></div>
+      </div>
+      <span class="garrow" aria-hidden="true"></span>
+      <div class="g">
+        <div class="gl"><span>봉인</span><span class="gv">3/3</span></div>
+        <div class="cells"><span class="cell on"></span><span class="cell on"></span><span class="cell on"></span></div>
+      </div>
+    </div>
+
+    <div class="loopfoot">
+      <div class="lf-t">현황판을 여는 세 곳 · 모두 같은 내용</div>
+      <div class="chips">
+        <span class="chip">HUD <span class="mono">[Tab]</span> 버튼</span>
+        <span class="chip">봉인 포털 <span class="mono">F</span></span>
+        <span class="chip">입장 창 「현황판」 버튼</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="band">
+    <div class="band-t">05–09 완료와 보고</div>
+    <div class="band-rule"></div>
+  </div>
+  <div class="row">
+
+    <div class="card">
+      <div class="meta"><span class="num">05</span><span class="state is-live">✓ 3/3</span></div>
+      <div class="ct">「보스원정 완료」 배너</div>
+      <div class="cb">세 번째 보스를 처치하면 완료 배너가 뜹니다.</div>
+    </div>
+
+    <span class="arrow" aria-hidden="true"></span>
+
+    <div class="card">
+      <div class="meta"><span class="num">06</span><span class="state is-off">― 수동</span></div>
+      <div class="ct">출구 포털로 직접 돌아갑니다</div>
+      <div class="cb">자동 귀환이 아니므로 출구 포털을 직접 통과합니다.</div>
+    </div>
+
+    <span class="arrow" aria-hidden="true"></span>
+
+    <div class="card">
+      <div class="meta"><span class="num">07</span><span class="state is-wait">― 보고 대기</span></div>
+      <div class="ct">세 포털에 빛 기둥이 섭니다</div>
+      <div class="cb">어느 포털에서든 F를 눌러 현황판의 「완료 보고」로 갑니다.</div>
+      <div class="locknote">
+        <svg width="12" height="13" viewBox="0 0 12 13" aria-hidden="true"><path d="M3 5V3.6A3 3 0 0 1 9 3.6V5" fill="none" stroke="#A6781F" stroke-width="1.4"/><rect x="1.6" y="5" width="8.8" height="6.6" rx="1.4" fill="#A6781F"/></svg>
+        <div class="lk">보고 전 다음 시작 불가 · 이어하기로도 건너뛸 수 없습니다</div>
+      </div>
+    </div>
+
+    <span class="arrow" aria-hidden="true"></span>
+
+    <div class="card gate">
+      <div class="meta"><span class="num">08</span><span class="state is-key">오브 필요</span></div>
+      <div class="ct">오브를 장착하고 보고합니다</div>
+      <div class="cb">현황판의 「완료 보고」를 실행하면 승리 정산으로 넘어갑니다.</div>
+    </div>
+
+    <span class="arrow" aria-hidden="true"></span>
+
+    <div class="card">
+      <div class="meta"><span class="num">09</span><span class="state is-live">✓ 정산</span></div>
+      <div class="ct">결과 화면에서 승리 정산</div>
+      <div class="cb">정산을 마쳐야 다음 보스원정을 시작할 수 있습니다.</div>
+    </div>
+
+  </div>
+
+  <div class="loopback">
+    <span class="lb-arrow" aria-hidden="true">←</span>
+    <span class="lb-text">승리 정산을 마치면 처음 「닫힘」 상태로 돌아갑니다.</span>
+    <span class="lb-chip">✓ 다음 원정 시작 가능</span>
+  </div>
+
+  <div class="pill">다음 원정은 완료 보고와 승리 정산을 마친 뒤에 열립니다.</div>
+
+</div>
+</div>

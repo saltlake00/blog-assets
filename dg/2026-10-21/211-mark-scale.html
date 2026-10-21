@@ -1,0 +1,419 @@
+<div class="dg-211-mark-scale"><style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&display=swap');
+
+.dg-211-mark-scale{
+  box-sizing:border-box !important;
+  max-width:960px !important;
+  margin:0 auto !important;
+  padding:28px 30px 30px !important;
+  background:#FFFFFF !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:12px !important;
+  font-family:'Noto Sans KR','Apple SD Gothic Neo',sans-serif !important;
+  color:#3D3D3A !important;
+  line-height:1.6 !important;
+  word-break:keep-all !important;
+}
+.dg-211-mark-scale div,
+.dg-211-mark-scale span{box-sizing:border-box !important;}
+
+.dg-211-mark-scale .dg-eyebrow{
+  display:inline-block !important;
+  padding:3px 8px !important;
+  border-radius:3px !important;
+  background:#F0EEE6 !important;
+  color:#5E5D59 !important;
+  font-size:11.5px !important;
+  font-weight:500 !important;
+  letter-spacing:0.04em !important;
+}
+.dg-211-mark-scale .dg-title{
+  margin-top:12px !important;
+  font-family:'Noto Serif KR',serif !important;
+  font-weight:700 !important;
+  font-size:22px !important;
+  line-height:1.45 !important;
+  color:#141413 !important;
+}
+.dg-211-mark-scale .dg-sub{
+  margin-top:8px !important;
+  font-size:13.5px !important;
+  line-height:1.6 !important;
+  color:#73716A !important;
+}
+
+.dg-211-mark-scale .dg-sec{
+  margin-top:24px !important;
+  padding-top:24px !important;
+  border-top:1px solid #E8E6DC !important;
+}
+.dg-211-mark-scale .dg-sec-label{
+  display:flex !important;
+  align-items:baseline !important;
+  gap:8px !important;
+  font-size:13px !important;
+  font-weight:700 !important;
+  color:#141413 !important;
+}
+.dg-211-mark-scale .dg-idx{
+  font-family:'JetBrains Mono',monospace !important;
+  font-size:11px !important;
+  font-weight:500 !important;
+  color:#B0AEA5 !important;
+}
+
+.dg-211-mark-scale .dg-wide{
+  display:grid !important;
+  grid-template-columns:78px 1fr 1fr !important;
+  column-gap:10px !important;
+  row-gap:8px !important;
+  margin-top:12px !important;
+}
+.dg-211-mark-scale .dg-row{display:contents !important;}
+.dg-211-mark-scale .dg-key{
+  padding-top:11px !important;
+  font-size:12px !important;
+  color:#87867F !important;
+}
+.dg-211-mark-scale .dg-colhead{
+  padding:8px 12px !important;
+  background:#F5F3EC !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:5px !important;
+  font-size:13px !important;
+  font-weight:700 !important;
+  color:#141413 !important;
+}
+.dg-211-mark-scale .dg-pr{
+  margin-left:6px !important;
+  font-family:'JetBrains Mono',monospace !important;
+  font-size:11px !important;
+  font-weight:500 !important;
+  color:#87867F !important;
+  overflow-wrap:anywhere !important;
+}
+.dg-211-mark-scale .dg-val{
+  padding:10px 12px !important;
+  background:#F5F3EC !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:5px !important;
+  font-size:13.5px !important;
+  line-height:1.55 !important;
+  color:#3D3D3A !important;
+}
+.dg-211-mark-scale .dg-note{
+  padding:4px 2px 0 !important;
+  font-size:12px !important;
+  line-height:1.55 !important;
+  color:#73716A !important;
+}
+.dg-211-mark-scale .dg-yes{
+  color:#5B7A4B !important;
+  font-weight:700 !important;
+}
+.dg-211-mark-scale .dg-no{
+  color:#B5402A !important;
+  font-weight:700 !important;
+}
+
+.dg-211-mark-scale .dg-stack{
+  display:none !important;
+  margin-top:12px !important;
+  gap:10px !important;
+}
+.dg-211-mark-scale .dg-card{
+  padding:14px 14px 12px !important;
+  background:#F5F3EC !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:5px !important;
+}
+.dg-211-mark-scale .dg-card-head{
+  padding-bottom:8px !important;
+  border-bottom:1px solid #E8E6DC !important;
+  font-size:13px !important;
+  font-weight:700 !important;
+  color:#141413 !important;
+}
+.dg-211-mark-scale .dg-item{margin-top:10px !important;}
+.dg-211-mark-scale .dg-item-k{
+  font-size:11.5px !important;
+  color:#87867F !important;
+}
+.dg-211-mark-scale .dg-item-v{
+  font-size:13.5px !important;
+  line-height:1.55 !important;
+  color:#3D3D3A !important;
+}
+.dg-211-mark-scale .dg-card .dg-note{
+  margin-top:10px !important;
+  padding:8px 0 0 !important;
+  border-top:1px dashed #D1CFC5 !important;
+}
+
+.dg-211-mark-scale .dg-formula{
+  display:inline-block !important;
+  margin-top:10px !important;
+  padding:4px 9px !important;
+  background:#F0EEE6 !important;
+  border-radius:3px !important;
+  font-family:'JetBrains Mono',monospace !important;
+  font-size:11.5px !important;
+  line-height:1.5 !important;
+  color:#5E5D59 !important;
+  overflow-wrap:anywhere !important;
+}
+.dg-211-mark-scale .dg-chart{margin-top:14px !important;}
+.dg-211-mark-scale .dg-bar-row{
+  display:grid !important;
+  grid-template-columns:48px 1fr 58px !important;
+  column-gap:10px !important;
+  align-items:center !important;
+  padding:4px 0 !important;
+}
+.dg-211-mark-scale .dg-bar-k{
+  font-size:12px !important;
+  color:#87867F !important;
+  white-space:nowrap !important;
+}
+.dg-211-mark-scale .dg-track{
+  height:12px !important;
+  background:#F0EEE6 !important;
+  border-radius:3px !important;
+  overflow:hidden !important;
+}
+.dg-211-mark-scale .dg-fill{
+  height:12px !important;
+  background:#5E5D59 !important;
+  border-radius:3px !important;
+}
+.dg-211-mark-scale .dg-fill-last{background:#C6613F !important;}
+.dg-211-mark-scale .dg-bar-v{
+  font-family:'JetBrains Mono',monospace !important;
+  font-size:12.5px !important;
+  font-weight:500 !important;
+  color:#73716A !important;
+  text-align:right !important;
+}
+.dg-211-mark-scale .dg-bar-v-last{
+  color:#A9502F !important;
+  font-weight:700 !important;
+}
+.dg-211-mark-scale .dg-w30{width:30% !important;}
+.dg-211-mark-scale .dg-w40{width:40% !important;}
+.dg-211-mark-scale .dg-w50{width:50% !important;}
+.dg-211-mark-scale .dg-w60{width:60% !important;}
+.dg-211-mark-scale .dg-w70{width:70% !important;}
+.dg-211-mark-scale .dg-w80{width:80% !important;}
+.dg-211-mark-scale .dg-w90{width:90% !important;}
+.dg-211-mark-scale .dg-w100{width:100% !important;}
+.dg-211-mark-scale .dg-axis{
+  display:grid !important;
+  grid-template-columns:48px 1fr 58px !important;
+  column-gap:10px !important;
+  margin-top:6px !important;
+  font-size:11px !important;
+  color:#B0AEA5 !important;
+}
+.dg-211-mark-scale .dg-axis-in{
+  display:flex !important;
+  justify-content:space-between !important;
+}
+.dg-211-mark-scale .dg-memo{
+  margin-top:14px !important;
+  padding:10px 12px !important;
+  background:#F5F3EC !important;
+  border-left:3px solid #D1CFC5 !important;
+  border-radius:5px !important;
+  font-size:12.5px !important;
+  line-height:1.6 !important;
+  color:#5E5D59 !important;
+}
+.dg-211-mark-scale .dg-memo-sub{
+  margin-top:4px !important;
+  font-size:12px !important;
+  color:#87867F !important;
+}
+
+.dg-211-mark-scale .dg-concl{
+  margin-top:24px !important;
+  padding:13px 20px !important;
+  background:#C6613F !important;
+  border-radius:999px !important;
+  font-size:14px !important;
+  line-height:1.55 !important;
+  color:#FFFFFF !important;
+  text-align:center !important;
+}
+
+@media (max-width:720px){
+  .dg-211-mark-scale{padding:22px 18px 24px !important;}
+  .dg-211-mark-scale .dg-wide{display:none !important;}
+  .dg-211-mark-scale .dg-stack{display:grid !important;}
+  .dg-211-mark-scale .dg-title{font-size:21px !important;}
+}
+
+@media (max-width:420px){
+  .dg-211-mark-scale{padding:18px 14px 20px !important;}
+  .dg-211-mark-scale .dg-title{font-size:19px !important;}
+  .dg-211-mark-scale .dg-bar-row,
+  .dg-211-mark-scale .dg-axis{
+    grid-template-columns:40px 1fr 52px !important;
+    column-gap:8px !important;
+  }
+  .dg-211-mark-scale .dg-bar-k{font-size:11.5px !important;}
+  .dg-211-mark-scale .dg-bar-v{font-size:11.5px !important;}
+  .dg-211-mark-scale .dg-concl{
+    border-radius:20px !important;
+    padding:12px 16px !important;
+    font-size:13px !important;
+    text-align:left !important;
+  }
+}
+</style>
+  <div class="dg-head">
+    <span class="dg-eyebrow">DAY58 · 섬광 창</span>
+    <div class="dg-title">섬광 창은 즉발 광선이 되고, 표식은 가시 수만큼 세집니다</div>
+    <div class="dg-sub">1차 투사체판이 아이스 스피어와 비슷해 재설계했습니다.</div>
+  </div>
+
+  <div class="dg-sec">
+    <div class="dg-sec-label"><span class="dg-idx">01</span><span>1차와 재설계 비교</span></div>
+
+    <div class="dg-wide">
+      <div class="dg-row">
+        <div class="dg-key"></div>
+        <div class="dg-colhead">1차 <span class="dg-pr">PR #571</span></div>
+        <div class="dg-colhead">재설계 <span class="dg-pr">PR #577</span></div>
+      </div>
+      <div class="dg-row">
+        <div class="dg-key">탄</div>
+        <div class="dg-val">18m 직선 고속탄 · 초당 120m</div>
+        <div class="dg-val">18m 즉발 광선 · 탄속 초당 20,000m</div>
+      </div>
+      <div class="dg-row">
+        <div class="dg-key">관통</div>
+        <div class="dg-val"><span class="dg-no">×</span> 없음</div>
+        <div class="dg-val"><span class="dg-yes">✓</span> 기본 [관통 2] 태그로 직선상의 적을 관통</div>
+      </div>
+      <div class="dg-row">
+        <div class="dg-key">역할</div>
+        <div class="dg-val">피해 22</div>
+        <div class="dg-val">표식 담당 보조기 · 피해 10 · 마나 10</div>
+      </div>
+      <div class="dg-row">
+        <div class="dg-key">표식</div>
+        <div class="dg-val">받는 피해 ×1.15 · 3초 · 중첩 없음</div>
+        <div class="dg-val">맞은 자리에 빛 가시가 꽂혀 쌓입니다(대상당 최대 8개). 가시 수만큼 배율이 커집니다.</div>
+      </div>
+      <div class="dg-row">
+        <div class="dg-key"></div>
+        <div class="dg-note">아이스 스피어(초당 100m · 모두 관통)와 비슷하다는 피드백</div>
+        <div class="dg-val" style="background:transparent !important; border:0 !important; padding:0 !important"></div>
+      </div>
+    </div>
+
+    <div class="dg-stack">
+      <div class="dg-card">
+        <div class="dg-card-head">1차 <span class="dg-pr">PR #571</span></div>
+        <div class="dg-item">
+          <div class="dg-item-k">탄</div>
+          <div class="dg-item-v">18m 직선 고속탄 · 초당 120m</div>
+        </div>
+        <div class="dg-item">
+          <div class="dg-item-k">관통</div>
+          <div class="dg-item-v"><span class="dg-no">×</span> 없음</div>
+        </div>
+        <div class="dg-item">
+          <div class="dg-item-k">역할</div>
+          <div class="dg-item-v">피해 22</div>
+        </div>
+        <div class="dg-item">
+          <div class="dg-item-k">표식</div>
+          <div class="dg-item-v">받는 피해 ×1.15 · 3초 · 중첩 없음</div>
+        </div>
+        <div class="dg-note">아이스 스피어(초당 100m · 모두 관통)와 비슷하다는 피드백</div>
+      </div>
+
+      <div class="dg-card">
+        <div class="dg-card-head">재설계 <span class="dg-pr">PR #577</span></div>
+        <div class="dg-item">
+          <div class="dg-item-k">탄</div>
+          <div class="dg-item-v">18m 즉발 광선 · 탄속 초당 20,000m</div>
+        </div>
+        <div class="dg-item">
+          <div class="dg-item-k">관통</div>
+          <div class="dg-item-v"><span class="dg-yes">✓</span> 기본 [관통 2] 태그로 직선상의 적을 관통</div>
+        </div>
+        <div class="dg-item">
+          <div class="dg-item-k">역할</div>
+          <div class="dg-item-v">표식 담당 보조기 · 피해 10 · 마나 10</div>
+        </div>
+        <div class="dg-item">
+          <div class="dg-item-k">표식</div>
+          <div class="dg-item-v">맞은 자리에 빛 가시가 꽂혀 쌓입니다(대상당 최대 8개). 가시 수만큼 배율이 커집니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dg-sec">
+    <div class="dg-sec-label"><span class="dg-idx">02</span><span>가시 수에 따른 받는 피해 배율</span></div>
+    <div class="dg-formula">1 + 0.15 + 0.05 × (가시 수 − 1)</div>
+
+    <div class="dg-chart">
+      <div class="dg-bar-row">
+        <div class="dg-bar-k">가시 1</div>
+        <div class="dg-track"><div class="dg-fill dg-w30"></div></div>
+        <div class="dg-bar-v">×1.15</div>
+      </div>
+      <div class="dg-bar-row">
+        <div class="dg-bar-k">가시 2</div>
+        <div class="dg-track"><div class="dg-fill dg-w40"></div></div>
+        <div class="dg-bar-v">×1.20</div>
+      </div>
+      <div class="dg-bar-row">
+        <div class="dg-bar-k">가시 3</div>
+        <div class="dg-track"><div class="dg-fill dg-w50"></div></div>
+        <div class="dg-bar-v">×1.25</div>
+      </div>
+      <div class="dg-bar-row">
+        <div class="dg-bar-k">가시 4</div>
+        <div class="dg-track"><div class="dg-fill dg-w60"></div></div>
+        <div class="dg-bar-v">×1.30</div>
+      </div>
+      <div class="dg-bar-row">
+        <div class="dg-bar-k">가시 5</div>
+        <div class="dg-track"><div class="dg-fill dg-w70"></div></div>
+        <div class="dg-bar-v">×1.35</div>
+      </div>
+      <div class="dg-bar-row">
+        <div class="dg-bar-k">가시 6</div>
+        <div class="dg-track"><div class="dg-fill dg-w80"></div></div>
+        <div class="dg-bar-v">×1.40</div>
+      </div>
+      <div class="dg-bar-row">
+        <div class="dg-bar-k">가시 7</div>
+        <div class="dg-track"><div class="dg-fill dg-w90"></div></div>
+        <div class="dg-bar-v">×1.45</div>
+      </div>
+      <div class="dg-bar-row">
+        <div class="dg-bar-k">가시 8</div>
+        <div class="dg-track"><div class="dg-fill dg-w100 dg-fill-last"></div></div>
+        <div class="dg-bar-v dg-bar-v-last">×1.50</div>
+      </div>
+
+      <div class="dg-axis">
+        <div></div>
+        <div class="dg-axis-in"><span>기준 ×1.00</span><span>최대 ×1.50</span></div>
+        <div></div>
+      </div>
+    </div>
+
+    <div class="dg-memo">
+      <div>가시는 배율 단계로, 섬광 창 직격으로만 쌓입니다. 표식이 끝나면 한꺼번에 사라집니다.</div>
+      <div class="dg-memo-sub">다른 주문이 적중하면 표식 시간만 갱신합니다.</div>
+    </div>
+  </div>
+
+  <div class="dg-concl">섬광 창은 표식 담당 보조기가 되어, 직격으로 가시를 쌓아 받는 피해를 최대 ×1.50까지 올립니다.</div>
+</div>
