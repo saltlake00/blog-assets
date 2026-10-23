@@ -1,315 +1,228 @@
 <div class="dg-obt-feedback-groups">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&family=JetBrains+Mono:wght@500&display=swap');
 .dg-obt-feedback-groups{
+  container-type:inline-size !important;
+  box-sizing:border-box !important;
   max-width:960px !important;
   margin:0 auto !important;
-  font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif !important;
-  font-size:14px !important;
-  line-height:1.5 !important;
+  font-family:'Noto Sans KR',-apple-system,'Malgun Gothic',sans-serif !important;
   color:#3D3D3A !important;
+  line-height:1.45 !important;
   word-break:keep-all !important;
-  text-align:left !important;
 }
-.dg-obt-feedback-groups div,
-.dg-obt-feedback-groups span{box-sizing:border-box !important;}
-.dg-obt-feedback-groups .dg-board{
+.dg-obt-feedback-groups .dg-panel{
+  box-sizing:border-box !important;
   background:#FFFFFF !important;
   border:1px solid #E8E6DC !important;
   border-radius:12px !important;
-  padding:24px !important;
+  padding:16px !important;
 }
-.dg-obt-feedback-groups .dg-eyebrow{
+.dg-obt-feedback-groups .dg-kicker{
   font-size:12px !important;
-  font-weight:500 !important;
-  letter-spacing:0.08em !important;
   color:#87867F !important;
-  line-height:1.5 !important;
+  letter-spacing:0.03em !important;
 }
 .dg-obt-feedback-groups .dg-title{
-  margin-top:7px !important;
+  margin-top:3px !important;
   font-family:'Noto Serif KR',serif !important;
+  font-weight:700 !important;
   font-size:22px !important;
-  font-weight:700 !important;
-  line-height:1.4 !important;
-  color:#141413 !important;
-  overflow-wrap:anywhere !important;
-}
-.dg-obt-feedback-groups .dg-sub{
-  margin-top:6px !important;
-  font-size:14px !important;
-  color:#5E5D59 !important;
-  line-height:1.6 !important;
-}
-.dg-obt-feedback-groups .dg-body{
-  margin-top:18px !important;
-  display:grid !important;
-  grid-template-columns:128px 24px minmax(0,1fr) !important;
-  column-gap:10px !important;
-  align-items:start !important;
-}
-.dg-obt-feedback-groups .dg-source{
-  background:#F5EDE6 !important;
-  border:1px solid #E8E6DC !important;
-  border-radius:5px !important;
-  padding:14px 12px !important;
-}
-.dg-obt-feedback-groups .dg-source-num{
-  font-family:'JetBrains Mono',monospace !important;
-  font-size:40px !important;
-  font-weight:500 !important;
-  line-height:1.1 !important;
-  color:#A9502F !important;
-}
-.dg-obt-feedback-groups .dg-source-label{
-  margin-top:4px !important;
-  font-size:13px !important;
-  font-weight:700 !important;
-  color:#3D3D3A !important;
-  line-height:1.4 !important;
-}
-.dg-obt-feedback-groups .dg-source-note{
-  margin-top:6px !important;
-  font-size:12px !important;
-  color:#87867F !important;
-  line-height:1.5 !important;
-}
-.dg-obt-feedback-groups .dg-arrow{
-  display:flex !important;
-  justify-content:center !important;
-  padding-top:38px !important;
-  color:#D1CFC5 !important;
-}
-.dg-obt-feedback-groups .dg-cols{
-  display:grid !important;
-  grid-template-columns:1.05fr 1.2fr 0.9fr !important;
-  gap:10px !important;
-  min-width:0 !important;
-}
-.dg-obt-feedback-groups .dg-col{
-  background:#F5F3EC !important;
-  border:1px solid #E8E6DC !important;
-  border-radius:5px !important;
-  padding:12px !important;
-  min-width:0 !important;
-}
-.dg-obt-feedback-groups .dg-colhead{
-  display:flex !important;
-  align-items:center !important;
-  gap:6px !important;
-}
-.dg-obt-feedback-groups .dg-coltitle{
-  font-size:16px !important;
-  font-weight:700 !important;
   line-height:1.35 !important;
   color:#141413 !important;
 }
-.dg-obt-feedback-groups .dg-count{
-  margin-left:auto !important;
-  flex:none !important;
-  font-size:12px !important;
-  font-weight:700 !important;
-  line-height:1.5 !important;
-  color:#73716A !important;
-  background:#FFFFFF !important;
-  border:1px solid #D1CFC5 !important;
-  border-radius:3px !important;
-  padding:1px 6px !important;
-}
-.dg-obt-feedback-groups .dg-colnote{
-  margin-top:4px !important;
-  font-size:12px !important;
-  line-height:1.5 !important;
-  color:#87867F !important;
-}
-.dg-obt-feedback-groups .dg-gcard{
-  margin-top:8px !important;
-  background:#FFFFFF !important;
-  border:1px solid #E8E6DC !important;
-  border-radius:5px !important;
-  padding:8px 9px !important;
-}
-.dg-obt-feedback-groups .dg-gtop{
+.dg-obt-feedback-groups .dg-accent{color:#A9502F !important;}
+.dg-obt-feedback-groups .dg-arrow{color:#B0AEA5 !important;font-weight:400 !important;}
+.dg-obt-feedback-groups .dg-sec{margin-top:14px !important;}
+.dg-obt-feedback-groups .dg-sec-head{
   display:flex !important;
   align-items:baseline !important;
+  gap:8px !important;
   flex-wrap:wrap !important;
-  gap:6px !important;
 }
-.dg-obt-feedback-groups .dg-gnum{
-  font-family:'JetBrains Mono',monospace !important;
-  font-size:12px !important;
-  font-weight:500 !important;
-  line-height:1.4 !important;
-  color:#73716A !important;
-}
-.dg-obt-feedback-groups .dg-gtopic{
-  font-size:13px !important;
+.dg-obt-feedback-groups .dg-sec-name{
+  font-size:16px !important;
   font-weight:700 !important;
-  line-height:1.4 !important;
-  color:#3D3D3A !important;
+  color:#141413 !important;
+}
+.dg-obt-feedback-groups .dg-sec-sub{
+  font-size:12px !important;
+  color:#87867F !important;
+}
+.dg-obt-feedback-groups .dg-g4{
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:8px !important;
+  margin-top:8px !important;
+}
+.dg-obt-feedback-groups .dg-card{
+  box-sizing:border-box !important;
+  background:#F5F3EC !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:5px !important;
+  padding:9px 10px !important;
+}
+.dg-obt-feedback-groups .dg-card-top{
+  display:flex !important;
+  align-items:baseline !important;
+  gap:6px !important;
+  flex-wrap:wrap !important;
+}
+.dg-obt-feedback-groups .dg-num{
+  font-family:'JetBrains Mono',monospace !important;
+  font-weight:500 !important;
+  font-size:12px !important;
+  color:#5E5D59 !important;
+  overflow-wrap:anywhere !important;
+}
+.dg-obt-feedback-groups .dg-topic{
+  font-size:14px !important;
+  font-weight:500 !important;
+  color:#141413 !important;
 }
 .dg-obt-feedback-groups .dg-chips{
   display:flex !important;
   flex-wrap:wrap !important;
   gap:4px !important;
-  margin-top:6px !important;
+  margin-top:7px !important;
 }
 .dg-obt-feedback-groups .dg-chip{
+  box-sizing:border-box !important;
+  display:inline-block !important;
   font-family:'JetBrains Mono',monospace !important;
-  font-size:12px !important;
-  line-height:1.6 !important;
-  color:#5E5D59 !important;
-  background:#F0EEE6 !important;
-  border:1px solid #E8E6DC !important;
+  font-size:11px !important;
+  line-height:1 !important;
+  padding:4px 6px !important;
   border-radius:3px !important;
-  padding:0 4px !important;
-}
-.dg-obt-feedback-groups .dg-cause{
-  margin-top:7px !important;
-  padding-top:6px !important;
-  border-top:1px dashed #D1CFC5 !important;
-  font-size:12px !important;
-  line-height:1.5 !important;
-  color:#73716A !important;
-}
-.dg-obt-feedback-groups .dg-row{
-  display:grid !important;
-  grid-template-columns:44px minmax(0,1fr) auto !important;
-  gap:2px 6px !important;
-  align-items:start !important;
-  padding:5px 0 !important;
-  border-bottom:1px solid #E8E6DC !important;
-}
-.dg-obt-feedback-groups .dg-row:last-child{
-  border-bottom:0 !important;
-}
-.dg-obt-feedback-groups .dg-rownum{
-  font-family:'JetBrains Mono',monospace !important;
-  font-size:12px !important;
-  line-height:1.5 !important;
-  color:#73716A !important;
-}
-.dg-obt-feedback-groups .dg-rowname{
-  font-size:13px !important;
-  line-height:1.45 !important;
-  color:#3D3D3A !important;
-  overflow-wrap:anywhere !important;
-}
-.dg-obt-feedback-groups .dg-rowfb{
-  font-family:'JetBrains Mono',monospace !important;
-  font-size:12px !important;
-  line-height:1.5 !important;
-  color:#87867F !important;
-  text-align:right !important;
-}
-.dg-obt-feedback-groups .dg-sum{
-  margin-top:14px !important;
   background:#FFFFFF !important;
   border:1px solid #E8E6DC !important;
-  border-radius:5px !important;
-  padding:8px 10px !important;
+  color:#5E5D59 !important;
+}
+.dg-obt-feedback-groups .dg-note{
+  margin-top:6px !important;
+  padding-left:8px !important;
+  border-left:2px solid #D1CFC5 !important;
   font-size:12px !important;
-  line-height:1.6 !important;
+  line-height:1.4 !important;
   color:#73716A !important;
 }
-.dg-obt-feedback-groups .dg-sum-strong{
-  margin-right:8px !important;
+.dg-obt-feedback-groups .dg-row2{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) 216px !important;
+  gap:10px !important;
+  margin-top:12px !important;
+}
+.dg-obt-feedback-groups .dg-block{
+  box-sizing:border-box !important;
+  border-radius:5px !important;
+  padding:10px !important;
+}
+.dg-obt-feedback-groups .dg-block-new{
+  background:#F5EDE6 !important;
+  border:1px solid #E8E6DC !important;
+}
+.dg-obt-feedback-groups .dg-block-old{
+  background:#F5F3EC !important;
+  border:1px solid #E8E6DC !important;
+}
+.dg-obt-feedback-groups .dg-block-head{
+  display:flex !important;
+  align-items:baseline !important;
+  gap:7px !important;
+  flex-wrap:wrap !important;
+}
+.dg-obt-feedback-groups .dg-block-name{
   font-size:14px !important;
   font-weight:700 !important;
   color:#141413 !important;
 }
-.dg-obt-feedback-groups .dg-memo{
+.dg-obt-feedback-groups .dg-block-sub{
+  font-size:11.5px !important;
+  color:#73716A !important;
+}
+.dg-obt-feedback-groups .dg-g10{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:4px 8px !important;
   margin-top:8px !important;
-  font-size:12px !important;
-  line-height:1.5 !important;
-  color:#87867F !important;
 }
-.dg-obt-feedback-groups .dg-pill{
-  margin-top:14px !important;
-  display:inline-block !important;
-  max-width:100% !important;
-  background:#C6613F !important;
-  color:#FFFFFF !important;
-  border-radius:999px !important;
-  padding:10px 18px !important;
-  font-size:14px !important;
+.dg-obt-feedback-groups .dg-item{
+  box-sizing:border-box !important;
+  display:flex !important;
+  align-items:baseline !important;
+  gap:5px !important;
+  background:#FFFFFF !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:5px !important;
+  padding:5px 7px !important;
+  line-height:1.3 !important;
+}
+.dg-obt-feedback-groups .dg-item-num{
+  flex:none !important;
+  font-family:'JetBrains Mono',monospace !important;
   font-weight:500 !important;
-  line-height:1.45 !important;
+  font-size:11.5px !important;
+  color:#73716A !important;
+  overflow-wrap:anywhere !important;
 }
-@media (max-width:900px){
-  .dg-obt-feedback-groups .dg-board{
-    padding:18px !important;
-  }
-  .dg-obt-feedback-groups .dg-body{
-    grid-template-columns:1fr !important;
-  }
-  .dg-obt-feedback-groups .dg-source{
-    display:flex !important;
-    align-items:baseline !important;
-    flex-wrap:wrap !important;
-    gap:8px !important;
-    padding:10px 12px !important;
-  }
-  .dg-obt-feedback-groups .dg-source-num{
-    font-size:28px !important;
-  }
-  .dg-obt-feedback-groups .dg-source-label{
-    margin-top:0 !important;
-  }
-  .dg-obt-feedback-groups .dg-source-note{
-    margin-top:0 !important;
-    margin-left:auto !important;
-  }
-  .dg-obt-feedback-groups .dg-arrow{
-    padding:8px 0 !important;
-  }
-  .dg-obt-feedback-groups .dg-arrow svg{
-    transform:rotate(90deg) !important;
-  }
-  .dg-obt-feedback-groups .dg-cols{
-    grid-template-columns:1fr !important;
-    gap:10px !important;
-  }
+.dg-obt-feedback-groups .dg-item-name{
+  flex:1 1 auto !important;
+  min-width:0 !important;
+  font-size:13px !important;
+  color:#3D3D3A !important;
 }
-@media (max-width:520px){
-  .dg-obt-feedback-groups .dg-board{
-    padding:14px !important;
-  }
-  .dg-obt-feedback-groups .dg-pill{
-    padding:9px 14px !important;
-  }
+.dg-obt-feedback-groups .dg-item-fb{
+  flex:none !important;
+  font-family:'JetBrains Mono',monospace !important;
+  font-size:11px !important;
+  color:#87867F !important;
+  overflow-wrap:anywhere !important;
+}
+.dg-obt-feedback-groups .dg-old{
+  display:flex !important;
+  align-items:baseline !important;
+  gap:4px !important;
+  flex-wrap:wrap !important;
+  padding:6px 0 !important;
+  border-bottom:1px solid #E8E6DC !important;
+  font-size:12.5px !important;
+  line-height:1.35 !important;
+}
+.dg-obt-feedback-groups .dg-old:last-child{
+  border-bottom:none !important;
+  padding-bottom:0 !important;
+}
+.dg-obt-feedback-groups .dg-foot{
+  margin-top:10px !important;
+  font-size:12px !important;
+  line-height:1.4 !important;
+  color:#73716A !important;
+}
+@container (max-width:560px){
+  .dg-obt-feedback-groups .dg-g4{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}
+  .dg-obt-feedback-groups .dg-row2{grid-template-columns:minmax(0,1fr) !important;}
+  .dg-obt-feedback-groups .dg-g10{grid-template-columns:minmax(0,1fr) !important;}
+  .dg-obt-feedback-groups .dg-title{font-size:20px !important;}
+}
+@container (max-width:400px){
+  .dg-obt-feedback-groups .dg-panel{padding:12px !important;}
+  .dg-obt-feedback-groups .dg-title{font-size:19px !important;}
 }
 </style>
-<div class="dg-board">
-  <div class="dg-eyebrow">DAY60 · 0.3.0-obt 첫 빌드 피드백</div>
-  <div class="dg-title">피드백 23건을 원인별로 묶어 새 이슈 14개로 정리했습니다</div>
-  <div class="dg-sub">기록표 행 번호를 그대로 달아, 어떤 피드백이 어느 이슈로 갔는지 바로 보이게 했습니다.</div>
+  <div class="dg-panel">
+    <div class="dg-kicker">DAY60 · 0.3.0-obt 첫 빌드 · 피드백 기록표 23행</div>
+    <div class="dg-title">피드백 23건 <span class="dg-arrow">→</span> 새 이슈 <span class="dg-accent">14개</span></div>
 
-  <div class="dg-body">
-    <div class="dg-source">
-      <div class="dg-source-num">23</div>
-      <div class="dg-source-label">피드백</div>
-      <div class="dg-source-note">기록표 행 번호 1~23</div>
-    </div>
-
-    <div class="dg-arrow" aria-hidden="true">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-        <path d="M4 12h15M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-
-    <div class="dg-cols">
-      <div class="dg-col">
-        <div class="dg-colhead">
-          <div class="dg-coltitle">묶은 이슈</div>
-          <div class="dg-count">4</div>
-        </div>
-        <div class="dg-colnote">원인이 같은 피드백을 한 이슈로 묶었습니다.</div>
-
-        <div class="dg-gcard">
-          <div class="dg-gtop">
-            <span class="dg-gnum">#627</span>
-            <span class="dg-gtopic">화면 비율·해상도</span>
+    <div class="dg-sec">
+      <div class="dg-sec-head">
+        <span class="dg-sec-name">묶은 이슈 4</span>
+        <span class="dg-sec-sub">원인이 같은 것끼리 · 칩은 피드백 번호</span>
+      </div>
+      <div class="dg-g4">
+        <div class="dg-card">
+          <div class="dg-card-top">
+            <span class="dg-num">#627</span>
+            <span class="dg-topic">화면 비율·해상도</span>
           </div>
           <div class="dg-chips">
             <span class="dg-chip">3</span>
@@ -317,13 +230,11 @@
             <span class="dg-chip">18</span>
             <span class="dg-chip">22</span>
           </div>
-          <div class="dg-cause">공통 원인 — UI 기준 해상도가 1280×720이라, 1920×1080에서는 1.5배로 커집니다.</div>
         </div>
-
-        <div class="dg-gcard">
-          <div class="dg-gtop">
-            <span class="dg-gnum">#624</span>
-            <span class="dg-gtopic">랭킹 던전</span>
+        <div class="dg-card">
+          <div class="dg-card-top">
+            <span class="dg-num">#624</span>
+            <span class="dg-topic">랭킹 던전</span>
           </div>
           <div class="dg-chips">
             <span class="dg-chip">13</span>
@@ -331,22 +242,20 @@
             <span class="dg-chip">22</span>
           </div>
         </div>
-
-        <div class="dg-gcard">
-          <div class="dg-gtop">
-            <span class="dg-gnum">#625</span>
-            <span class="dg-gtopic">몬스터</span>
+        <div class="dg-card">
+          <div class="dg-card-top">
+            <span class="dg-num">#625</span>
+            <span class="dg-topic">몬스터</span>
           </div>
           <div class="dg-chips">
             <span class="dg-chip">14</span>
             <span class="dg-chip">21</span>
           </div>
         </div>
-
-        <div class="dg-gcard">
-          <div class="dg-gtop">
-            <span class="dg-gnum">#628</span>
-            <span class="dg-gtopic">필드 밀도</span>
+        <div class="dg-card">
+          <div class="dg-card-top">
+            <span class="dg-num">#628</span>
+            <span class="dg-topic">필드 밀도</span>
           </div>
           <div class="dg-chips">
             <span class="dg-chip">20</span>
@@ -354,112 +263,91 @@
           </div>
         </div>
       </div>
+      <div class="dg-note">#627 공통 원인: UI 기준 해상도 1280×720 — 1920×1080에서 1.5배로 커짐</div>
+    </div>
 
-      <div class="dg-col">
-        <div class="dg-colhead">
-          <div class="dg-coltitle">새 이슈</div>
-          <div class="dg-count">10</div>
+    <div class="dg-row2">
+      <div class="dg-block dg-block-new">
+        <div class="dg-block-head">
+          <span class="dg-block-name">새 이슈 10</span>
+          <span class="dg-block-sub">하나씩 만든 이슈</span>
         </div>
-        <div class="dg-colnote">피드백 한 건씩 따로 만든 이슈입니다.</div>
-
-        <div class="dg-row">
-          <span class="dg-rownum">#615</span>
-          <span class="dg-rowname">일시정지 버튼 글자 정렬</span>
-          <span class="dg-rowfb">2</span>
-        </div>
-        <div class="dg-row">
-          <span class="dg-rownum">#616</span>
-          <span class="dg-rowname">이름 화면 배경 깜빡임</span>
-          <span class="dg-rowfb">1</span>
-        </div>
-        <div class="dg-row">
-          <span class="dg-rownum">#617</span>
-          <span class="dg-rowname">보조 주문 장전</span>
-          <span class="dg-rowfb">8</span>
-        </div>
-        <div class="dg-row">
-          <span class="dg-rownum">#618</span>
-          <span class="dg-rowname">정산 버튼 하나·큰 Esc</span>
-          <span class="dg-rowfb">3</span>
-        </div>
-        <div class="dg-row">
-          <span class="dg-rownum">#619</span>
-          <span class="dg-rowname">튜토리얼 세공 단계 강조</span>
-          <span class="dg-rowfb">4</span>
-        </div>
-        <div class="dg-row">
-          <span class="dg-rownum">#620</span>
-          <span class="dg-rowname">오브 탭 내부 ID 노출</span>
-          <span class="dg-rowfb">5</span>
-        </div>
-        <div class="dg-row">
-          <span class="dg-rownum">#621</span>
-          <span class="dg-rowname">바닥 마법진 깜빡임</span>
-          <span class="dg-rowfb">9</span>
-        </div>
-        <div class="dg-row">
-          <span class="dg-rownum">#622</span>
-          <span class="dg-rowname">질주 중 공격</span>
-          <span class="dg-rowfb">10</span>
-        </div>
-        <div class="dg-row">
-          <span class="dg-rownum">#623</span>
-          <span class="dg-rowname">보스 처치 뒤 필드 이동 렉</span>
-          <span class="dg-rowfb">12</span>
-        </div>
-        <div class="dg-row">
-          <span class="dg-rownum">#626</span>
-          <span class="dg-rowname">지도 포털 아이콘·줌아웃·화면 밖 플레이어·군락지</span>
-          <span class="dg-rowfb">15~17, 20</span>
+        <div class="dg-g10">
+          <div class="dg-item">
+            <span class="dg-item-num">#615</span>
+            <span class="dg-item-name">일시정지 버튼 글자 정렬</span>
+            <span class="dg-item-fb">(2)</span>
+          </div>
+          <div class="dg-item">
+            <span class="dg-item-num">#616</span>
+            <span class="dg-item-name">이름 화면 배경 깜빡임</span>
+            <span class="dg-item-fb">(1)</span>
+          </div>
+          <div class="dg-item">
+            <span class="dg-item-num">#617</span>
+            <span class="dg-item-name">보조 주문 장전</span>
+            <span class="dg-item-fb">(8)</span>
+          </div>
+          <div class="dg-item">
+            <span class="dg-item-num">#618</span>
+            <span class="dg-item-name">정산 버튼·큰 Esc</span>
+            <span class="dg-item-fb">(3)</span>
+          </div>
+          <div class="dg-item">
+            <span class="dg-item-num">#619</span>
+            <span class="dg-item-name">튜토리얼 세공 강조</span>
+            <span class="dg-item-fb">(4)</span>
+          </div>
+          <div class="dg-item">
+            <span class="dg-item-num">#620</span>
+            <span class="dg-item-name">오브 탭 내부 ID 노출</span>
+            <span class="dg-item-fb">(5)</span>
+          </div>
+          <div class="dg-item">
+            <span class="dg-item-num">#621</span>
+            <span class="dg-item-name">바닥 마법진 깜빡임</span>
+            <span class="dg-item-fb">(9)</span>
+          </div>
+          <div class="dg-item">
+            <span class="dg-item-num">#622</span>
+            <span class="dg-item-name">질주 중 공격</span>
+            <span class="dg-item-fb">(10)</span>
+          </div>
+          <div class="dg-item">
+            <span class="dg-item-num">#623</span>
+            <span class="dg-item-name">보스 처치 뒤 이동 렉</span>
+            <span class="dg-item-fb">(12)</span>
+          </div>
+          <div class="dg-item">
+            <span class="dg-item-num">#626</span>
+            <span class="dg-item-name">지도 포털·줌아웃 등</span>
+            <span class="dg-item-fb">(15~17, 20)</span>
+          </div>
         </div>
       </div>
 
-      <div class="dg-col">
-        <div class="dg-colhead">
-          <div class="dg-coltitle">기존 이슈 댓글</div>
-          <div class="dg-count">4건</div>
+      <div class="dg-block dg-block-old">
+        <div class="dg-block-head">
+          <span class="dg-block-name">기존 이슈 댓글 4건</span>
         </div>
-        <div class="dg-colnote">이미 있던 이슈에 피드백을 덧붙였습니다.</div>
-
-        <div class="dg-gcard">
-          <div class="dg-gtop">
-            <span class="dg-gnum">#521</span>
-            <span class="dg-gtopic">마법책 오브 탭</span>
-          </div>
-          <div class="dg-chips">
-            <span class="dg-chip">6</span>
-            <span class="dg-chip">7</span>
-          </div>
+        <div class="dg-old">
+          <span class="dg-item-num">#521</span>
+          <span class="dg-item-name">마법책 오브 탭</span>
+          <span class="dg-item-fb">(6, 7)</span>
         </div>
-
-        <div class="dg-gcard">
-          <div class="dg-gtop">
-            <span class="dg-gnum">#227</span>
-            <span class="dg-gtopic">떠 있는 보스 조준</span>
-          </div>
-          <div class="dg-chips">
-            <span class="dg-chip">11</span>
-          </div>
+        <div class="dg-old">
+          <span class="dg-item-num">#227</span>
+          <span class="dg-item-name">떠 있는 보스 조준</span>
+          <span class="dg-item-fb">(11)</span>
         </div>
-
-        <div class="dg-gcard">
-          <div class="dg-gtop">
-            <span class="dg-gnum">#451</span>
-            <span class="dg-gtopic">나무 LOD 팝핑</span>
-          </div>
-          <div class="dg-chips">
-            <span class="dg-chip">19</span>
-          </div>
+        <div class="dg-old">
+          <span class="dg-item-num">#451</span>
+          <span class="dg-item-name">나무 LOD 팝핑</span>
+          <span class="dg-item-fb">(19)</span>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="dg-sum">
-    <span class="dg-sum-strong">새 이슈 합계 14개</span>
-    <span>묶은 이슈 4개 + 하나씩 만든 이슈 10개</span>
+    <div class="dg-foot">한 피드백이 두 이슈에 걸치면 양쪽에 표시했습니다(예: 3, 15, 20, 22).</div>
   </div>
-  <div class="dg-memo">한 피드백이 두 이슈에 걸치면 양쪽에 표시했습니다. 예: 3, 15, 20, 22.</div>
-  <div class="dg-pill">피드백 23건이 새 이슈 14개와 기존 이슈 댓글로 모두 정리됐습니다.</div>
-</div>
 </div>
