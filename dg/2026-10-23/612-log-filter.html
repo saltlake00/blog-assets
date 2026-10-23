@@ -1,0 +1,289 @@
+<div class="dg-612-log-filter">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&display=swap');
+.dg-612-log-filter,.dg-612-log-filter *{box-sizing:border-box !important;}
+.dg-612-log-filter{
+  max-width:960px !important;
+  margin:0 auto !important;
+  padding:16px 12px 20px !important;
+  background:#FAF9F5 !important;
+  color:#3D3D3A !important;
+  font-family:'Noto Sans KR','Malgun Gothic',sans-serif !important;
+  font-size:14px !important;
+  line-height:1.6 !important;
+  word-break:keep-all !important;
+}
+.dg-612-log-filter .dg-sheet{
+  background:#FFFFFF !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:12px !important;
+  padding:24px !important;
+}
+.dg-612-log-filter .dg-title{
+  font-family:'Noto Serif KR',Georgia,serif !important;
+  font-size:22px !important;
+  font-weight:700 !important;
+  line-height:1.4 !important;
+  color:#141413 !important;
+  word-break:keep-all !important;
+}
+.dg-612-log-filter .dg-lede{
+  margin-top:8px !important;
+  font-size:14px !important;
+  line-height:1.65 !important;
+  color:#5E5D59 !important;
+  word-break:keep-all !important;
+}
+.dg-612-log-filter .dg-table{
+  margin-top:20px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:8px !important;
+}
+.dg-612-log-filter .dg-row{
+  display:grid !important;
+  grid-template-columns:minmax(0,2.15fr) minmax(0,0.95fr) minmax(0,1.15fr) !important;
+  gap:8px !important;
+  align-items:stretch !important;
+}
+.dg-612-log-filter .dg-h{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:4px !important;
+  min-width:0 !important;
+  padding:0 2px 6px !important;
+  font-size:13px !important;
+  font-weight:700 !important;
+  line-height:1.4 !important;
+  color:#3D3D3A !important;
+  word-break:keep-all !important;
+}
+.dg-612-log-filter .dg-h-note{
+  font-size:12px !important;
+  font-weight:400 !important;
+  line-height:1.5 !important;
+  color:#73716A !important;
+  word-break:keep-all !important;
+}
+.dg-612-log-filter .dg-h-after .dg-h-note{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  gap:4px !important;
+  align-items:center !important;
+}
+.dg-612-log-filter .dg-step{
+  display:inline-block !important;
+  padding:2px 5px !important;
+  background:#F0EEE6 !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:3px !important;
+  font-size:12px !important;
+  line-height:1.4 !important;
+  color:#5E5D59 !important;
+  overflow-wrap:anywhere !important;
+}
+.dg-612-log-filter .dg-arrow{
+  font-size:12px !important;
+  line-height:1 !important;
+  color:#B0AEA5 !important;
+}
+.dg-612-log-filter .dg-log{
+  display:block !important;
+  min-width:0 !important;
+  padding:10px 12px !important;
+  background:#F5F3EC !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:5px !important;
+  font-family:'JetBrains Mono',Consolas,monospace !important;
+  font-size:12px !important;
+  line-height:1.55 !important;
+  color:#3D3D3A !important;
+  word-break:keep-all !important;
+  overflow-wrap:anywhere !important;
+}
+.dg-612-log-filter .dg-em{
+  color:#B5402A !important;
+  font-weight:700 !important;
+}
+.dg-612-log-filter .dg-mark{
+  color:#87867F !important;
+  font-weight:400 !important;
+}
+.dg-612-log-filter .dg-v{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:3px !important;
+  min-width:0 !important;
+  min-height:46px !important;
+  padding:8px 6px !important;
+  background:#F5F3EC !important;
+  border:1px solid #E8E6DC !important;
+  border-left:3px solid #D1CFC5 !important;
+  border-radius:5px !important;
+  text-align:center !important;
+}
+.dg-612-log-filter .dg-v.is-fail{
+  border-left-color:#A6781F !important;
+}
+.dg-612-log-filter .dg-v.is-pass{
+  border-left-color:#5B7A4B !important;
+}
+.dg-612-log-filter .dg-chip{
+  font-size:13px !important;
+  font-weight:700 !important;
+  line-height:1.4 !important;
+  word-break:keep-all !important;
+}
+.dg-612-log-filter .dg-v.is-fail .dg-chip{
+  color:#A6781F !important;
+}
+.dg-612-log-filter .dg-v.is-pass .dg-chip{
+  color:#5B7A4B !important;
+}
+.dg-612-log-filter .dg-v.is-changed{
+  background:#F5EDE6 !important;
+  border:1.5px solid #C6613F !important;
+  border-left:3px solid #C6613F !important;
+}
+.dg-612-log-filter .dg-tag{
+  font-size:12px !important;
+  font-weight:700 !important;
+  line-height:1.3 !important;
+  color:#A9502F !important;
+  word-break:keep-all !important;
+}
+.dg-612-log-filter .dg-foot{
+  margin-top:18px !important;
+  padding-top:12px !important;
+  border-top:1px solid #E8E6DC !important;
+  font-size:12px !important;
+  line-height:1.7 !important;
+  color:#73716A !important;
+  word-break:keep-all !important;
+}
+.dg-612-log-filter .dg-foot-line{
+  margin-top:2px !important;
+}
+.dg-612-log-filter .dg-mono{
+  font-family:'JetBrains Mono',Consolas,monospace !important;
+  font-size:12px !important;
+  color:#5E5D59 !important;
+  overflow-wrap:anywhere !important;
+}
+.dg-612-log-filter .dg-foot-note{
+  margin-top:4px !important;
+  font-size:12px !important;
+  line-height:1.6 !important;
+  color:#87867F !important;
+  word-break:keep-all !important;
+}
+.dg-612-log-filter .dg-pill-wrap{
+  display:flex !important;
+  margin-top:16px !important;
+}
+.dg-612-log-filter .dg-pill{
+  display:inline-block !important;
+  padding:10px 18px !important;
+  background:#C6613F !important;
+  border-radius:999px !important;
+  color:#FFFFFF !important;
+  font-size:14px !important;
+  font-weight:700 !important;
+  line-height:1.4 !important;
+  word-break:keep-all !important;
+}
+@media (max-width:720px){
+  .dg-612-log-filter{
+    padding:12px 10px 16px !important;
+  }
+  .dg-612-log-filter .dg-sheet{
+    padding:18px 16px !important;
+  }
+  .dg-612-log-filter .dg-row{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+  }
+  .dg-612-log-filter .dg-log{
+    grid-column:1 / -1 !important;
+  }
+  .dg-612-log-filter .dg-head .dg-h:first-child{
+    grid-column:1 / -1 !important;
+    padding-bottom:0 !important;
+  }
+}
+@media (max-width:400px){
+  .dg-612-log-filter{
+    padding:10px 8px 14px !important;
+  }
+  .dg-612-log-filter .dg-sheet{
+    padding:14px 12px !important;
+  }
+  .dg-612-log-filter .dg-lede{
+    font-size:13px !important;
+  }
+  .dg-612-log-filter .dg-chip{
+    font-size:12px !important;
+  }
+}
+</style>
+<div class="dg-sheet">
+  <div class="dg-title">같은 로그 줄, 판정만 바뀝니다</div>
+  <div class="dg-lede">수정 전에는 경로에 들어간 Error까지 실패로 읽었습니다. 수정 뒤에는 진짜 오류 줄만 실패로 남습니다.</div>
+
+  <div class="dg-table">
+    <div class="dg-row dg-head">
+      <div class="dg-h">로그 줄</div>
+      <div class="dg-h">
+        <span>수정 전</span>
+        <span class="dg-h-note">줄 전체에서 단어 error 검색</span>
+      </div>
+      <div class="dg-h dg-h-after">
+        <span>수정 후</span>
+        <span class="dg-h-note">
+          <span class="dg-step">경로·파일 이름 토큰 지움</span>
+          <span class="dg-arrow" aria-hidden="true">→</span>
+          <span class="dg-step">단어 error 검색</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="dg-row">
+      <div class="dg-log">Start importing …/icons/<span class="dg-em">Error</span>.png using Guid(…)</div>
+      <div class="dg-v is-fail"><span class="dg-chip">× 실패</span></div>
+      <div class="dg-v is-pass is-changed">
+        <span class="dg-tag">판정 바뀜</span>
+        <span class="dg-chip">✓ 통과</span>
+      </div>
+    </div>
+
+    <div class="dg-row">
+      <div class="dg-log">Assets/Scripts/Foo.cs(12,5): <span class="dg-em">error</span> CS0103: …<span class="dg-mark">†</span></div>
+      <div class="dg-v is-fail"><span class="dg-chip">× 실패</span></div>
+      <div class="dg-v is-fail"><span class="dg-chip">× 실패</span></div>
+    </div>
+
+    <div class="dg-row">
+      <div class="dg-log"><span class="dg-em">Error</span> building Player because scripts had compiler <span class="dg-em">errors</span></div>
+      <div class="dg-v is-fail"><span class="dg-chip">× 실패</span></div>
+      <div class="dg-v is-fail"><span class="dg-chip">× 실패</span></div>
+    </div>
+
+    <div class="dg-row">
+      <div class="dg-log">Build Finished, Result: Success.</div>
+      <div class="dg-v is-pass"><span class="dg-chip">✓ 통과</span></div>
+      <div class="dg-v is-pass"><span class="dg-chip">✓ 통과</span></div>
+    </div>
+  </div>
+
+  <div class="dg-foot">
+    <div class="dg-foot-line">진짜 오류 6가지(<span class="dg-mono">error CS0103</span>, <span class="dg-mono">Error building Player</span>, <span class="dg-mono">Error:</span>, <span class="dg-mono">An error occurred</span>, <span class="dg-mono">NullReferenceException:</span>, <span class="dg-mono">Result: Failed</span>)는 수정 뒤에도 모두 실패로 잡혔습니다.</div>
+    <div class="dg-foot-line">판정 시험 12건과 묶음 빌드 시험 22건을 통과했습니다.</div>
+    <div class="dg-foot-note">† 둘째 줄의 파일 경로는 예시 형식이며 실제 오류 줄이 아닙니다.</div>
+  </div>
+
+  <div class="dg-pill-wrap">
+    <div class="dg-pill">진짜 오류 6가지는 계속 실패 — 시험으로 고정</div>
+  </div>
+</div>
+</div>

@@ -1,0 +1,96 @@
+<div class="dg-605-ranking-measure">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&display=swap');
+.dg-605-ranking-measure{--sheet:#FFFFFF !important;--card:#F5F3EC !important;--card2:#F0EEE6 !important;--line:#E8E6DC !important;--line2:#D1CFC5 !important;--muted:#87867F !important;--muted2:#73716A !important;--ink3:#5E5D59 !important;--ink2:#3D3D3A !important;--ink:#141413 !important;--clay:#C6613F !important;--clay-dark:#A9502F !important;box-sizing:border-box !important;max-width:960px !important;margin:0 auto !important;padding:22px 20px 20px !important;background:var(--sheet) !important;border:1px solid var(--line) !important;border-radius:12px !important;font-family:'Noto Sans KR',-apple-system,'Malgun Gothic',sans-serif !important;font-size:14px !important;line-height:1.55 !important;color:var(--ink2) !important;word-break:keep-all !important}
+.dg-605-ranking-measure .ttl{font-family:'Noto Serif KR',serif !important;font-weight:700 !important;font-size:22px !important;line-height:1.4 !important;color:var(--ink) !important;letter-spacing:-0.01em !important;margin:0 0 8px !important;word-break:keep-all !important}
+.dg-605-ranking-measure .sub{font-size:13px !important;line-height:1.65 !important;color:var(--muted2) !important;word-break:keep-all !important}
+.dg-605-ranking-measure .card{box-sizing:border-box !important;margin-top:16px !important;padding:22px 18px 16px !important;background:var(--card) !important;border:1px solid var(--line) !important;border-radius:5px !important}
+.dg-605-ranking-measure .legend{display:flex !important;flex-wrap:wrap !important;gap:6px 8px !important}
+.dg-605-ranking-measure .chip{display:inline-flex !important;align-items:center !important;gap:6px !important;box-sizing:border-box !important;padding:3px 9px !important;background:var(--sheet) !important;border:1px solid var(--line) !important;border-radius:3px !important;font-size:11px !important;line-height:1.5 !important;color:var(--ink3) !important;white-space:nowrap !important}
+.dg-605-ranking-measure .sw{display:inline-block !important;width:9px !important;height:9px !important;border-radius:2px !important;flex:none !important}
+.dg-605-ranking-measure .sw-old{background:var(--line2) !important}
+.dg-605-ranking-measure .sw-new{background:var(--clay) !important}
+.dg-605-ranking-measure .chart{position:relative !important;display:grid !important;grid-template-columns:112px minmax(0,1fr) !important;column-gap:12px !important;row-gap:10px !important;margin-top:46px !important}
+.dg-605-ranking-measure .lbl{grid-column:1 !important;display:flex !important;flex-direction:column !important;justify-content:center !important;min-width:0 !important}
+.dg-605-ranking-measure .lbl-hp{font-family:'JetBrains Mono',monospace !important;font-size:13px !important;font-weight:500 !important;line-height:1.35 !important;color:var(--ink) !important;overflow-wrap:anywhere !important}
+.dg-605-ranking-measure .lbl-sub{font-size:11px !important;line-height:1.4 !important;color:var(--muted) !important}
+.dg-605-ranking-measure .track{grid-column:2 !important;position:relative !important;height:26px !important;background:var(--card2) !important;border-radius:4px !important}
+.dg-605-ranking-measure .t-973{--w:60.8125% !important}
+.dg-605-ranking-measure .t-1035{--w:64.6875% !important}
+.dg-605-ranking-measure .t-822{--w:51.375% !important}
+.dg-605-ranking-measure .t-828{--w:51.75% !important}
+.dg-605-ranking-measure .fill{position:absolute !important;top:0 !important;bottom:0 !important;left:0 !important;width:var(--w) !important;border-radius:4px !important}
+.dg-605-ranking-measure .f-old{background:var(--line2) !important}
+.dg-605-ranking-measure .f-new{background:var(--clay) !important}
+.dg-605-ranking-measure .val{position:absolute !important;top:50% !important;left:calc(var(--w) + 20px) !important;transform:translateY(-50%) !important;font-family:'JetBrains Mono',monospace !important;font-size:12px !important;font-weight:500 !important;line-height:1 !important;white-space:nowrap !important}
+.dg-605-ranking-measure .v-old{color:var(--ink3) !important}
+.dg-605-ranking-measure .v-new{color:var(--clay-dark) !important}
+.dg-605-ranking-measure .refs{grid-column:2 !important;grid-row:1 / 5 !important;position:relative !important;z-index:2 !important;pointer-events:none !important}
+.dg-605-ranking-measure .ref{position:absolute !important;top:0 !important;bottom:0 !important}
+.dg-605-ranking-measure .ref-goal{left:53.125% !important;border-left:2px solid var(--clay) !important}
+.dg-605-ranking-measure .ref-drop{left:93.75% !important;border-left:2px dashed var(--muted) !important}
+.dg-605-ranking-measure .tag{position:absolute !important;top:-42px !important;left:0 !important;display:flex !important;flex-direction:column !important;align-items:flex-end !important;gap:1px !important;transform:translateX(calc(-100% - 6px)) !important;text-align:right !important;white-space:nowrap !important;line-height:1.35 !important}
+.dg-605-ranking-measure .tag-v{font-family:'JetBrains Mono',monospace !important;font-size:12px !important;font-weight:500 !important}
+.dg-605-ranking-measure .tag-k{font-size:11px !important;color:var(--muted) !important}
+.dg-605-ranking-measure .ref-goal .tag-v{color:var(--clay-dark) !important}
+.dg-605-ranking-measure .ref-drop .tag-v{color:var(--muted2) !important}
+.dg-605-ranking-measure .axis{grid-column:2 !important;display:flex !important;justify-content:space-between !important;font-family:'JetBrains Mono',monospace !important;font-size:10px !important;line-height:1.4 !important;color:var(--muted2) !important}
+.dg-605-ranking-measure .r1{grid-row:1 !important}
+.dg-605-ranking-measure .r2{grid-row:2 !important}
+.dg-605-ranking-measure .r3{grid-row:3 !important}
+.dg-605-ranking-measure .r4{grid-row:4 !important}
+.dg-605-ranking-measure .r5{grid-row:5 !important}
+.dg-605-ranking-measure .cap{margin-top:14px !important;font-size:12px !important;line-height:1.6 !important;color:var(--muted2) !important;word-break:keep-all !important}
+.dg-605-ranking-measure .note{margin-top:10px !important;padding-top:10px !important;border-top:1px solid var(--line) !important;font-size:12px !important;line-height:1.6 !important;color:var(--muted2) !important;word-break:keep-all !important}
+.dg-605-ranking-measure .pill{margin-top:16px !important;padding:11px 18px !important;background:var(--clay) !important;border-radius:999px !important;color:var(--sheet) !important;font-size:13px !important;font-weight:500 !important;line-height:1.55 !important;text-align:center !important;word-break:keep-all !important}
+@media (max-width:460px){
+.dg-605-ranking-measure{padding:18px 14px 16px !important}
+.dg-605-ranking-measure .card{padding:20px 12px 14px !important}
+.dg-605-ranking-measure .chart{grid-template-columns:80px minmax(0,1fr) !important;column-gap:8px !important;margin-top:44px !important}
+.dg-605-ranking-measure .lbl-hp{font-size:12px !important}
+.dg-605-ranking-measure .lbl-sub{font-size:10px !important}
+.dg-605-ranking-measure .val{left:calc(var(--w) + 10px) !important}
+.dg-605-ranking-measure .tag{top:-40px !important}
+}
+</style>
+
+<div class="ttl">고정 큐브 체력 5000, 두 조합 모두 목표 85초 안에 들어왔습니다</div>
+<div class="sub">자폭병 없이 고정 큐브만 때렸을 때 다 깎는 시간을 쟀습니다. 대표 조합 2개를 자동 시전 시험으로 확인했습니다.</div>
+
+<div class="card">
+  <div class="legend">
+    <span class="chip"><span class="sw sw-old"></span>6000 (이전)</span>
+    <span class="chip"><span class="sw sw-new"></span>5000 (변경)</span>
+  </div>
+
+  <div class="chart">
+    <div class="refs">
+      <div class="ref ref-goal">
+        <span class="tag"><span class="tag-v">85초</span><span class="tag-k">바꾼 목표</span></span>
+      </div>
+      <div class="ref ref-drop">
+        <span class="tag"><span class="tag-v">150초</span><span class="tag-k">버린 목표</span></span>
+      </div>
+    </div>
+
+    <div class="lbl r1"><span class="lbl-hp">6000</span><span class="lbl-sub">조합 1</span></div>
+    <div class="track t-973 r1"><div class="fill f-old"></div><span class="val v-old">97.3초</span></div>
+
+    <div class="lbl r2"><span class="lbl-hp">6000</span><span class="lbl-sub">조합 2</span></div>
+    <div class="track t-1035 r2"><div class="fill f-old"></div><span class="val v-old">103.5초</span></div>
+
+    <div class="lbl r3"><span class="lbl-hp">5000</span><span class="lbl-sub">조합 1</span></div>
+    <div class="track t-822 r3"><div class="fill f-new"></div><span class="val v-new">82.2초</span></div>
+
+    <div class="lbl r4"><span class="lbl-hp">5000</span><span class="lbl-sub">조합 2</span></div>
+    <div class="track t-828 r4"><div class="fill f-new"></div><span class="val v-new">82.8초</span></div>
+
+    <div class="axis r5"><span>0초</span><span>160초</span></div>
+  </div>
+
+  <div class="cap">체력 줄 100개 기준입니다. 6000일 때 줄 하나가 60, 5000일 때 50입니다.</div>
+  <div class="note">자폭병 없이 잰 순수 피해 시간. 실제 클리어는 2~3분 예상</div>
+</div>
+
+<div class="pill">체력 5000에서 두 조합 모두 82초대로, 새 목표 약 85초 안에 들어왔습니다.</div>
+</div>
