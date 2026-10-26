@@ -229,6 +229,12 @@ code { font-family: Consolas, "D2Coding", monospace; font-size: .9em; background
 .tri figcaption { font-size: 26px; color: var(--muted); }
 .tri figcaption b { color: var(--accent-bright); margin-right: 10px; }
 
+
+/* 스킬 구성: 오브 세공 분기 */
+table.orbs { border-collapse: collapse; margin-top: 18px; font-size: 26px; }
+table.orbs th { text-align: left; padding: 6px 24px 6px 0; font-weight: 700; }
+table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var(--line-subtle); }
+
 /* 아래 막대 */
 #foot { position: absolute; left: 0; right: 0; bottom: 0; height: 56px; display: flex; align-items: center; padding: 0 96px; gap: 24px; font-size: 20px; color: var(--muted); z-index: 5; }
 #foot .name { flex: 1; }
@@ -262,7 +268,6 @@ code { font-family: Consolas, "D2Coding", monospace; font-size: .9em; background
   </div>
   <div class="note">이름, 게임 이름, 한 달 동안 혼자 만들었다는 것.</div>
 </section>
-
 <!-- 2 어떤 게임인가 -->
 <section class="slide" id="s2" data-title="게임 소개">
   <p class="kicker">01 · 게임</p>
@@ -271,7 +276,7 @@ code { font-family: Consolas, "D2Coding", monospace; font-size: .9em; background
     <div class="col">
       <ul class="pts">
         <li><b class="hl">장르</b> 3인칭 마법 액션 보스 러쉬</li>
-        <li><b class="hl">목표</b> 보스 3마리 처치</li>
+        <li><b class="hl">목표</b> 보스 3마리 처치 (전체 보스 6종)</li>
         <li><b class="hl">진행</b> 필드 → 원정 시작대 → 보스원정</li>
         <li><b class="hl">전투</b> 공격 예고 범위 회피 후 주문 공격</li>
         <li><b class="hl">성장</b> 보스 처치 보상으로 오브 강화·세공</li>
@@ -288,7 +293,6 @@ code { font-family: Consolas, "D2Coding", monospace; font-size: .9em; background
   </div>
   <div class="note">필드에서 보스원정을 떠나 보스 3마리를 잡는다. 보스를 잡을 때마다 오브를 강화·세공한다.</div>
 </section>
-
 <!-- 3 왜 만들었나 -->
 <section class="slide" id="s3" data-title="개발 동기">
   <p class="kicker">01 · 게임</p>
@@ -296,7 +300,7 @@ code { font-family: Consolas, "D2Coding", monospace; font-size: .9em; background
   <div class="cols">
     <div class="col">
       <ul class="pts">
-        <li><b class="hl">출발점</b> 상호작용 환경 구축 실험 (AI 3D 생성, Claude 모델링, GIS 디지털 트윈, 동물 AI)</li>
+        <li><b class="hl">출발점</b> 상호작용 환경 구축 실험 (AI 3D 생성, Claude 모델링, 실제 지도 기반 지형, 동물 AI)</li>
         <li><b class="hl">목표</b> 자유로운 마법 조합 (초기안: 속성 없이 코딩하듯 마법 작성)</li>
         <li><b class="hl">범위 조정</b> 규모 문제로 태그 방식으로 축소</li>
         <li><b class="hl">보스전</b> 마법 사용 대상으로 추가</li>
@@ -307,7 +311,6 @@ code { font-family: Consolas, "D2Coding", monospace; font-size: .9em; background
   </div>
   <div class="note">환경 실험이 먼저였고, 마법 조합은 하고 싶었던 것. 범위가 커져 태그로 줄였고, 보스는 마법을 쓸 대상으로 넣었다.</div>
 </section>
-
 <!-- 4 주문과 속성 -->
 <section class="slide" id="s4" data-title="주문·속성 시스템">
   <p class="kicker">01 · 게임</p>
@@ -319,7 +322,7 @@ code { font-family: Consolas, "D2Coding", monospace; font-size: .9em; background
         <button class="chip" data-el="ice"   data-key="06-주문-얼음" data-ph="06-얼음">얼음</button>
         <button class="chip" data-el="bolt"  data-key="06-주문-전기" data-ph="06-전기">전기</button>
         <button class="chip" data-el="light" data-key="06-주문-빛"   data-ph="06-빛">빛</button>
-        <button class="chip" data-el="earth" data-key="06-주문-토"   data-ph="06-토">토</button>
+        <button class="chip" data-el="earth" data-key="06-주문-토"   data-ph="06-토">땅</button>
       </div>
       <div class="desc" id="el-desc"></div>
       <ul class="pts" style="margin-top:28px">
@@ -332,7 +335,6 @@ code { font-family: Consolas, "D2Coding", monospace; font-size: .9em; background
   </div>
   <div class="note">시연 전에 규칙을 먼저 설명한다. 탭으로 속성을 보여 준다.</div>
 </section>
-
 <!-- 5 보스 패턴 -->
 <section class="slide" id="s5" data-title="보스 패턴">
   <p class="kicker">01 · 게임</p>
@@ -354,68 +356,9 @@ code { font-family: Consolas, "D2Coding", monospace; font-size: .9em; background
   </div>
   <div class="note">보스 패턴은 따로 찍은 영상. 예고 범위가 나오고 공격이 들어오는 장면.</div>
 </section>
-
-<!-- 보스원정 현황판 -->
-<section class="slide" id="s6" data-title="보스원정 현황판">
-  <p class="kicker">01 · 게임</p>
-  <h1>보스원정 현황판</h1>
-  <div class="cols">
-    <div class="col">
-      <ul class="pts">
-        <li>B 키로 여는 지도형 현황판</li>
-        <li>보스 3마리 노드, 원정 진행 단계 표시</li>
-        <li>시작 창·현황판·포털 표식이 같은 원정 모델 공유</li>
-      </ul>
-      <div class="chips" style="margin-top:auto">
-        <button class="chip on" data-ph="12-현황판-게임" data-t="">게임</button>
-        <button class="chip" data-ph="12-현황판-목업" data-t="">v3 목업</button>
-      </div>
-    </div>
-    <div class="media" data-key="12-현황판" data-ph="12-현황판-게임"></div>
-  </div>
-  <div class="note">원정 진행은 HUD가 아니라 이 현황판에서만 본다(#685). 지도형은 목업 v3 그대로 구현.</div>
-</section>
-
-<!-- 랭킹·온라인 -->
-<section class="slide" id="s7" data-title="랭킹·온라인">
-  <p class="kicker">01 · 게임</p>
-  <h1>랭킹 던전·온라인</h1>
-  <div class="cols">
-    <div class="col">
-      <ul class="pts">
-        <li><b class="hl">랭킹 던전</b> 완성 오브 소지 시 입장, 6대 보스 패턴의 고정 큐브, 제한 시간 3분</li>
-        <li><b class="hl">개인 랭킹</b> 슬롯별 최고 기록</li>
-        <li><b class="hl">온라인 순위</b> UGS Leaderboards 기록 제출·전체 순위</li>
-        <li><b class="hl">계정</b> 익명 시작, 구글 계정 연결, 클라우드 저장 동기화</li>
-      </ul>
-      <div class="chips" style="margin-top:auto">
-        <button class="chip on" data-ph="13-랭킹-온라인" data-t="">온라인 순위</button>
-        <button class="chip" data-ph="13-랭킹-설명창" data-t="">순위 상세</button>
-        <button class="chip" data-ph="13-랭킹-개인" data-t="">개인 랭킹</button>
-        <button class="chip" data-ph="13-로그인" data-t="">계정 로그인</button>
-      </div>
-    </div>
-    <div class="media" data-key="13-랭킹" data-ph="13-랭킹-온라인"></div>
-  </div>
-  <div class="note">#105 개인 랭킹 → #599 온라인 순위, #418 로그인·클라우드 저장. 로컬 저장이 정본이고 온라인은 뒤에서 비교·동기화.</div>
-</section>
-
-<!-- 6 피드백과 바뀐 부분 -->
-<section class="slide" id="s8" data-title="피드백 반영">
-  <p class="kicker">02 · 피드백</p>
-  <h1>피드백 반영 <span class="muted" style="font-size:28px;font-weight:400">CBT 팀원 2명 · 기능 지적은 대부분 자체 플레이</span></h1>
-  <div class="fb-grid">
-    <div class="fb"><span class="stage">팀원 2명</span><p class="q">볼륨 부족</p><p class="a">원거리 몬스터 추가 (필드 밀도 보강은 미완)</p><span class="iss">#625 · #628</span></div>
-    <div class="fb"><span class="stage">자체 플레이</span><p class="q">조준점·캐릭터 겹침으로 시야 가림</p><p class="a">캐릭터 화면 하단 배치, 조준점 세로 이동</p><span class="iss">#286</span></div>
-    <div class="fb"><span class="stage">자체 플레이</span><p class="q">보스 공격 단조로움·낮은 난이도</p><p class="a">패턴 순서 무작위, 2페이즈 가속, 연속 공격</p><span class="iss">#386</span></div>
-    <div class="fb"><span class="stage">자체 플레이</span><p class="q">첫 플레이 시 조작 파악 어려움</p><p class="a">기본 조작 9단계 튜토리얼</p><span class="iss">#604</span></div>
-  </div>
-  <div class="note">OBT는 따로 열지 않았다. CBT는 팀플 팀원 2명, 피드백은 볼륨이 적다는 정도. 기능 지적은 대부분 직접 해 보며 찾았다.</div>
-</section>
-
 <!-- 7 Claude와 일한 방식 -->
-<section class="slide" id="s9" data-title="Claude 협업 구조">
-  <p class="kicker">03 · Claude 협업</p>
+<section class="slide" id="s6" data-title="Claude 협업 구조">
+  <p class="kicker">02 · Claude 협업</p>
   <h1>Claude 협업 구조</h1>
   <div class="pipe">
     <div class="step"><b>이슈</b><span>GitHub 보드</span></div><i>→</i>
@@ -433,28 +376,26 @@ code { font-family: Consolas, "D2Coding", monospace; font-size: .9em; background
   <div class="cols" style="grid-template-columns:1fr 1fr;gap:48px">
     <ul class="pts">
       <li>결정 사항 즉시 위키 기록 → 세션 교체 후에도 맥락 유지</li>
-      <li>계획·검토 Claude, 구현 Codex 분담 → 사용량 절감</li>
-      <li>한 판 자동 플레이 시험 → 회귀 오류를 PR 전에 발견</li>
+      <li>계획·검토 Claude, 구현 Codex 역할 분담</li>
+      <li>한 판 자동 플레이 시험 → 수정 후 기존 기능 고장을 PR 전에 발견</li>
     </ul>
     <p class="muted" style="font-size:26px;margin:0">커밋·PR 수: 이슈 소단위 분할, PR별 자동 시험<br>캐릭터·보스 모델: VARCO 3D 생성<br>외부 에셋: VFX 팩, 환경 팩, 스카이박스</p>
   </div>
   <div class="note">이슈 하나를 작업 공간 하나에서 처리한다. 계획은 Claude, 구현은 Codex, 시험 통과 뒤 PR.</div>
 </section>
-
 <!-- 8 막힌 점과 해결 -->
-<section class="slide" id="s10" data-title="문제와 해결">
-  <p class="kicker">03 · Claude 협업</p>
+<section class="slide" id="s7" data-title="문제와 해결">
+  <p class="kicker">02 · Claude 협업</p>
   <h1>문제와 해결</h1>
   <div class="fb-grid" style="grid-template-columns:1fr">
     <div class="fb"><p class="q">AI의 화면 결과 자체 합격 처리</p><p class="a">캡처 시험 분리, 화면 직접 확인 후 이슈 종료</p></div>
-    <div class="fb"><p class="q">같은 지적의 반복</p><p class="a">규칙 파일화, 2회 위반 시 훅으로 자동 차단</p></div>
+    <div class="fb"><p class="q">같은 지적의 반복</p><p class="a">규칙 파일화, 2회 위반 시 자동 차단 스크립트(훅)</p></div>
   </div>
   <div class="note">시간이 남으면: 세션 여럿이 같은 폴더를 고쳐 충돌 → 저장소 복사본 5개. VARCO 3D 애니메이션 FBX가 클립 0개 → Blender로 다시 내보냄.</div>
 </section>
-
 <!-- UI 개선 과정 -->
-<section class="slide" id="s11" data-title="UI 개선 과정">
-  <p class="kicker">03 · Claude 협업</p>
+<section class="slide" id="s8" data-title="UI 개선 과정">
+  <p class="kicker">02 · Claude 협업</p>
   <h1>UI 개선 과정 <span class="muted" style="font-size:28px;font-weight:400">v2 목업 → v3 목업 → 게임</span></h1>
   <div class="chips ui-tabs">
     <button class="chip on" data-set="hud">필드 HUD</button>
@@ -464,39 +405,178 @@ code { font-family: Consolas, "D2Coding", monospace; font-size: .9em; background
   <div class="tri">
     <figure><img data-stage="v2" alt=""><figcaption><b>v2 목업</b> 배치·흐름 확인용 와이어프레임</figcaption></figure>
     <figure><img data-stage="v3" alt=""><figcaption><b>v3 목업</b> 디자인 문법, 색·간격 토큰 확정</figcaption></figure>
-    <figure><img data-stage="game" alt=""><figcaption><b>게임</b> 토큰 값 그대로 Unity UI에 적용</figcaption></figure>
+    <figure><img data-stage="game" alt=""><figcaption><b>게임</b> 색·간격 값(토큰)을 Unity UI에 적용</figcaption></figure>
   </div>
   <p class="muted" style="font-size:26px;margin:22px 0 0">목업: Claude Design 캔버스, 저장소에 PNG·HTML 사본 → 구현은 Codex → 게임 캡처와 목업 비교 후 수정</p>
   <div class="note">처음엔 배치만 잡은 회색 상자(v2), 그다음 색·간격 규칙을 정한 v3, 마지막이 실제 게임 화면.</div>
 </section>
-
+<!-- Blender MCP 모델링 -->
+<section class="slide" id="s9" data-title="Blender MCP 모델링">
+  <p class="kicker">02 · Claude 협업</p>
+  <h1>Blender MCP 모델링 <span class="muted" style="font-size:28px;font-weight:400">Claude가 MCP(AI의 도구 연결)로 Blender 직접 조작</span></h1>
+  <div class="cols">
+    <div class="col">
+      <ul class="pts">
+        <li><b class="hl">단계</b> 블로킹 → 기계 구조 → 디테일 → 재질·조명 → 리그·모션 → Unity 반입</li>
+        <li><b class="hl">단계별 새 세션</b> 단계마다 세션 분리, 긴 대화 누적 방지</li>
+        <li><b class="hl">게임 반입</b> 공원 폐허 건물 11채</li>
+        <li><b class="hl">기록</b> 호출마다 장면 지문 저장 → 변화 구간만 남긴 타임랩스 자동 편집</li>
+      </ul>
+      <div class="chips" style="margin-top:auto">
+        <button class="chip on" data-key="blender-city" data-ph="16-건물-게임">건물 (게임 반입)</button>
+        <button class="chip" data-key="blender-spider" data-ph="11-원경">거미포탑</button>
+        <button class="chip" data-key="blender-howitzer" data-ph="11-원경">중곡사포</button>
+        <button class="chip" data-key="blender-arena" data-ph="11-원경">병풍 경기장</button>
+      </div>
+    </div>
+    <div class="media" data-key="blender-city" data-ph="16-건물-게임"></div>
+  </div>
+  <div class="note">모델링도 코드처럼 Claude에게 맡겼다. 단계마다 새 세션, 결과는 타임랩스로 남겼다.</div>
+</section>
 <!-- 9 작업 노하우 -->
-<section class="slide" id="s12" data-title="협업 노하우">
-  <p class="kicker">03 · Claude 협업</p>
+<section class="slide" id="s10" data-title="협업 노하우">
+  <p class="kicker">02 · Claude 협업</p>
   <h1>협업 노하우</h1>
   <ol class="rules">
-    <li><b>오케스트레이션</b><span>계획·조율 Claude, 구현 Codex, 검토 agy(Gemini) 분담. 사용량 분산</span></li>
+    <li><b>오케스트레이션</b><span>계획·조율 Claude, 구현 Codex, 교차 검토 Gemini·DeepSeek 분담</span></li>
     <li><b>위키 기록</b><span>결정 사항을 날짜·이유와 함께 기록. 새 세션이 위키에서 맥락 탐색</span></li>
     <li><b>자체 탐색·자체 검토</b><span>파일 위치를 알려 주지 않고 탐색 지시. 작업 후 자체 검토와 타 모델 교차 검토</span></li>
     <li><b>대화 대신 규칙 파일 수정</b><span>반복되는 지적은 규칙 파일에 반영. 화면 결과는 직접 확인 후 종료</span></li>
   </ol>
   <div class="note">특별한 프롬프트 문장은 없었다. 오케스트레이션, 위키 기록, 스스로 찾고 검토하라는 지시가 대부분이었다.</div>
 </section>
-
+<!-- 6 피드백과 바뀐 부분 -->
+<section class="slide" id="s11" data-title="피드백 반영">
+  <p class="kicker">03 · 피드백</p>
+  <h1>피드백 반영 <span class="muted" style="font-size:28px;font-weight:400">비공개 테스트(CBT) 팀원 2명 · 기능 지적은 대부분 자체 플레이</span></h1>
+  <div class="fb-grid">
+    <div class="fb"><span class="stage">팀원 2명</span><p class="q">볼륨 부족</p><p class="a">원거리 몬스터 추가 (필드 밀도 보강은 미완)</p></div>
+    <div class="fb"><span class="stage">자체 플레이</span><p class="q">조준점·캐릭터 겹침으로 시야 가림</p><p class="a">캐릭터 화면 하단 배치, 조준점 세로 이동</p></div>
+    <div class="fb"><span class="stage">자체 플레이</span><p class="q">보스 공격 단조로움·낮은 난이도</p><p class="a">패턴 순서 무작위, 2페이즈 가속, 연속 공격</p></div>
+    <div class="fb"><span class="stage">자체 플레이</span><p class="q">첫 플레이 시 조작 파악 어려움</p><p class="a">기본 조작 9단계 튜토리얼</p></div>
+  </div>
+  <div class="note">OBT는 따로 열지 않았다. CBT는 팀플 팀원 2명, 피드백은 볼륨이 적다는 정도. 기능 지적은 대부분 직접 해 보며 찾았다.</div>
+</section>
 <!-- 10 자평과 다음 -->
-<section class="slide" id="s13" data-title="자평 및 향후 계획">
+<section class="slide" id="s12" data-title="자평 및 향후 계획">
   <p class="kicker">04 · 마무리</p>
   <h1>자평 및 향후 계획</h1>
   <div class="wrap3">
     <div class="panel done"><h2>✓ 완성</h2><ul class="pts"><li>보스원정 한 판 정산까지 완주</li><li>주문 5속성, 오브 세공</li><li>튜토리얼</li></ul></div>
     <div class="panel todo"><h2>× 미완</h2><ul class="pts"><li>효과음 (제거)</li><li>보스 E·F 전용 패턴</li><li>숙련 시스템</li></ul></div>
-    <div class="panel next"><h2>→ 향후 계획</h2><ul class="pts"><li>사운드 재도입</li><li>온라인 랭킹</li><li>PV 촬영 도구</li></ul></div>
+    <div class="panel next"><h2>→ 향후 계획</h2><ul class="pts"><li>사운드 재도입</li><li>플레이 로그 수집</li><li>PV 촬영 도구</li></ul></div>
   </div>
   <div class="cols" style="grid-template-columns: 1fr 1fr; gap:40px">
-    <div class="col" style="justify-content:flex-end"><p class="thanks">감사합니다</p><p class="muted">Wild Arcana · 김성훈</p></div>
+    <div class="col" style="justify-content:flex-end"><p class="muted">Wild Arcana · 김성훈</p></div>
     <div class="media" data-key="12-마무리" data-ph="11-원경"></div>
   </div>
   <div class="note">된 것·덜 된 것·다음.</div>
+</section>
+<!-- 질의응답 -->
+<section class="slide cover" id="s13" data-title="질의응답">
+  <div class="media" data-key="11-원경" data-ph="11-원경" data-notag></div>
+  <div class="shade"></div>
+  <div class="title-block">
+    <p class="logo">질의응답</p>
+    <p class="who">Wild Arcana · 김성훈<br><span class="muted">다음 장부터 부록: 스킬 구성 · 일반 몬스터 · 보스원정 현황판 · 랭킹·온라인</span></p>
+  </div>
+  <div class="note">예상 질문: Claude 사용량 한도는? / 코드를 직접 짠 비율은? / AI 3D 모델 품질 문제는? / 다시 하면 바꿀 것은?</div>
+</section>
+<!-- 스킬 구성 -->
+<section class="slide" id="s14" data-title="스킬 구성">
+  <p class="kicker">부록</p>
+  <h1>스킬 구성</h1>
+  <div class="cols">
+    <div class="col">
+      <ul class="pts">
+        <li><b class="hl">주력 주문</b> 좌클릭, 오브 5종, 오브별 세공 분기 2개</li>
+        <li><b class="hl">보조 주문</b> Q·E, 충전 횟수만큼 장전, 조준점 아래 발수 게이지</li>
+        <li><b class="hl">궁극</b> V, 장착 스킬 거대화, 시간·적중으로 충전, Lv2 해금</li>
+      </ul>
+      <table class="orbs">
+        <tr><th style="color:var(--fire-b)">화염 오브</th><td>화상 중첩</td><td>연소 폭발</td></tr>
+        <tr><th style="color:var(--ice-b)">얼음 오브</th><td>빙결</td><td>한기 증폭</td></tr>
+        <tr><th style="color:var(--bolt-b)">전기 오브</th><td>연쇄 확장</td><td>과부하</td></tr>
+        <tr><th style="color:var(--light-b)">빛 오브</th><td>표식 증폭</td><td>광휘 관통</td></tr>
+        <tr><th style="color:var(--earth-b)">땅 오브</th><td>균열 심화</td><td>여진</td></tr>
+      </table>
+      <div class="chips" style="margin-top:auto">
+        <button class="chip on" data-ph="14-궁극-발동" data-t="">궁극 발동</button>
+        <button class="chip" data-ph="14-궁극-충전" data-t="">궁극 충전</button>
+        <button class="chip" data-ph="14-마법책-궁극" data-t="">마법책 궁극 칸</button>
+      </div>
+    </div>
+    <div class="media" data-key="14-스킬" data-ph="14-궁극-발동"></div>
+  </div>
+  <div class="note">주력은 오브가 정하고 세공으로 갈라진다. 보조는 Q·E, 궁극은 V. 궁극은 장착한 스킬을 크게 만들어 쓴다(#465).</div>
+</section>
+<!-- 일반 몬스터 -->
+<section class="slide" id="s15" data-title="일반 몬스터">
+  <p class="kicker">부록</p>
+  <h1>일반 몬스터</h1>
+  <div class="cols">
+    <div class="col">
+      <ul class="pts">
+        <li><b class="hl">무리 상태</b> 무관심 → 감지 → 공격 → 퇴각, 구역 단위 재생성</li>
+        <li><b class="hl">전투 역할</b> 근접 돌진, 사격, 폭탄, 저격, 방패</li>
+        <li><b class="hl">공격 전조</b> 0.5초 이상 몸 펌프·깜빡임·바닥 띠·조준선 → 완벽 회피와 연결</li>
+        <li><b class="hl">보상</b> 경험치, 세공석 조각</li>
+        <li><b class="hl">보스방 자폭병</b> 접근 후 정지, 0.5초 예고 뒤 자폭</li>
+      </ul>
+      <div class="chips" style="margin-top:auto">
+        <button class="chip on" data-ph="15-몬스터-외형" data-t="">외형</button>
+        <button class="chip" data-ph="15-몬스터-무리" data-t="">혼합 무리</button>
+        <button class="chip" data-ph="15-몬스터-저격" data-t="">저격 조준선</button>
+        <button class="chip" data-ph="15-몬스터-방패" data-t="">방패</button>
+        <button class="chip" data-ph="15-자폭병" data-t="">자폭병</button>
+      </div>
+    </div>
+    <div class="media" data-key="15-몬스터" data-ph="15-몬스터-외형"></div>
+  </div>
+  <div class="note">필드 남쪽 몬스터 구역(#388), 공격 전조(#469), 전투 역할 4종(#636), 자폭병(#320).</div>
+</section>
+<!-- 보스원정 현황판 -->
+<section class="slide" id="s16" data-title="보스원정 현황판">
+  <p class="kicker">부록</p>
+  <h1>보스원정 현황판</h1>
+  <div class="cols">
+    <div class="col">
+      <ul class="pts">
+        <li>B 키로 여는 지도형 현황판</li>
+        <li>보스 3마리 노드, 원정 진행 단계 표시</li>
+        <li>시작 창·현황판·포털 표식이 같은 원정 모델 공유</li>
+      </ul>
+      <div class="chips" style="margin-top:auto">
+        <button class="chip on" data-ph="12-현황판-게임" data-t="">게임</button>
+        <button class="chip" data-ph="12-현황판-목업" data-t="">v3 목업</button>
+      </div>
+    </div>
+    <div class="media" data-key="12-현황판" data-ph="12-현황판-게임"></div>
+  </div>
+  <div class="note">원정 진행은 HUD가 아니라 이 현황판에서만 본다(#685). 지도형은 목업 v3 그대로 구현.</div>
+</section>
+<!-- 랭킹·온라인 -->
+<section class="slide" id="s17" data-title="랭킹·온라인">
+  <p class="kicker">부록</p>
+  <h1>랭킹 던전·온라인</h1>
+  <div class="cols">
+    <div class="col">
+      <ul class="pts">
+        <li><b class="hl">랭킹 던전</b> 강화를 다 채운 오브로 입장, 보스 6종 패턴을 쓰는 고정 표적, 제한 시간 3분</li>
+        <li><b class="hl">개인 랭킹</b> 슬롯별 최고 기록</li>
+        <li><b class="hl">온라인 순위</b> Unity 온라인 서비스(UGS)로 기록 제출·전체 순위</li>
+        <li><b class="hl">계정</b> 익명 시작, 구글 계정 연결, 클라우드 저장 동기화</li>
+      </ul>
+      <div class="chips" style="margin-top:auto">
+        <button class="chip on" data-ph="13-랭킹-온라인" data-t="">온라인 순위</button>
+        <button class="chip" data-ph="13-랭킹-설명창" data-t="">순위 상세</button>
+        <button class="chip" data-ph="13-랭킹-개인" data-t="">개인 랭킹</button>
+        <button class="chip" data-ph="13-로그인" data-t="">계정 로그인</button>
+      </div>
+    </div>
+    <div class="media" data-key="13-랭킹" data-ph="13-랭킹-온라인"></div>
+  </div>
+  <div class="note">#105 개인 랭킹 → #599 온라인 순위, #418 로그인·클라우드 저장. 로컬 저장이 정본이고 온라인은 뒤에서 비교·동기화.</div>
 </section>
 
 <div id="foot"><span class="name">Wild Arcana</span><span id="stitle"></span><button id="prev" title="이전 (←)">‹</button><button id="next" title="다음 (→)">›</button><span id="num"></span></div>
@@ -648,7 +728,7 @@ code { font-family: Consolas, "D2Coding", monospace; font-size: .9em; background
     ice:   ['얼음', '이동 둔화'],
     bolt:  ['전기', '주변 적에게 연쇄'],
     light: ['빛',   '천광 폭격: 하늘에서 빛줄기 낙하'],
-    earth: ['토',   '클라드니 기둥: 바닥 무늬를 따라 기둥 생성']
+    earth: ['땅',   '클라드니 기둥: 바닥 무늬를 따라 기둥 생성']
   };
   function showEl(c) {
     var e = EL[c.getAttribute('data-el')];
