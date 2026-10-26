@@ -411,7 +411,8 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
   <p class="kicker">02 · Claude 협업</p>
   <h1>UI 개선 과정 <span class="muted" style="font-size:28px;font-weight:400">같은 화면의 수정 전·후</span></h1>
   <div class="chips ui-tabs">
-    <button class="chip on" data-set="마법책">마법책</button>
+    <button class="chip on" data-set="hud">필드 HUD</button>
+    <button class="chip" data-set="마법책">마법책</button>
     <button class="chip" data-set="원정">원정 시작</button>
     <button class="chip" data-set="입장">던전 입장</button>
     <button class="chip" data-set="랭킹">랭킹</button>
@@ -427,7 +428,7 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
     <div class="ba-row"><p><b>수정 후</b>AI 시안 이미지 → 벡터 추적(SVG), 주문 10종 모두 다른 그림</p><div class="ba-ic svg" data-icons="후"></div></div>
   </div>
   <p class="muted ba-fix">과정: 게임 캡처 → 사용자 지적 → 목업과 비교 → Codex 수정 → 같은 구도로 다시 캡처</p>
-  <div class="note">트러블슈팅처럼 같은 구도로 찍어 비교. 마법책 #370: 이름 잘림·창 0.67배 → 1배·한 줄 목록. 원정 시작 #593: 카드 3장 → 현황판과 같은 지도. 던전 입장 #384: "배경이 너무 잘 보여서 구리다" → 흐림·어둡힘. 랭킹 #105: "심심하고 아쉽다" → 순위 표식·속성색·상세 열. 주문 아이콘 #720: "너무 단순하다" → VARCO 시안 10장을 vtracer로 추적한 SVG, HUD 아이콘 26 → 40px.</div>
+  <div class="note">트러블슈팅처럼 같은 구도로 찍어 비교. 필드 HUD: 10-14 캡처(#392) → 10-27 main 실제 필드 씬 캡처(생활 T, 궁극 V #465, 아이콘 #720). 마법책 #370 → #383: 이름 잘림·창 0.67배 → 창 키우기(#370) → v3 디자인 문법으로 전체 화면 재구성(#383). 원정 시작 #593: 카드 3장 → 현황판과 같은 지도. 던전 입장 #384: "배경이 너무 잘 보여서 구리다" → 흐림·어둡힘. 랭킹 #105: "심심하고 아쉽다" → 순위 표식·속성색·상세 열. 주문 아이콘 #720: "너무 단순하다" → VARCO 시안 10장을 vtracer로 추적한 SVG, HUD 아이콘 26 → 40px.</div>
 </section>
 <!-- Blender MCP 모델링 -->
 <section class="slide" id="s9" data-title="Blender MCP 모델링">
@@ -759,7 +760,8 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
   // ── UI 개선 과정: 같은 화면 수정 전·후 ─────────────────
   // 이미지는 media/ph/ui-<키>-전.jpg / -후.jpg. 아이콘은 ui-아이콘-전-NN.png / -후-NN.svg(10개).
   var UI_SETS = {
-    '마법책': { 전: '창 0.67배 축소, 주문 이름 잘림', 후: '창 1배, 한 줄 목록·속성 필터, 글자 13px 이상' },
+    hud: { 전: '주문 칸 3개, 단순 선 아이콘', 후: '생활·궁극 칸 추가 5칸, 주문별 아이콘 40px, 조작 안내 줄' },
+    '마법책': { 전: '필드 위 작은 창(0.67배), 주문 이름 잘림', 후: '전체 화면 v3: 속성 탭, 주문 카드, 장착 칸 3개 + 궁극, 상세 열' },
     '원정': { 전: '봉인 카드 3장 나열', 후: '현황판과 같은 지도형: 던전 3곳 + 허브' },
     '입장': { 전: '뒤 배경이 그대로 비침, 창이 묻힘', 후: '배경 흐림·어둡힘, 창 뒤 금빛 번짐' },
     '랭킹': { 전: '글자 위주 목록', 후: '1~3위 표식, 속성색 구, 숙련 칩, 상세 열' },
