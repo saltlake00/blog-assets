@@ -1,0 +1,130 @@
+<div class="dg-obt-batch-groups">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&family=JetBrains+Mono:wght@500&display=swap');
+
+.dg-obt-batch-groups{
+  container-type:inline-size !important;
+  box-sizing:border-box !important;
+  max-width:960px !important;
+  margin:0 auto !important;
+  padding:22px 24px 20px !important;
+  background:#FFFFFF !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:12px !important;
+  font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif !important;
+  color:#141413 !important;
+  word-break:keep-all !important;
+}
+.dg-obt-batch-groups .t{
+  box-sizing:border-box !important;
+  font-family:'Noto Serif KR','Nanum Myeongjo',serif !important;
+  font-weight:700 !important;
+  font-size:22px !important;
+  line-height:1.4 !important;
+  letter-spacing:-0.02em !important;
+  color:#141413 !important;
+}
+.dg-obt-batch-groups .sub{
+  box-sizing:border-box !important;
+  margin-top:6px !important;
+  font-size:12.5px !important;
+  line-height:1.55 !important;
+  color:#73716A !important;
+}
+.dg-obt-batch-groups .rows{
+  box-sizing:border-box !important;
+  margin-top:14px !important;
+}
+.dg-obt-batch-groups .row{
+  box-sizing:border-box !important;
+  display:grid !important;
+  grid-template-columns:96px 1fr !important;
+  column-gap:10px !important;
+  align-items:start !important;
+  padding:6px 0 !important;
+  border-top:1px solid #F0EEE6 !important;
+}
+.dg-obt-batch-groups .row:first-child{
+  border-top:0 !important;
+}
+.dg-obt-batch-groups .nm{
+  box-sizing:border-box !important;
+  font-size:12.5px !important;
+  font-weight:500 !important;
+  line-height:1.4 !important;
+  color:#3D3D3A !important;
+  padding-top:1px !important;
+}
+.dg-obt-batch-groups .bar{
+  box-sizing:border-box !important;
+  display:flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  height:18px !important;
+}
+.dg-obt-batch-groups .fl{
+  box-sizing:border-box !important;
+  height:11px !important;
+  width:var(--w) !important;
+  flex:0 0 auto !important;
+  background:#D1CFC5 !important;
+  border-radius:3px !important;
+}
+.dg-obt-batch-groups .row.hi .fl{
+  background:#C6613F !important;
+}
+.dg-obt-batch-groups .vl{
+  box-sizing:border-box !important;
+  font-family:'JetBrains Mono',monospace !important;
+  font-size:11px !important;
+  font-weight:500 !important;
+  line-height:1 !important;
+  color:#3D3D3A !important;
+  white-space:nowrap !important;
+}
+.dg-obt-batch-groups .row.hi .vl{
+  color:#C6613F !important;
+}
+.dg-obt-batch-groups .ds{
+  box-sizing:border-box !important;
+  margin-top:2px !important;
+  font-size:11px !important;
+  line-height:1.45 !important;
+  color:#87867F !important;
+}
+.dg-obt-batch-groups .note{
+  box-sizing:border-box !important;
+  display:inline-block !important;
+  margin-top:12px !important;
+  padding:4px 8px !important;
+  border-radius:3px !important;
+  background:#F0EEE6 !important;
+  font-size:11px !important;
+  line-height:1.4 !important;
+  color:#73716A !important;
+}
+
+@container (max-width:400px){
+  .dg-obt-batch-groups .t{ font-size:19px !important; }
+  .dg-obt-batch-groups .row{ grid-template-columns:76px 1fr !important; column-gap:8px !important; }
+  .dg-obt-batch-groups .nm{ font-size:11.5px !important; }
+}
+</style>
+
+<div class="t">일괄 처리 PR은 화면 비율·UI에 가장 많이 몰렸습니다</div>
+<div class="sub">10-25 낮부터 10-26 새벽까지 병합한 PR을 성격별로 묶은 건수입니다. 막대 길이는 가장 많은 묶음(10건)을 기준으로 합니다.</div>
+
+<div class="rows">
+  <div class="row hi"><div class="nm">화면 비율·UI</div><div><div class="bar"><div class="fl" style="--w:calc((100% - 40px) * 1) !important"></div><div class="vl">10건</div></div><div class="ds">16:10 잘림·해상도 설정, 지도 전체 화면·21:9, 일시정지 정렬, 패배 화면</div></div></div>
+  <div class="row"><div class="nm">도구·시험</div><div><div class="bar"><div class="fl" style="--w:calc((100% - 40px) * 0.6) !important"></div><div class="vl">6건</div></div><div class="ds">로딩 덮개, 확인 장면 바로가기, 기존 실패 시험 정리</div></div></div>
+  <div class="row"><div class="nm">새 콘텐츠</div><div><div class="bar"><div class="fl" style="--w:calc((100% - 40px) * 0.5) !important"></div><div class="vl">5건</div></div><div class="ds">불나비 떼·지연 포격, 빛·땅 오브, 클라드니 기둥, 천광 폭격, 보스 판재 기둥</div></div></div>
+  <div class="row"><div class="nm">필드 밀도</div><div><div class="bar"><div class="fl" style="--w:calc((100% - 40px) * 0.4) !important"></div><div class="vl">4건</div></div><div class="ds">자리 생성기, 소품 540개, 동물 42마리, 몬스터 구역 4곳</div></div></div>
+  <div class="row"><div class="nm">전투·조작</div><div><div class="bar"><div class="fl" style="--w:calc((100% - 40px) * 0.4) !important"></div><div class="vl">4건</div></div><div class="ds">보조 주문 묶음 장전·질주 해제, 보스 회전 상한, ALT 자유 시점, 소리로 동물 도망</div></div></div>
+  <div class="row"><div class="nm">지도</div><div><div class="bar"><div class="fl" style="--w:calc((100% - 40px) * 0.2) !important"></div><div class="vl">2건</div></div><div class="ds">블록 굽기·줌아웃·화면 밖 화살표, 군락지 아이콘</div></div></div>
+  <div class="row"><div class="nm">랭킹 던전</div><div><div class="bar"><div class="fl" style="--w:calc((100% - 40px) * 0.1) !important"></div><div class="vl">1건</div></div><div class="ds">줄 색 체력 바·자폭병 묶음</div></div></div>
+  <div class="row"><div class="nm">환경</div><div><div class="bar"><div class="fl" style="--w:calc((100% - 40px) * 0.1) !important"></div><div class="vl">1건</div></div><div class="ds">공원 안 파빌리온 11채</div></div></div>
+</div>
+
+<div class="note">이 기간 병합 PR 37건 중 묶음을 정한 33건</div>
+
+</div>

@@ -1,0 +1,309 @@
+<div class="dg-citykit-check-failures">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&display=swap');
+
+.dg-citykit-check-failures{
+  box-sizing:border-box !important;
+  width:100% !important;
+  padding:18px 12px !important;
+  background:#FAF9F5 !important;
+  color:#3D3D3A !important;
+  font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif !important;
+  font-size:14px !important;
+  line-height:1.5 !important;
+  word-break:keep-all !important;
+  -webkit-text-size-adjust:100% !important;
+  container-type:inline-size !important;
+}
+.dg-citykit-check-failures .sheet{
+  box-sizing:border-box !important;
+  width:100% !important;
+  max-width:960px !important;
+  margin:0 auto !important;
+  padding:16px 16px 14px !important;
+  background:#FFFFFF !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:12px !important;
+}
+.dg-citykit-check-failures .kicker{
+  margin-bottom:5px !important;
+  font-size:12px !important;
+  font-weight:500 !important;
+  line-height:1.4 !important;
+  letter-spacing:.1em !important;
+  color:#87867F !important;
+}
+.dg-citykit-check-failures .title{
+  margin:0 0 14px !important;
+  font-family:'Noto Serif KR',Georgia,serif !important;
+  font-weight:700 !important;
+  font-size:22px !important;
+  line-height:1.35 !important;
+  color:#141413 !important;
+  word-break:keep-all !important;
+}
+.dg-citykit-check-failures .head{
+  display:grid !important;
+  grid-template-columns:132px 12px minmax(0,1fr) 12px minmax(0,1fr) 12px minmax(0,1fr) !important;
+  gap:6px !important;
+  padding:0 10px 6px 13px !important;
+  font-size:12px !important;
+  font-weight:500 !important;
+  line-height:1.4 !important;
+  color:#87867F !important;
+}
+.dg-citykit-check-failures .rows{
+  display:grid !important;
+  gap:8px !important;
+}
+.dg-citykit-check-failures .row{
+  display:grid !important;
+  grid-template-columns:132px 12px minmax(0,1fr) 12px minmax(0,1fr) 12px minmax(0,1fr) !important;
+  gap:6px !important;
+  align-items:start !important;
+  box-sizing:border-box !important;
+  padding:9px 10px !important;
+  background:#F5F3EC !important;
+  border:1px solid #E8E6DC !important;
+  border-left:3px solid #D1CFC5 !important;
+  border-radius:5px !important;
+}
+.dg-citykit-check-failures .row-bad{border-left-color:#B5402A !important;}
+.dg-citykit-check-failures .row-mid{border-left-color:#A6781F !important;}
+.dg-citykit-check-failures .cell{min-width:0 !important;}
+.dg-citykit-check-failures .lab{display:none !important;}
+.dg-citykit-check-failures .name{
+  font-size:14px !important;
+  font-weight:700 !important;
+  line-height:1.4 !important;
+  color:#141413 !important;
+  overflow-wrap:anywhere !important;
+}
+.dg-citykit-check-failures .meta{
+  margin-top:2px !important;
+  font-size:12px !important;
+  line-height:1.5 !important;
+  color:#73716A !important;
+  overflow-wrap:anywhere !important;
+}
+.dg-citykit-check-failures .code{
+  font-family:'JetBrains Mono',ui-monospace,monospace !important;
+  font-size:12px !important;
+  font-weight:500 !important;
+  letter-spacing:.01em !important;
+  color:#87867F !important;
+  overflow-wrap:anywhere !important;
+}
+.dg-citykit-check-failures .txt{
+  font-size:14px !important;
+  line-height:1.55 !important;
+  color:#3D3D3A !important;
+  overflow-wrap:anywhere !important;
+}
+.dg-citykit-check-failures .txt-muted{color:#5E5D59 !important;}
+.dg-citykit-check-failures .tag{
+  display:inline-block !important;
+  margin-right:4px !important;
+  padding:3px 6px !important;
+  border:1px solid !important;
+  border-radius:3px !important;
+  background:#FFFFFF !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+  line-height:1.1 !important;
+  letter-spacing:.02em !important;
+  vertical-align:1px !important;
+  white-space:nowrap !important;
+}
+.dg-citykit-check-failures .tag-bad{color:#B5402A !important;border-color:#B5402A !important;}
+.dg-citykit-check-failures .tag-mid{color:#A6781F !important;border-color:#A6781F !important;}
+.dg-citykit-check-failures .ok{
+  margin-right:3px !important;
+  font-weight:700 !important;
+  color:#5B7A4B !important;
+}
+.dg-citykit-check-failures .arrow{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-height:22px !important;
+  font-size:12px !important;
+  line-height:1 !important;
+  color:#D1CFC5 !important;
+}
+.dg-citykit-check-failures .arrow::before{content:"→" !important;}
+.dg-citykit-check-failures .memo{
+  display:flex !important;
+  align-items:flex-start !important;
+  gap:8px !important;
+  margin-top:12px !important;
+  padding:8px 10px !important;
+  background:#F0EEE6 !important;
+  border-radius:5px !important;
+  font-size:13px !important;
+  line-height:1.5 !important;
+  color:#3D3D3A !important;
+}
+.dg-citykit-check-failures .memo-k{
+  flex:0 0 auto !important;
+  padding:1px 5px !important;
+  border:1px solid #D1CFC5 !important;
+  border-radius:3px !important;
+  background:#FFFFFF !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+  line-height:1.3 !important;
+  letter-spacing:.04em !important;
+  color:#73716A !important;
+}
+.dg-citykit-check-failures .memo-t{min-width:0 !important;overflow-wrap:anywhere !important;}
+.dg-citykit-check-failures .conclusion{
+  display:flex !important;
+  justify-content:center !important;
+  margin-top:12px !important;
+}
+.dg-citykit-check-failures .pill{
+  display:inline-block !important;
+  max-width:100% !important;
+  box-sizing:border-box !important;
+  padding:9px 18px !important;
+  background:#C6613F !important;
+  border-radius:999px !important;
+  color:#FFFFFF !important;
+  font-size:14px !important;
+  font-weight:500 !important;
+  line-height:1.45 !important;
+  text-align:center !important;
+  word-break:keep-all !important;
+  overflow-wrap:anywhere !important;
+}
+
+@container (max-width:740px){
+  .dg-citykit-check-failures .sheet{padding:14px 12px 12px !important;}
+  .dg-citykit-check-failures .head{display:none !important;}
+  .dg-citykit-check-failures .row{
+    grid-template-columns:minmax(0,1fr) !important;
+    gap:5px !important;
+    padding:10px !important;
+  }
+  .dg-citykit-check-failures .lab{
+    display:block !important;
+    margin-bottom:2px !important;
+    font-size:12px !important;
+    font-weight:700 !important;
+    line-height:1.4 !important;
+    letter-spacing:.06em !important;
+    color:#87867F !important;
+  }
+  .dg-citykit-check-failures .arrow{
+    min-height:14px !important;
+    font-size:13px !important;
+  }
+  .dg-citykit-check-failures .arrow::before{content:"↓" !important;}
+  .dg-citykit-check-failures .memo{display:block !important;}
+  .dg-citykit-check-failures .memo-k{
+    margin-right:6px !important;
+    vertical-align:1px !important;
+  }
+  .dg-citykit-check-failures .pill{
+    font-size:13px !important;
+    padding:8px 14px !important;
+  }
+}
+</style>
+
+  <div class="sheet">
+    <div class="kicker">CITY-KIT · 건물 생성 점검</div>
+    <div class="title">점검 스크립트가 세 번 틀려, 놓침과 거짓 경보로 갈렸습니다</div>
+
+    <div class="head" aria-hidden="true">
+      <div>점검</div>
+      <div></div>
+      <div>틀린 결과</div>
+      <div></div>
+      <div>원인</div>
+      <div></div>
+      <div>고친 뒤</div>
+    </div>
+
+    <div class="rows">
+      <div class="row row-bad">
+        <div class="cell">
+          <div class="lab">점검</div>
+          <div class="name">틈 점검</div>
+          <div class="meta"><span class="code">COVER</span> · 배경 화소</div>
+        </div>
+        <div class="arrow" aria-hidden="true"></div>
+        <div class="cell">
+          <div class="lab">틀린 결과</div>
+          <div class="txt"><span class="tag tag-bad">× 놓침</span>S2까지 0px로 통과</div>
+        </div>
+        <div class="arrow" aria-hidden="true"></div>
+        <div class="cell">
+          <div class="lab">원인</div>
+          <div class="txt txt-muted">숨긴 모듈 원본을 그려 아무것도 안 그려짐</div>
+        </div>
+        <div class="arrow" aria-hidden="true"></div>
+        <div class="cell">
+          <div class="lab">고친 뒤</div>
+          <div class="txt"><span class="ok">✓</span>배치된 건물을 그림 · LOD0 0px, LOD1 1px</div>
+        </div>
+      </div>
+
+      <div class="row row-mid">
+        <div class="cell">
+          <div class="lab">점검</div>
+          <div class="name">같은 평면 겹침</div>
+          <div class="meta"><span class="code">coplanar</span> · 겹친 면 쌍</div>
+        </div>
+        <div class="arrow" aria-hidden="true"></div>
+        <div class="cell">
+          <div class="lab">틀린 결과</div>
+          <div class="txt"><span class="tag tag-mid">― 거짓 경보</span>S3에서 없는 겹침 31쌍 보고</div>
+        </div>
+        <div class="arrow" aria-hidden="true"></div>
+        <div class="cell">
+          <div class="lab">원인</div>
+          <div class="txt txt-muted">갱신 전 위치 행렬로 계산</div>
+        </div>
+        <div class="arrow" aria-hidden="true"></div>
+        <div class="cell">
+          <div class="lab">고친 뒤</div>
+          <div class="txt"><span class="ok">✓</span>계산 전에 장면 갱신</div>
+        </div>
+      </div>
+
+      <div class="row row-bad">
+        <div class="cell">
+          <div class="lab">점검</div>
+          <div class="name">결정성</div>
+          <div class="meta">같은 시드 두 번 비교</div>
+        </div>
+        <div class="arrow" aria-hidden="true"></div>
+        <div class="cell">
+          <div class="lab">틀린 결과</div>
+          <div class="txt"><span class="tag tag-bad">× 놓침</span>S5에서 LOD1이 원점에 모인 것을 놓치고 통과</div>
+        </div>
+        <div class="arrow" aria-hidden="true"></div>
+        <div class="cell">
+          <div class="lab">원인</div>
+          <div class="txt txt-muted">두 번 다 같은 버그로 만들어 서로 같았음</div>
+        </div>
+        <div class="arrow" aria-hidden="true"></div>
+        <div class="cell">
+          <div class="lab">고친 뒤</div>
+          <div class="txt"><span class="ok">✓</span>복제 위치를 원본과 대조하는 점검 추가</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="memo">
+      <span class="memo-k">메모</span>
+      <span class="memo-t">점검 결과가 0이면 잰 대상의 크기도 같이 확인합니다.</span>
+    </div>
+
+    <div class="conclusion">
+      <span class="pill">재는 대상이 틀리면 통과도 거짓 경보도 그대로 믿게 됩니다.</span>
+    </div>
+  </div>
+</div>
