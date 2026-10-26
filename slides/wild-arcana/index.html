@@ -265,7 +265,35 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
 .note { display: none; }
 #help { position: absolute; right: 24px; top: 20px; z-index: 7; font-size: 18px; color: var(--muted); opacity: 0; transition: opacity .3s; }
 #help.on { opacity: 1; }
+/* GIS 디지털 트윈 장 (조각/gis.html) */
+#gis .gis-grid { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) 230px; gap: 44px; min-height: 0; }
+#gis .gis-left { display: flex; flex-direction: column; min-height: 0; min-width: 0; }
+#gis svg.flowmap { width: 100%; height: auto; display: block; font-family: var(--sans); }
+#gis .flowmap .hd { font-size: 22px; font-weight: 700; fill: var(--warm); letter-spacing: .04em; }
+#gis .flowmap .box { fill: var(--panel); stroke: var(--line-subtle); stroke-width: 1.5; }
+#gis .flowmap .proc { fill: var(--card); stroke: var(--accent); stroke-width: 2; }
+#gis .flowmap .t { font-size: 27px; font-weight: 700; fill: var(--ink); }
+#gis .flowmap .s { font-size: 20px; fill: var(--muted); }
+#gis .flowmap .n { font-size: 30px; font-weight: 900; }
+#gis .flowmap .ln { stroke: var(--line); stroke-width: 2.5; fill: none; }
+#gis .flowmap .ar { fill: var(--line); }
+#gis .flowmap .thumb { stroke: var(--line-subtle); stroke-width: 1; fill: none; }
+#gis .stats { margin: 26px 0 0; }
+#gis .stat { padding: 16px 22px; }
+#gis .stat .n { font-size: 54px; }
+#gis .stat .n small { font-size: 28px; margin-left: 4px; }
+#gis .stat .l { font-size: 22px; }
+#gis .park { position: relative; min-height: 0; display: flex; flex-direction: column; gap: 10px; }
+#gis .park svg { flex: 1; min-height: 0; width: 100%; height: 100%; display: block; }
+#gis .park p { margin: 0; font-size: 20px; line-height: 1.4; color: var(--muted); text-align: center; }
+#gis-steps ul.pts li { font-size: 27px; margin-bottom: 12px; }
+#gis-steps ul.pts li b.hl { display: inline-block; min-width: 92px; }
+#gis-steps .chips { margin-top: auto; }
+#gis-steps .flow { gap: 6px; flex-wrap: nowrap; }
+#gis-steps .flow .chip { font-size: 21px; padding: 6px 13px; min-height: 48px; white-space: nowrap; }
+#gis-steps .flow .arrow { font-size: 20px; }
 </style>
+<link rel="stylesheet" href="도표.css">
 </head>
 <body>
 <div id="stage">
@@ -288,12 +316,17 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
   <div class="cols">
     <div class="col">
       <ul class="pts">
-        <li><b class="hl">장르</b> 3인칭 마법 액션 보스 러쉬</li>
-        <li><b class="hl">목표</b> 보스 3마리 처치 (전체 보스 6종)</li>
-        <li><b class="hl">진행</b> 필드 → 원정 시작대 → 보스원정</li>
+        <li><b class="hl">목표</b> 원정 한 번에 보스 3마리 처치</li>
         <li><b class="hl">전투</b> 공격 예고 범위 회피 후 주문 공격</li>
         <li><b class="hl">성장</b> 보스 처치 보상으로 오브 강화·세공</li>
       </ul>
+      <p class="vz-tiles-cap">전체 콘텐츠</p>
+      <div class="vz-tiles">
+        <div class="vz-tile"><div class="n">6</div><div class="l">보스</div></div>
+        <div class="vz-tile"><div class="n">5</div><div class="l">속성</div><div class="sw"><i style="background:var(--fire)"></i><i style="background:var(--ice)"></i><i style="background:var(--bolt)"></i><i style="background:var(--light)"></i><i style="background:var(--earth)"></i></div></div>
+        <div class="vz-tile"><div class="n">10</div><div class="l">주문</div></div>
+        <div class="vz-tile"><div class="n">7</div><div class="l">필드 동물</div></div>
+      </div>
       <div class="chips flow" style="margin-top:auto">
         <button class="chip on" data-ph="02-시작화면" data-t="">시작</button><span class="arrow">→</span>
         <button class="chip" data-ph="02-필드전경" data-t="">필드</button><span class="arrow">→</span>
@@ -324,6 +357,152 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
   </div>
   <div class="note">환경 실험이 먼저였고, 마법 조합은 하고 싶었던 것. 범위가 커져 태그로 줄였고, 보스는 마법을 쓸 대상으로 넣었다.</div>
 </section>
+<!-- GIS 1: 데이터 흐름 -->
+<section class="slide" id="gis" data-title="GIS 디지털 트윈">
+  <p class="kicker">01 · 게임</p>
+  <h1>GIS 디지털 트윈 환경 구성</h1>
+  <div class="gis-grid">
+    <div class="gis-left">
+      <svg class="flowmap" viewBox="0 0 1380 520" role="img" aria-label="원본 GIS 데이터 3종이 Python 가공을 거쳐 필드 데이터가 되고, 지형·건물·지도·미니맵으로 쓰이는 흐름">
+        <defs>
+          <marker id="gis-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path class="ar" d="M0 0 L10 5 L0 10 z"/></marker>
+        </defs>
+        <!-- 열 머리 -->
+        <text class="hd" x="0" y="22">원본 GIS 데이터</text>
+        <text class="hd" x="404" y="22">가공</text>
+        <text class="hd" x="700" y="22">필드 데이터</text>
+        <text class="hd" x="1040" y="22">게임 적용</text>
+
+        <!-- 1열: 원본 3종 -->
+        <rect class="box" x="0" y="44" width="350" height="140" rx="6"/>
+        <image href="media/ph/17-gis-src-dem.jpg" x="14" y="58" width="112" height="112"/>
+        <rect class="thumb" x="14" y="58" width="112" height="112"/>
+        <text class="t" x="144" y="100">DEM 높이</text>
+        <text class="s" x="144" y="132">NYC 라이다 2017</text>
+        <text class="s" x="144" y="158">1m 격자</text>
+
+        <rect class="box" x="0" y="204" width="350" height="140" rx="6"/>
+        <image href="media/ph/17-gis-src-bld.jpg" x="14" y="218" width="112" height="112"/>
+        <rect class="thumb" x="14" y="218" width="112" height="112"/>
+        <text class="t" x="144" y="260">건물 윤곽</text>
+        <text class="s" x="144" y="292">NYC Open Data</text>
+        <text class="s" x="144" y="318">외곽선·높이</text>
+
+        <rect class="box" x="0" y="364" width="350" height="140" rx="6"/>
+        <image href="media/ph/17-gis-src-osm.jpg" x="14" y="378" width="112" height="112"/>
+        <rect class="thumb" x="14" y="378" width="112" height="112"/>
+        <text class="t" x="144" y="420">길·물·숲</text>
+        <text class="s" x="144" y="452">OpenStreetMap</text>
+        <text class="s" x="144" y="478">Overpass API</text>
+
+        <path class="ln" d="M350 114 H396" marker-end="url(#gis-ar)"/>
+        <path class="ln" d="M350 274 H396" marker-end="url(#gis-ar)"/>
+        <path class="ln" d="M350 434 H396" marker-end="url(#gis-ar)"/>
+
+        <!-- 2열: 가공 -->
+        <rect class="proc" x="404" y="44" width="240" height="460" rx="6"/>
+        <text class="t" x="424" y="96">Python 가공</text>
+        <text class="s" x="424" y="126">Tools/gis</text>
+        <text class="s" x="424" y="194">위경도 → UTM</text>
+        <text class="s" x="424" y="222">→ 필드 좌표</text>
+        <text class="s" x="424" y="290">공원 긴 축 = Z축</text>
+        <text class="s" x="424" y="318">축척 1:1</text>
+        <text class="s" x="424" y="386">고정 시드</text>
+        <text class="s" x="424" y="414">→ 같은 원본,</text>
+        <text class="s" x="424" y="442">같은 결과</text>
+
+        <path class="ln" d="M644 114 H692" marker-end="url(#gis-ar)"/>
+        <path class="ln" d="M644 274 H692" marker-end="url(#gis-ar)"/>
+        <path class="ln" d="M644 434 H692" marker-end="url(#gis-ar)"/>
+
+        <!-- 3열: 필드 데이터 -->
+        <rect class="box" x="700" y="64" width="270" height="100" rx="6"/>
+        <text class="t" x="720" y="106">높이맵</text>
+        <text class="s" x="720" y="140">16bit · 1025² · 타일</text>
+        <rect class="box" x="700" y="224" width="270" height="100" rx="6"/>
+        <text class="t" x="720" y="266">스플랫</text>
+        <text class="s" x="720" y="300">잔디·흙길·바위·진흙</text>
+        <rect class="box" x="700" y="384" width="270" height="100" rx="6"/>
+        <text class="t" x="720" y="426">배치 JSON</text>
+        <text class="s" x="720" y="460">건물·물·나무·길</text>
+
+        <!-- 모음선 -->
+        <path class="ln" d="M970 114 H1000 M970 274 H1000 M970 434 H1000 M1000 100 V400"/>
+        <path class="ln" d="M1000 100 H1032" marker-end="url(#gis-ar)"/>
+        <path class="ln" d="M1000 222 H1032" marker-end="url(#gis-ar)"/>
+        <path class="ln" d="M1000 344 H1032" marker-end="url(#gis-ar)"/>
+
+        <!-- 4열: 게임 적용 4단계 -->
+        <rect class="box" x="1040" y="48" width="340" height="104" rx="6" style="stroke:var(--earth-b)"/>
+        <text class="n" x="1060" y="96" style="fill:var(--earth-b)">1</text>
+        <text class="t" x="1096" y="94">지형</text>
+        <text class="s" x="1096" y="128">Terrain 1024m 타일 10장</text>
+
+        <rect class="box" x="1040" y="170" width="340" height="104" rx="6" style="stroke:var(--fire-b)"/>
+        <text class="n" x="1060" y="218" style="fill:var(--fire-b)">2</text>
+        <text class="t" x="1096" y="216">건물</text>
+        <text class="s" x="1096" y="250">윤곽 돌출, 11채 Blender</text>
+
+        <rect class="box" x="1040" y="292" width="340" height="96" rx="6" style="stroke:var(--ice-b)"/>
+        <text class="n" x="1060" y="340" style="fill:var(--ice-b)">3</text>
+        <text class="t" x="1096" y="338">지도</text>
+        <text class="s" x="1096" y="368">오프라인 굽기 1m/px</text>
+
+        <path class="ln" d="M1210 388 V412" marker-end="url(#gis-ar)"/>
+        <rect class="box" x="1040" y="414" width="340" height="96" rx="6" style="stroke:var(--light-b)"/>
+        <text class="n" x="1060" y="458" style="fill:var(--light-b)">4</text>
+        <text class="t" x="1096" y="456">미니맵</text>
+        <text class="s" x="1096" y="490">같은 지도, 반경 100m</text>
+      </svg>
+
+      <div class="stats">
+        <div class="stat"><div class="n">1:1</div><div class="l">실제 축척</div></div>
+        <div class="stat"><div class="n">4.1<small>×0.8km</small></div><div class="l">센트럴파크 전체</div></div>
+        <div class="stat"><div class="n">10<small>장</small></div><div class="l">지형 타일 1024m</div></div>
+        <div class="stat"><div class="n">6,940<small>동</small></div><div class="l">GIS 건물</div></div>
+      </div>
+    </div>
+
+    <!-- 오른쪽: 구운 전체 지도 -->
+    <div class="park">
+      <svg viewBox="0 0 388 1280" preserveAspectRatio="xMidYMid meet" role="img" aria-label="구운 공원 전체 지도와 첫 플레이 구역">
+        <image href="media/ph/17-gis-0-전체지도.jpg" x="0" y="0" width="388" height="1280"/>
+        <!-- 첫 플레이 구역: 지도 X 53.6~80.3%, Y 87.7~96.3% (CentralPark_Map.json 범위로 환산) -->
+        <rect x="208" y="1123" width="104" height="110" fill="none" stroke="#f2a33a" stroke-width="5"/>
+        <text x="194" y="40" text-anchor="middle" font-size="34" font-weight="700" fill="#f4f1ea">N ↑</text>
+      </svg>
+      <p>bake_map.py 출력<br><b class="hl" style="color:var(--warm)">□</b> 첫 플레이 구역</p>
+    </div>
+  </div>
+  <div class="note">센트럴파크를 실제 GIS 데이터로 1:1로 옮겼다. 라이다 높이, 뉴욕시 건물 윤곽, OSM 길·물·숲 세 가지를 파이썬으로 필드 좌표에 맞춰 가공하고, 같은 가공 결과로 지형·건물·지도·미니맵을 모두 만들었다. 처음엔 1km 타일 하나였고 나중에 공원 전체 4km로 넓혔다.</div>
+</section>
+
+<!-- GIS 2: 단계별 결과 -->
+<section class="slide" id="gis-steps" data-title="GIS 구성 단계">
+  <p class="kicker">01 · 게임</p>
+  <h1>GIS 환경 구성 단계</h1>
+  <div class="cols">
+    <div class="col">
+      <ul class="pts">
+        <li><b class="hl">데이터</b> DEM·건물·OSM 3종 합성, 원 타일 1024m 건물 658동 (주황 사각: 첫 플레이 구역)</li>
+        <li><b class="hl">지형</b> 높이맵 + 스플랫 4층, 타일 이음새 높이 차 평균 1~2mm</li>
+        <li><b class="hl">건물</b> 윤곽·높이 돌출, 원경은 256m 격자로 합친 메시</li>
+        <li><b class="hl">지도</b> 같은 GIS 데이터로 PNG 굽기, 북쪽 위</li>
+        <li><b class="hl">미니맵</b> 같은 지도 텍스처, 반경 100m, 북쪽 고정 (왼쪽 게임 화면, 오른쪽 같은 자리 위에서)</li>
+      </ul>
+      <div class="chips flow">
+        <button class="chip on" data-ph="17-gis-1-데이터">데이터</button><span class="arrow">→</span>
+        <button class="chip" data-ph="17-gis-2-지형">지형</button><span class="arrow">→</span>
+        <button class="chip" data-ph="17-gis-3-건물">건물</button><span class="arrow">→</span>
+        <button class="chip" data-ph="17-gis-4-필드">필드</button><span class="arrow">→</span>
+        <button class="chip" data-ph="17-gis-5-지도">지도</button><span class="arrow">→</span>
+        <button class="chip" data-ph="17-gis-6-미니맵">미니맵</button>
+      </div>
+    </div>
+    <div class="media" data-key="17-gis" data-ph="17-gis-1-데이터" data-notag></div>
+  </div>
+  <div class="note">칩을 차례로 눌러 데이터에서 미니맵까지 보여 준다. 지형은 나무 없이 높이·길·물만 올린 에디터 화면, 건물은 외곽선을 높이만큼 올린 첫 판, 필드는 식생까지 올린 화면. 미니맵은 왼쪽이 게임 미니맵, 오른쪽이 같은 자리를 위에서 본 장면이다.</div>
+</section>
 <!-- 4 주문과 속성 -->
 <section class="slide" id="s4" data-title="주문·속성 시스템">
   <p class="kicker">01 · 게임</p>
@@ -346,26 +525,21 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
     </div>
     <div class="media" data-key="06-주문-화염" data-ph="06-화염"></div>
   </div>
-  <div class="note">시연 전에 규칙을 먼저 설명한다. 탭으로 속성을 보여 준다.</div>
+  <div class="note">영상 전에 규칙을 먼저 설명한다. 탭으로 속성을 보여 준다.</div>
 </section>
 <!-- 5 보스 패턴 -->
 <section class="slide" id="s5" data-title="보스 패턴">
   <p class="kicker">01 · 게임</p>
-  <h1>보스 패턴</h1>
+  <h1>보스 패턴 <span class="muted" style="font-size:28px;font-weight:400">보스별 약점·저항, 예고 범위 2종</span></h1>
   <div class="cols">
     <div class="col">
       <ul class="pts">
-        <li>보스별 고유 패턴</li>
         <li>공격 전 바닥에 예고 범위 표시</li>
         <li>2페이즈: 속도 증가·연속 공격</li>
       </ul>
-      <div class="chips" style="margin-top:auto">
-        <button class="chip on" data-key="05-보스1" data-ph="05-예고1">보스 1</button>
-        <button class="chip" data-key="05-보스2" data-ph="05-예고2">보스 2</button>
-        <button class="chip" data-key="05-보스3" data-ph="04-보스전">보스 3</button>
-      </div>
+      <div class="vz-boss" data-viz="boss"></div>
     </div>
-    <div class="media" data-key="05-보스1" data-ph="05-예고1"></div>
+    <div class="media" data-key="05-보스큐브-충격파" data-ph="05-예고1"></div>
   </div>
   <div class="note">보스 패턴은 따로 찍은 영상. 예고 범위가 나오고 공격이 들어오는 장면.</div>
 </section>
@@ -380,29 +554,32 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
     <div class="step"><b>시험</b><span>Unity 자동 시험</span></div><i>→</i>
     <div class="step"><b>PR·확인</b><span>화면은 직접 확인</span></div>
   </div>
-  <div class="stats">
-    <div class="stat"><div class="n" data-to="2142">0</div><div class="l">커밋</div></div>
-    <div class="stat"><div class="n" data-to="378">0</div><div class="l">병합 PR</div></div>
-    <div class="stat"><div class="n" data-to="277">0</div><div class="l">닫은 이슈</div></div>
-    <div class="stat"><div class="n" data-to="29">0</div><div class="l">개발 일수</div></div>
+  <div class="vz-dev">
+    <div class="stats">
+      <div class="stat"><div class="n" data-to="2168">0</div><div class="l">커밋</div></div>
+      <div class="stat"><div class="n" data-to="381">0</div><div class="l">병합 PR</div></div>
+      <div class="stat"><div class="n" data-to="279">0</div><div class="l">닫은 이슈</div></div>
+      <div class="stat"><div class="n" data-to="29">0</div><div class="l">개발 일수</div></div>
+    </div>
+    <div class="vz-chart">
+      <h3>일별 커밋<span>9/29 ~ 10/27 · 10/27 00:50 집계</span></h3>
+      <div data-viz="commits"></div>
+    </div>
   </div>
-  <div class="cols" style="grid-template-columns:1fr 1fr;gap:48px">
-    <ul class="pts">
-      <li>결정 사항 즉시 위키 기록 → 세션 교체 후에도 맥락 유지</li>
-      <li>계획·검토 Claude, 구현 Codex 역할 분담</li>
-      <li>한 판 자동 플레이 시험 → 수정 후 기존 기능 고장을 PR 전에 발견</li>
-    </ul>
-    <p class="muted" style="font-size:26px;margin:0">커밋·PR 수: 이슈 소단위 분할, PR별 자동 시험<br>캐릭터·보스 모델: VARCO 3D 생성<br>외부 에셋: VFX 팩, 환경 팩, 스카이박스</p>
-  </div>
-  <div class="note">이슈 하나를 작업 공간 하나에서 처리한다. 계획은 Claude, 구현은 Codex, 시험 통과 뒤 PR.</div>
+  <div class="note">이슈 하나를 작업 공간 하나에서 처리한다. 계획은 Claude, 구현은 Codex, 시험 통과 뒤 PR. 결정은 바로 위키에 적어 세션이 바뀌어도 맥락 유지. 한 판 자동 플레이 시험으로 기존 기능 고장을 PR 전에 발견. 커밋·PR 수가 많은 이유: 이슈를 작게 나누고 PR마다 자동 시험. 다듬기 구간(10/17~24)은 원래 OBT 계획이었으나 공개 테스트는 열지 않았다.</div>
 </section>
 <!-- 8 막힌 점과 해결 -->
 <section class="slide" id="s7" data-title="문제와 해결">
   <p class="kicker">02 · Claude 협업</p>
   <h1>문제와 해결</h1>
-  <div class="fb-grid" style="grid-template-columns:1fr">
+  <div class="fb-grid" style="grid-template-columns:1fr;flex:none">
     <div class="fb"><p class="q">AI의 화면 결과 자체 합격 처리</p><p class="a">캡처 시험 분리, 화면 직접 확인 후 이슈 종료</p></div>
-    <div class="fb"><p class="q">같은 지적의 반복</p><p class="a">규칙 파일화, 2회 위반 시 자동 차단 스크립트(훅)</p></div>
+  </div>
+  <p class="muted" style="margin:28px 0 0;font-size:28px"><b style="color:var(--ink)">같은 지적의 반복</b> → 점점 강한 장치로 교정</p>
+  <div class="vz-stairs">
+    <div class="vz-stair"><span class="k">1단</span><h3>대화로 지적</h3><p>세션이 끝나면 사라짐<br>다음 세션에서 재발</p></div>
+    <div class="vz-stair"><span class="k">2단</span><h3>규칙 파일</h3><p>AGENTS.md·작업 습관 문서에 기록<br>모든 세션이 시작할 때 읽음</p></div>
+    <div class="vz-stair"><span class="k">3단 · 규칙으로도 재발</span><h3>훅 자동 차단</h3><p>도구 호출 전후 검사 스크립트<br><code>영어 답 차단</code> <code>새 워크트리 차단</code> <code>Unity 인스턴스 고정</code></p></div>
   </div>
   <div class="note">시간이 남으면: 세션 여럿이 같은 폴더를 고쳐 충돌 → 저장소 복사본 5개. VARCO 3D 애니메이션 FBX가 클립 0개 → Blender로 다시 내보냄.</div>
 </section>
@@ -430,15 +607,66 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
   <p class="muted ba-fix">과정: 게임 캡처 → 사용자 지적 → 목업과 비교 → Codex 수정 → 같은 구도로 다시 캡처</p>
   <div class="note">트러블슈팅처럼 같은 구도로 찍어 비교. 필드 HUD: 10-14 캡처(#392) → 10-27 main 실제 필드 씬 캡처(생활 T, 궁극 V #465, 아이콘 #720). 마법책 #370 → #383: 이름 잘림·창 0.67배 → 창 키우기(#370) → v3 디자인 문법으로 전체 화면 재구성(#383). 원정 시작 #593: 카드 3장 → 현황판과 같은 지도. 던전 입장 #384: "배경이 너무 잘 보여서 구리다" → 흐림·어둡힘. 랭킹 #105: "심심하고 아쉽다" → 순위 표식·속성색·상세 열. 주문 아이콘 #720: "너무 단순하다" → VARCO 시안 10장을 vtracer로 추적한 SVG, HUD 아이콘 26 → 40px.</div>
 </section>
+<!-- VARCO 3D 에셋 모음. 「Blender MCP 모델링」 앞에 끼운다. 이미지: media/ph/varco/NN.jpg (Docs/에셋레퍼런스에서 420px로 자름) -->
+<style>
+#varco .vc-head { display: flex; align-items: center; gap: 14px; margin: 0 0 22px; font-size: 24px; color: var(--muted); }
+#varco .vc-head b { color: var(--ink); background: var(--card); border: 1px solid var(--line-subtle); border-radius: 4px; padding: 6px 14px; font-size: 22px; }
+#varco .vc-head i { font-style: normal; }
+#varco .vc-head .vc-n { margin-left: auto; display: flex; gap: 28px; }
+#varco .vc-head .vc-n span { font-size: 20px; }
+#varco .vc-head .vc-n strong { font-family: var(--serif); font-size: 44px; font-weight: 900; color: var(--ink); margin-right: 6px; }
+#varco .vc-grid { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(9, 1fr); grid-template-rows: repeat(3, 1fr); gap: 10px; }
+#varco figure { margin: 0; position: relative; border-radius: 4px; overflow: hidden; background: #151816; }
+#varco figure.w { grid-column: span 2; }
+#varco figure img { width: 100%; height: 100%; object-fit: cover; display: block; }
+#varco figure.w img { object-fit: contain; }
+#varco figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 10px 6px; font-size: 17px; font-weight: 700; color: #f4f1ea; background: linear-gradient(transparent, rgba(0,0,0,.72)); }
+#varco figcaption small { display: block; font-size: 13px; font-weight: 400; color: #d0c498; }
+</style>
+<section class="slide" id="varco" data-title="VARCO 3D 에셋">
+  <p class="kicker">02 · Claude 협업</p>
+  <h1>VARCO 3D 에셋 생성 <span class="muted" style="font-size:28px;font-weight:400">MCP로 연결한 에이전트가 생성 워크플로 직접 구성·실행</span></h1>
+  <div class="vc-head">
+    <b>콘셉트 이미지</b><i>→</i><b>부품 이미지</b><i>→</i><b>3D 모델</b><i>→</i><b>Unity 조립·배치</b>
+    <div class="vc-n"><span><strong>77</strong>생성 3D 원본</span></div>
+  </div>
+  <div class="vc-grid">
+    <figure><img src="media/ph/varco/00.jpg" alt=""><figcaption><small>보스</small>보스 큐브</figcaption></figure>
+    <figure><img src="media/ph/varco/01.jpg" alt=""><figcaption><small>보스</small>얼음 결정탑</figcaption></figure>
+    <figure><img src="media/ph/varco/02.jpg" alt=""><figcaption><small>보스</small>전기 코어</figcaption></figure>
+    <figure><img src="media/ph/varco/03.jpg" alt=""><figcaption><small>보스</small>용암 핵</figcaption></figure>
+    <figure><img src="media/ph/varco/04.jpg" alt=""><figcaption><small>보스</small>자이로스코프</figcaption></figure>
+    <figure><img src="media/ph/varco/05.jpg" alt=""><figcaption><small>보스</small>문양 기둥</figcaption></figure>
+    <figure><img src="media/ph/varco/18.jpg" alt=""><figcaption><small>랭킹 던전</small>고정 큐브</figcaption></figure>
+    <figure><img src="media/ph/varco/19.jpg" alt=""><figcaption><small>랭킹 던전</small>관문</figcaption></figure>
+    <figure><img src="media/ph/varco/06.jpg" alt=""><figcaption><small>몬스터</small>근접 큐브</figcaption></figure>
+    <figure><img src="media/ph/varco/07.jpg" alt=""><figcaption><small>몬스터</small>자폭병</figcaption></figure>
+    <figure><img src="media/ph/varco/08.jpg" alt=""><figcaption><small>몬스터</small>신호등 포탑</figcaption></figure>
+    <figure><img src="media/ph/varco/09.jpg" alt=""><figcaption><small>몬스터</small>부유 술사</figcaption></figure>
+    <figure><img src="media/ph/varco/10.jpg" alt=""><figcaption><small>군락 표시</small>파일런</figcaption></figure>
+    <figure><img src="media/ph/varco/11.jpg" alt=""><figcaption><small>군락 표시</small>폐차탑</figcaption></figure>
+    <figure><img src="media/ph/varco/12.jpg" alt=""><figcaption><small>군락 표시</small>변이 가로등</figcaption></figure>
+    <figure><img src="media/ph/varco/13.jpg" alt=""><figcaption><small>군락 표시</small>신호등 토템</figcaption></figure>
+    <figure><img src="media/ph/varco/14.jpg" alt=""><figcaption><small>필드 소품</small>추락 헬기</figcaption></figure>
+    <figure><img src="media/ph/varco/15.jpg" alt=""><figcaption><small>필드 소품</small>컨테이너</figcaption></figure>
+    <figure><img src="media/ph/varco/16.jpg" alt=""><figcaption><small>필드 소품</small>버스 정류장</figcaption></figure>
+    <figure><img src="media/ph/varco/17.jpg" alt=""><figcaption><small>필드 소품</small>급수탑</figcaption></figure>
+    <figure><img src="media/ph/varco/23.jpg" alt=""><figcaption><small>필드 소품</small>군 텐트</figcaption></figure>
+    <figure class="w"><img src="media/ph/varco/20.jpg" alt=""><figcaption><small>캐릭터</small>원본 1장 → 8파트 분할</figcaption></figure>
+    <figure class="w"><img src="media/ph/varco/21.jpg" alt=""><figcaption><small>캐릭터</small>T포즈 시안</figcaption></figure>
+    <figure class="w"><img src="media/ph/varco/22.jpg" alt=""><figcaption><small>UI</small>주문 아이콘 시안 → SVG 추적</figcaption></figure>
+  </div>
+  <div class="note">VARCO 3D를 MCP로 연결해 에이전트가 노드를 만들고 이어 실행. 보스는 콘셉트 1장 → 부품 이미지 → 부품 3D → Unity 빌더로 조립. 생성 3D 원본 77개(GLB·FBX, 저장소 밖 보관, Docs/에셋레퍼런스/3D원본-위치.md).</div>
+</section>
 <!-- Blender MCP 모델링 -->
 <section class="slide" id="s9" data-title="Blender MCP 모델링">
   <p class="kicker">02 · Claude 협업</p>
   <h1>Blender MCP 모델링 <span class="muted" style="font-size:28px;font-weight:400">Claude가 MCP(AI의 도구 연결)로 Blender 직접 조작</span></h1>
   <div class="cols">
     <div class="col">
+      <div class="vz-chev"><div>블로킹</div><div>기계 구조</div><div>디테일</div><div>재질·조명</div><div>리그·모션</div><div class="last">Unity 반입</div></div>
+      <p class="vz-chev-cap">단계마다 새 세션: 긴 대화 누적 방지</p>
       <ul class="pts">
-        <li><b class="hl">단계</b> 블로킹 → 기계 구조 → 디테일 → 재질·조명 → 리그·모션 → Unity 반입</li>
-        <li><b class="hl">단계별 새 세션</b> 단계마다 세션 분리, 긴 대화 누적 방지</li>
         <li><b class="hl">게임 반입</b> 공원 폐허 건물 11채</li>
         <li><b class="hl">기록</b> 호출마다 장면 지문 저장 → 변화 구간만 남긴 타임랩스 자동 편집</li>
       </ul>
@@ -461,16 +689,16 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
     <li><b>오케스트레이션</b><span>계획·조율 Claude, 구현 Codex, 교차 검토 Gemini·DeepSeek 분담</span></li>
     <li><b>위키 기록</b><span>결정 사항을 날짜·이유와 함께 기록. 새 세션이 위키에서 맥락 탐색</span></li>
     <li><b>자체 탐색·자체 검토</b><span>파일 위치를 알려 주지 않고 탐색 지시. 작업 후 자체 검토와 타 모델 교차 검토</span></li>
-    <li><b>대화 대신 규칙 파일 수정</b><span>반복되는 지적은 규칙 파일에 반영. 화면 결과는 직접 확인 후 종료</span></li>
+    <li><b>대화 대신 규칙 파일 수정</b><span>반복되는 지적은 대화가 아니라 규칙 파일에 반영</span></li>
   </ol>
   <div class="note">특별한 프롬프트 문장은 없었다. 오케스트레이션, 위키 기록, 스스로 찾고 검토하라는 지시가 대부분이었다.</div>
 </section>
 <!-- 6 피드백과 바뀐 부분 -->
-<section class="slide" id="s11" data-title="피드백 반영">
+<section class="slide" id="s11" data-title="피드백과 자체 점검">
   <p class="kicker">03 · 피드백</p>
-  <h1>피드백 반영 <span class="muted" style="font-size:28px;font-weight:400">비공개 테스트(CBT) 팀원 2명 · 기능 지적은 대부분 자체 플레이</span></h1>
+  <h1>피드백과 자체 점검 <span class="muted" style="font-size:28px;font-weight:400">비공개 테스트(CBT) 테스터 2명 · 기능 지적은 대부분 자체 플레이</span></h1>
   <div class="fb-grid">
-    <div class="fb"><span class="stage">팀원 2명</span><p class="q">볼륨 부족</p><p class="a">원거리 몬스터 추가 (필드 밀도 보강은 미완)</p></div>
+    <div class="fb"><span class="stage">테스터 2명</span><p class="q">볼륨 부족</p><p class="a">원거리 몬스터 추가 (필드 밀도 보강은 미완)</p></div>
     <div class="fb"><span class="stage">자체 플레이</span><p class="q">조준점·캐릭터 겹침으로 시야 가림</p><p class="a">캐릭터 화면 하단 배치, 조준점 세로 이동</p></div>
     <div class="fb"><span class="stage">자체 플레이</span><p class="q">보스 공격 단조로움·낮은 난이도</p><p class="a">패턴 순서 무작위, 2페이즈 가속, 연속 공격</p></div>
     <div class="fb"><span class="stage">자체 플레이</span><p class="q">첫 플레이 시 조작 파악 어려움</p><p class="a">기본 조작 9단계 튜토리얼</p></div>
@@ -483,7 +711,7 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
   <h1>자평 및 향후 계획</h1>
   <div class="wrap3">
     <div class="panel done"><h2>✓ 완성</h2><ul class="pts"><li>보스원정 한 판 정산까지 완주</li><li>주문 5속성, 오브 세공</li><li>튜토리얼</li></ul></div>
-    <div class="panel todo"><h2>× 미완</h2><ul class="pts"><li>효과음 (제거)</li><li>보스 E·F 전용 패턴</li><li>숙련 시스템</li></ul></div>
+    <div class="panel todo"><h2>× 미완</h2><ul class="pts"><li>효과음 (범위 제외)</li><li>자이로스코프·문양 기둥 전용 패턴</li><li>숙련 시스템</li></ul></div>
     <div class="panel next"><h2>→ 향후 계획</h2><ul class="pts"><li>사운드 재도입</li><li>플레이 로그 수집</li><li>PV 촬영 도구</li></ul></div>
   </div>
   <div class="cols" style="grid-template-columns: 1fr 1fr; gap:40px">
@@ -548,6 +776,9 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
         <button class="chip" data-ph="15-몬스터-무리" data-t="">혼합 무리</button>
         <button class="chip" data-ph="15-몬스터-저격" data-t="">저격 조준선</button>
         <button class="chip" data-ph="15-몬스터-방패" data-t="">방패</button>
+        <button class="chip" data-key="07-몬스터-크롤러-공격" data-ph="15-몬스터-외형">근접 공격</button>
+        <button class="chip" data-key="07-몬스터-술사-공격" data-ph="15-몬스터-외형">원거리 공격</button>
+        <button class="chip" data-key="07-몬스터-크롤러-사망" data-ph="15-몬스터-외형">처치</button>
         <button class="chip" data-ph="15-자폭병" data-t="">자폭병</button>
       </div>
     </div>
@@ -856,5 +1087,6 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
   go(isNaN(start) ? 0 : start - 1);
 })();
 </script>
+<script src="도표.js"></script>
 </body>
 </html>
