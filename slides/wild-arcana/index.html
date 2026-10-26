@@ -319,13 +319,13 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
 .boss-row figure .media video, .boss-row figure .media img { object-fit: cover; }
 .boss-row figcaption { position: absolute; left: 6px; top: 6px; font-size: 17px; font-weight: 700; color: #f4f1ea; background: rgba(13,15,14,.78); padding: 2px 10px; border-radius: 3px; }
 /* 협업 구조: 담당별 색 */
-.pipe2 { flex: 1; display: flex; align-items: stretch; gap: 12px; margin: 10px 0 18px; min-height: 0; }
+.pipe2 { display: flex; align-items: stretch; gap: 12px; margin: 30px 0 28px; min-height: 480px; }
 .pipe2 > i { align-self: center; font-style: normal; font-size: 34px; color: var(--muted); }
-.st2 { --c: var(--muted); flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 14px; padding: 26px 24px; background: var(--panel); border: 1px solid var(--line-subtle); border-top: 8px solid var(--c); border-radius: 6px; }
+.st2 { --c: var(--muted); flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; justify-content: flex-start; gap: 14px; padding: 26px 24px; background: var(--panel); border: 1px solid var(--line-subtle); border-top: 8px solid var(--c); border-radius: 6px; }
 .st2 .hd { display: flex; align-items: baseline; gap: 12px; } .st2 .hd em { font-style: normal; font-family: var(--serif); font-size: 40px; font-weight: 900; color: var(--c); } .st2 .hd b { font-size: 38px; color: var(--ink); }
 .st2 .who { align-self: flex-start; font-size: 22px; font-weight: 700; color: #151816; background: var(--c); border-radius: 3px; padding: 3px 12px; }
 .st2 .sub { font-size: 22px; color: var(--muted); }
-.st2 ul { margin: 22px 0 0; padding: 0 0 0 24px; font-size: 27px; line-height: 1.55; word-break: keep-all; color: var(--ink); } .st2 li::marker { color: var(--c); }
+.st2 ul { margin: 22px 0 0; padding: 0 0 0 24px; font-size: 27px; line-height: 1.55; word-break: keep-all; overflow-wrap: anywhere; color: var(--ink); } .st2 li::marker { color: var(--c); }
 .st2.me { --c: var(--accent); } .st2.claude { --c: #d97757; } .st2.codex { --c: var(--ice); } .st2.unity { --c: var(--bolt); }
 .legend2 { display: flex; gap: 28px; font-size: 22px; color: var(--muted); } .legend2 span::before { content: ""; display: inline-block; width: 16px; height: 16px; border-radius: 3px; margin-right: 8px; vertical-align: -2px; background: var(--c); }
 .legend2 .me { --c: var(--accent); } .legend2 .claude { --c: #d97757; } .legend2 .codex { --c: var(--ice); } .legend2 .unity { --c: var(--bolt); }
@@ -342,6 +342,18 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
 .tiles figure { margin: 0; display: flex; flex-direction: column; min-height: 0; } .tiles .media video, .tiles .media img { object-fit: cover; } .tiles.t3 .media video, .tiles.t3 .media img { object-fit: contain; }
 .tiles figcaption { padding: 8px 2px 0; font-size: 21px; color: var(--muted); white-space: nowrap; } .tiles figcaption b { font-size: 24px; color: var(--ink); margin-right: 8px; }
 .tile-text { display: flex; align-items: center; } .tile-text .pts li { font-size: 23px; margin-bottom: 8px; }
+/* 보스방 환경 */
+.arena-cols { grid-template-columns: 560px 1fr; }
+.arena-tiles { grid-template-columns: repeat(3, 1fr); grid-template-rows: 2fr 1fr; } .arena-tiles .big { grid-column: 1 / -1; }
+/* 문제와 해결 */
+.ps-row { display: flex; align-items: center; gap: 18px; margin: 0 0 12px; } .ps-row p { margin: 0; font-size: 30px; }
+.ps-row .tag { flex: none; width: 104px; text-align: center; font-size: 22px; font-weight: 800; padding: 4px 0; border-radius: 4px; }
+.ps-row .tag.q { background: var(--card); color: var(--muted); border: 1px solid var(--line); } .ps-row .tag.a { background: var(--accent); color: #151816; }
+.ps-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 22px 0 0 122px; }
+.ps-step { background: var(--panel); border: 1px solid var(--line-subtle); border-top: 6px solid var(--line); border-radius: 6px; padding: 18px 22px; }
+.ps-step code { font-family: var(--sans); font-size: 19px; white-space: nowrap; display: inline-block; margin: 0 4px 6px 0; } .ps-step:nth-child(2) { border-top-color: var(--accent); } .ps-step:nth-child(3) { border-top-color: var(--warm); }
+.ps-step .k { font-size: 20px; font-weight: 800; color: var(--muted); } .ps-step h3 { margin: 4px 0 8px; font-size: 30px; } .ps-step p { margin: 0 0 8px; font-size: 22px; color: var(--muted); line-height: 1.45; }
+.ps-scale { display: flex; align-items: center; gap: 14px; margin: 14px 0 0 122px; font-size: 20px; color: var(--muted); } .ps-scale i { flex: 1; height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--line), var(--accent), var(--warm)); }
 </style>
 <link rel="stylesheet" href="도표.css">
 </head>
@@ -505,8 +517,8 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
 </section>
 <!-- 5 보스 패턴 -->
 <section class="slide" id="s5" data-title="보스">
-  <p class="kicker">02 · AI</p>
-  <h1>보스 <span class="muted" style="font-size:28px;font-weight:400">보스 6종 · 패턴 2개씩, 공격 전 바닥에 예고 범위</span></h1>
+  <p class="kicker">02 · 게임 AI</p>
+  <h1>보스 <span class="muted" style="font-size:28px;font-weight:400">보스 6종 · 패턴 2개씩(2종은 공용 패턴), 공격 전 바닥에 예고 범위</span></h1>
   <div class="boss-grid">
     <div class="boss-row"><div class="bh"><b>보스 큐브</b><span class="bw none">약점 없음</span><span class="br none">저항 없음</span></div><figure><div class="media" data-key="05-보스큐브-충격파" data-ph="04-보스전" data-notag></div><figcaption>충격파</figcaption></figure><figure><div class="media" data-key="05-보스큐브-내려찍기" data-ph="04-보스전" data-notag></div><figcaption>내려찍기</figcaption></figure></div>
     <div class="boss-row"><div class="bh"><b>얼음 결정탑</b><span class="bw" style="--c:var(--fire-b)">화염 ×1.5</span><span class="br" style="--c:var(--ice-b)">얼음 ×0.5</span></div><figure><div class="media" data-key="05-보스얼음결정탑-직선강타" data-ph="04-보스전" data-notag></div><figcaption>직선강타</figcaption></figure><figure><div class="media" data-key="05-보스얼음결정탑-고리폭발" data-ph="04-보스전" data-notag></div><figcaption>고리폭발</figcaption></figure></div>
@@ -518,7 +530,7 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
   <div class="note">보스마다 패턴 두 개를 동시에 재생. 예고 범위(원·직선·도넛·방사)가 먼저 나오고 공격이 들어온다. 약점 ×1.5, 저항 ×0.5.</div>
 </section>
 <section class="slide" id="fboss" data-title="필드 보스">
-  <p class="kicker">02 · AI</p>
+  <p class="kicker">02 · 게임 AI</p>
   <h1>필드 보스 <span class="muted" style="font-size:28px;font-weight:400">필드에서 만나는 수호자, 처치하면 주문 해금</span></h1>
   <div class="fboss-grid">
     <div class="boss-row"><div class="bh"><b>거미 포탑 수호자</b><span>이동하며 겨냥 원 3개 → 지연 포격</span><span>처치 시 결정 드롭</span><span class="hl2">지연 포격·천광 폭격 해금</span></div><figure><div class="media" data-key="18-필드보스-거미" data-ph="18-필드보스-거미-겨냥" data-notag></div><figcaption>지연 포격</figcaption></figure><figure><div class="media" data-key="18-필드보스-거미-이동" data-ph="18-필드보스-거미-출현" data-notag></div><figcaption>이동</figcaption></figure></div>
@@ -528,7 +540,7 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
 </section>
 <!-- 일반 몬스터 -->
 <section class="slide" id="s15" data-title="일반 몬스터">
-  <p class="kicker">02 · AI</p>
+  <p class="kicker">02 · 게임 AI</p>
   <h1>일반 몬스터</h1>
   <div class="cols">
     <div class="col">
@@ -552,7 +564,7 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
   <div class="note">필드 남쪽 몬스터 구역(#388), 공격 전조(#469), 전투 역할 4종(#636), 자폭병(#320).</div>
 </section>
 <section class="slide" id="animal" data-title="동물">
-  <p class="kicker">02 · AI</p>
+  <p class="kicker">02 · 게임 AI</p>
   <h1>동물 <span class="muted" style="font-size:28px;font-weight:400">필드 동물 7종, 플레이어·소리·서로에게 반응</span></h1>
   <div class="tiles t4">
     <figure><div class="media" data-key="08-동물-닭-바라보기" data-ph="11-원경" data-notag></div><figcaption><b>닭</b> 바라보기</figcaption></figure>
@@ -635,7 +647,7 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
         <text class="s" x="720" y="140">16bit · 1025² · 타일</text>
         <rect class="box" x="700" y="224" width="286" height="100" rx="6"/>
         <text class="t" x="720" y="266">스플랫</text>
-        <text class="s" x="716" y="300" textLength="256" lengthAdjust="spacingAndGlyphs">잔디·흙길·바위·진흙</text>
+        <text class="s" x="720" y="300" style="font-size:18px">잔디·흙길·바위·진흙</text>
         <rect class="box" x="700" y="384" width="286" height="100" rx="6"/>
         <text class="t" x="720" y="426">배치 JSON</text>
         <text class="s" x="720" y="460">건물·물·나무·길</text>
@@ -716,6 +728,28 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
     <div class="media" data-key="17-gis" data-ph="17-gis-1-데이터" data-notag></div>
   </div>
   <div class="note">칩을 차례로 눌러 데이터에서 미니맵까지 보여 준다. 지형은 나무 없이 높이·길·물만 올린 에디터 화면, 건물은 외곽선을 높이만큼 올린 첫 판, 필드는 식생까지 올린 화면. 미니맵은 왼쪽이 게임 미니맵, 오른쪽이 같은 자리를 위에서 본 장면이다.</div>
+</section>
+<section class="slide" id="arena" data-title="보스방 환경">
+  <p class="kicker">03 · Claude로 만든 것</p>
+  <h1>보스방 환경 <span class="muted" style="font-size:28px;font-weight:400">병풍 경기장, 공중을 헤엄치는 금붕어</span></h1>
+  <div class="cols arena-cols">
+    <div class="col">
+      <ul class="pts">
+        <li><b class="hl">키트</b> Blender MCP로 만든 경기장 소품 반입, URP 재질</li>
+        <li><b class="hl">구조</b> 원형 경기장 + 바깥 고리 바닥, 둘레에 집게팔</li>
+        <li><b class="hl">분위기</b> 병풍 막이·족자 글귀·붉은 안개·심연</li>
+        <li><b class="hl">금붕어</b> 16마리 무리 + 거대 금붕어가 공중 유영</li>
+        <li><b class="hl">조명</b> 입장 시 보스방 전용 조명으로 전환</li>
+      </ul>
+    </div>
+    <div class="tiles arena-tiles">
+      <figure class="big"><div class="media" data-key="19-보스방-올려보기" data-ph="19-보스방-올려보기" data-notag></div><figcaption><b>올려보기</b> 금붕어 무리·족자</figcaption></figure>
+      <figure><div class="media" data-ph="19-보스방-전경" data-notag></div><figcaption><b>전경</b></figcaption></figure>
+      <figure><div class="media" data-ph="19-보스방-병풍" data-notag></div><figcaption><b>병풍</b></figcaption></figure>
+      <figure><div class="media" data-ph="19-보스방-금붕어" data-notag></div><figcaption><b>거대 금붕어</b></figcaption></figure>
+    </div>
+  </div>
+  <div class="note">보스방 환경(#146). 경기장 소품은 Blender 장의 「병풍 경기장」 타임랩스로 만든 것. 필드는 실제 지도, 보스방은 상상 공간으로 대비.</div>
 </section>
 <!-- UI 개선 과정 -->
 <section class="slide" id="s8" data-title="UI 개선 과정">
@@ -816,26 +850,27 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
     <i>→</i>
     <div class="st2 codex"><div class="hd"><em>3</em><b>구현</b></div><span class="who">Codex</span><span class="sub">작업 공간 5개</span><ul><li>계획대로 코드 수정</li><li>이슈별 브랜치 병행</li></ul></div>
     <i>→</i>
-    <div class="st2 unity"><div class="hd"><em>4</em><b>시험</b></div><span class="who">Unity</span><span class="sub">자동 시험</span><ul><li>EditMode·PlayMode 시험</li><li>한 판 자동 플레이(골드 패스)</li></ul></div>
+    <div class="st2 unity"><div class="hd"><em>4</em><b>시험</b></div><span class="who">Unity</span><span class="sub">자동 시험</span><ul><li>로직·플레이 자동 시험</li><li>연결부를 바꾸면 한 판 자동 플레이</li></ul></div>
     <i>→</i>
     <div class="st2 me"><div class="hd"><em>5</em><b>PR·확인</b></div><span class="who">사람</span><span class="sub">병합</span><ul><li>화면은 캡처로 직접 확인</li><li>통과 후 PR 병합</li></ul></div>
   </div>
   <div class="legend2"><span class="me">사람</span><span class="claude">Claude</span><span class="codex">Codex</span><span class="unity">Unity</span></div>
-  <div class="note">이슈 하나를 작업 공간 하나에서 처리한다. 계획은 Claude, 구현은 Codex, 시험 통과 뒤 PR. 결정은 바로 위키에 적어 세션이 바뀌어도 맥락 유지. 한 판 자동 플레이 시험으로 기존 기능 고장을 PR 전에 발견.</div>
+  <div class="note">이슈 하나를 작업 공간 하나에서 처리한다. 계획은 Claude, 구현은 Codex, 시험 통과 뒤 PR. 결정은 바로 위키에 적어 세션이 바뀌어도 맥락 유지. 바꾼 기능은 그 기능의 자동 시험으로, 화면 결과는 사람이 직접 확인.</div>
 </section>
 <!-- 8 막힌 점과 해결 -->
 <section class="slide" id="s7" data-title="문제와 해결">
   <p class="kicker">04 · Claude 협업 방식</p>
   <h1>문제와 해결</h1>
-  <div class="fb-grid" style="grid-template-columns:1fr;flex:none">
-    <div class="fb"><p class="q">AI의 화면 결과 자체 합격 처리</p><p class="a">캡처 시험 분리, 화면 직접 확인 후 이슈 종료</p></div>
+  <div class="ps-row"><span class="tag q">문제 1</span><p>AI가 화면 결과를 스스로 합격 처리</p></div>
+  <div class="ps-row"><span class="tag a">해결</span><p>캡처 시험을 따로 두고, 화면은 사람이 직접 확인한 뒤 이슈 종료</p></div>
+  <div class="ps-row" style="margin-top:34px"><span class="tag q">문제 2</span><p>같은 지적이 세션마다 반복</p></div>
+  <div class="ps-row"><span class="tag a">해결</span><p>재발할 때마다 한 단계 강한 장치로 교정</p></div>
+  <div class="ps-steps">
+    <div class="ps-step"><span class="k">1단</span><h3>대화로 지적</h3><p>세션이 끝나면 사라져 다음 세션에서 재발</p></div>
+    <div class="ps-step"><span class="k">2단</span><h3>규칙 파일</h3><p>AGENTS.md·작업 습관 문서에 기록, 모든 세션이 시작할 때 읽음</p></div>
+    <div class="ps-step"><span class="k">3단</span><h3>훅 자동 차단</h3><p>도구 호출 전후 검사 스크립트</p><p><code>영어 답 차단</code> <code>새 워크트리 차단</code> <code>Unity 인스턴스 고정</code></p></div>
   </div>
-  <p class="muted" style="margin:28px 0 0;font-size:28px"><b style="color:var(--ink)">같은 지적의 반복</b> → 점점 강한 장치로 교정</p>
-  <div class="vz-stairs">
-    <div class="vz-stair"><span class="k">1단</span><h3>대화로 지적</h3><p>세션이 끝나면 사라짐<br>다음 세션에서 재발</p></div>
-    <div class="vz-stair"><span class="k">2단</span><h3>규칙 파일</h3><p>AGENTS.md·작업 습관 문서에 기록<br>모든 세션이 시작할 때 읽음</p></div>
-    <div class="vz-stair"><span class="k">3단 · 규칙으로도 재발</span><h3>훅 자동 차단</h3><p>도구 호출 전후 검사 스크립트<br><code>영어 답 차단</code> <code>새 워크트리 차단</code> <code>Unity 인스턴스 고정</code></p></div>
-  </div>
+  <div class="ps-scale"><span>약함</span><i></i><span>강함</span></div>
   <div class="note">시간이 남으면: 세션 여럿이 같은 폴더를 고쳐 충돌 → 저장소 복사본 5개. VARCO 3D 애니메이션 FBX가 클립 0개 → Blender로 다시 내보냄.</div>
 </section>
 <!-- 9 작업 노하우 -->
@@ -868,13 +903,13 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
   <h1>개발 내용 요약</h1>
   <div class="vz-dev">
     <div class="stats">
-      <div class="stat"><div class="n" data-to="2168">0</div><div class="l">커밋</div></div>
-      <div class="stat"><div class="n" data-to="381">0</div><div class="l">병합 PR</div></div>
-      <div class="stat"><div class="n" data-to="279">0</div><div class="l">닫은 이슈</div></div>
-      <div class="stat"><div class="n" data-to="29">0</div><div class="l">개발 일수</div></div>
+      <div class="stat"><div class="n" data-to="2212">0</div><div class="l">커밋</div></div>
+      <div class="stat"><div class="n" data-to="386">0</div><div class="l">병합 PR</div></div>
+      <div class="stat"><div class="n" data-to="280">0</div><div class="l">닫은 이슈</div></div>
+      <div class="stat"><div class="n" data-to="29">0</div><div class="l">개발 기간(일)</div></div>
     </div>
     <div class="vz-chart">
-      <h3>일별 커밋<span>9/29 ~ 10/27 · 10/27 00:50 집계</span></h3>
+      <h3>일별 커밋<span>9/29 ~ 10/27 · 그래프 10/27 00:50, 숫자 10/27 오전 집계</span></h3>
       <div data-viz="commits"></div>
     </div>
   </div>
