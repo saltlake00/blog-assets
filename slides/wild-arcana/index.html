@@ -38,7 +38,7 @@
   --panel: var(--surface-800);
   --card: var(--surface-700);
   --sans: "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
-  --serif: "Noto Serif KR", "Batang", serif;
+  --serif: var(--sans); /* 2026-10-27 명조 → 고딕: 프로젝터 가독성 */
 }
 /* 밝은 방(프로젝터)용: L 키. tokens.json에 밝은 테마가 없어 시작 버튼 면(title-button-bg)을 바탕으로 쓴다. */
 :root[data-theme="light"] {
@@ -75,7 +75,7 @@ body { font-family: var(--sans); color: var(--ink); }
 @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
 .kicker { font-size: 26px; font-weight: 700; color: var(--warm); letter-spacing: .04em; margin: 0 0 10px; }
-h1 { font-family: var(--serif); font-size: 64px; line-height: 1.2; margin: 0 0 32px; font-weight: 900; }
+h1 { font-family: var(--sans); font-size: 62px; line-height: 1.2; margin: 0 0 32px; font-weight: 800; letter-spacing: -.01em; }
 h2 { font-size: 34px; margin: 0 0 14px; }
 p, li { font-size: 32px; line-height: 1.55; }
 .muted { color: var(--muted); }
@@ -99,6 +99,7 @@ b.hl { color: var(--accent-bright); }
   font-size: 18px; padding: 4px 12px; border-radius: 3px;
   background: rgba(13,15,14,.78); color: #a59c88; border: 1px solid #3b3e38;
 }
+.media .tag { display: none; } /* 녹화/자리표시 꼬리표: 제작 확인용, 발표에서는 숨김 */
 .media .tag.rec { color: #6fdc94; border-color: #1e4d33; }
 .media .empty {
   position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column;
@@ -115,14 +116,14 @@ b.hl { color: var(--accent-bright); }
 /* 칩·탭 */
 .chips { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 18px; }
 .chip {
-  font: inherit; font-size: 26px; font-weight: 700;
-  min-height: 56px; padding: 8px 24px; border-radius: 28px;
-  background: var(--card); color: var(--ink);
-  border: 1px solid var(--line); cursor: pointer;
-  transition: background .12s, border-color .12s;
+  font: inherit; font-size: 25px; font-weight: 700;
+  min-height: 54px; padding: 8px 22px; border-radius: 6px;
+  background: var(--panel); color: var(--muted);
+  border: 2px solid var(--line-subtle); cursor: pointer;
+  transition: background .12s, border-color .12s, color .12s;
 }
-.chip:hover { border-color: var(--accent-bright); }
-.chip.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.chip:hover { color: var(--ink); border-color: var(--line); }
+.chip.on { background: var(--accent); color: #151816; border-color: var(--accent); }
 .chip:focus-visible { outline: 2px solid var(--accent-bright); outline-offset: 3px; }
 .flow .chip { position: relative; }
 #s2 .flow { gap: 8px; }
@@ -292,6 +293,47 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
 #gis-steps .flow { gap: 6px; flex-wrap: nowrap; }
 #gis-steps .flow .chip { font-size: 21px; padding: 6px 13px; min-height: 48px; white-space: nowrap; }
 #gis-steps .flow .arrow { font-size: 20px; }
+/* 주문 장: 속성 5칸 그리드 */
+.el-grid { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr 1fr; gap: 20px 24px; }
+.el-cell { margin: 0; display: flex; flex-direction: column; min-height: 0; }
+.el-cell .media { border-top: 4px solid var(--line-subtle); }
+.el-cell figcaption { padding: 10px 2px 0; font-size: 22px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.el-cell figcaption b { font-size: 26px; margin-right: 8px; }
+.el-cell[data-el="fire"] .media { border-top-color: var(--fire); } .el-cell[data-el="fire"] b { color: var(--fire-b); }
+.el-cell[data-el="ice"] .media { border-top-color: var(--ice); } .el-cell[data-el="ice"] b { color: var(--ice-b); }
+.el-cell[data-el="bolt"] .media { border-top-color: var(--bolt); } .el-cell[data-el="bolt"] b { color: var(--bolt-b); }
+.el-cell[data-el="light"] .media { border-top-color: var(--light); } .el-cell[data-el="light"] b { color: var(--light-b); }
+.el-cell[data-el="earth"] .media { border-top-color: var(--earth); } .el-cell[data-el="earth"] b { color: var(--earth-b); }
+.el-rules { display: flex; align-items: center; padding: 0 12px; }
+.el-rules .pts li { font-size: 26px; }
+/* 보스 패턴 장: 6×2 영상 그리드 */
+.boss-grid { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(3, 1fr); gap: 16px 28px; }
+.boss-row { display: grid; grid-template-columns: 190px 1fr 1fr; gap: 10px; min-height: 0; background: var(--card); border: 1px solid var(--line-subtle); border-radius: 6px; padding: 10px; }
+.boss-row .bh { display: flex; flex-direction: column; gap: 8px; justify-content: center; font-size: 20px; }
+.boss-row .bh b { font-size: 26px; color: var(--ink); margin-bottom: 4px; }
+.boss-row .bw, .boss-row .br { color: var(--c); font-weight: 700; }
+.boss-row .br { font-weight: 400; } .boss-row .bw::before { content: "약점 "; color: var(--muted); font-weight: 400; } .boss-row .br::before { content: "저항 "; color: var(--muted); }
+.boss-row .none { color: var(--muted); font-weight: 400; } .boss-row .none::before { content: none; }
+.boss-row figure { margin: 0; position: relative; min-height: 0; display: flex; }
+.boss-row figure .media { flex: 1; }
+.boss-row figure .media video, .boss-row figure .media img { object-fit: cover; }
+.boss-row figcaption { position: absolute; left: 6px; top: 6px; font-size: 17px; font-weight: 700; color: #f4f1ea; background: rgba(13,15,14,.78); padding: 2px 10px; border-radius: 3px; }
+/* 협업 구조: 담당별 색 */
+.pipe2 { flex: 1; display: flex; align-items: stretch; gap: 12px; margin: 10px 0 18px; min-height: 0; }
+.pipe2 > i { align-self: center; font-style: normal; font-size: 34px; color: var(--muted); }
+.st2 { --c: var(--muted); flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 14px; padding: 26px 24px; background: var(--panel); border: 1px solid var(--line-subtle); border-top: 8px solid var(--c); border-radius: 6px; }
+.st2 .hd { display: flex; align-items: baseline; gap: 12px; } .st2 .hd em { font-style: normal; font-family: var(--serif); font-size: 40px; font-weight: 900; color: var(--c); } .st2 .hd b { font-size: 38px; color: var(--ink); }
+.st2 .who { align-self: flex-start; font-size: 22px; font-weight: 700; color: #151816; background: var(--c); border-radius: 3px; padding: 3px 12px; }
+.st2 .sub { font-size: 22px; color: var(--muted); }
+.st2 ul { margin: 22px 0 0; padding: 0 0 0 24px; font-size: 27px; line-height: 1.55; word-break: keep-all; color: var(--ink); } .st2 li::marker { color: var(--c); }
+.st2.me { --c: var(--accent); } .st2.claude { --c: #d97757; } .st2.codex { --c: var(--ice); } .st2.unity { --c: var(--bolt); }
+.legend2 { display: flex; gap: 28px; font-size: 22px; color: var(--muted); } .legend2 span::before { content: ""; display: inline-block; width: 16px; height: 16px; border-radius: 3px; margin-right: 8px; vertical-align: -2px; background: var(--c); }
+.legend2 .me { --c: var(--accent); } .legend2 .claude { --c: #d97757; } .legend2 .codex { --c: var(--ice); } .legend2 .unity { --c: var(--bolt); }
+/* Blender 장: 4개 그리드 */
+#s9 .vz-chev { margin-bottom: 18px; }
+.bl-grid { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 16px 28px; }
+.bl-grid figure { margin: 0; display: flex; flex-direction: column; min-height: 0; } .bl-grid .media video, .bl-grid .media img { object-fit: cover; }
+.bl-grid figcaption { padding: 8px 2px 0; font-size: 22px; color: var(--muted); } .bl-grid figcaption b { font-size: 26px; color: var(--ink); margin-right: 8px; }
 </style>
 <link rel="stylesheet" href="도표.css">
 </head>
@@ -328,14 +370,14 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
         <div class="vz-tile"><div class="n">7</div><div class="l">필드 동물</div></div>
       </div>
       <div class="chips flow" style="margin-top:auto">
-        <button class="chip on" data-ph="02-시작화면" data-t="">시작</button><span class="arrow">→</span>
+        <button class="chip on" data-ph="13-로그인" data-t="">시작</button><span class="arrow">→</span>
         <button class="chip" data-ph="02-필드전경" data-t="">필드</button><span class="arrow">→</span>
         <button class="chip" data-ph="04-포털" data-t="">원정 시작대</button><span class="arrow">→</span>
         <button class="chip" data-ph="04-보스전" data-t="">보스전</button><span class="arrow">→</span>
         <button class="chip" data-ph="04-승리정산" data-t="">정산</button>
       </div>
     </div>
-    <div class="media" data-key="04-한판흐름" data-ph="02-시작화면"></div>
+    <div class="media" data-key="04-한판흐름" data-ph="13-로그인"></div>
   </div>
   <div class="note">필드에서 보스원정을 떠나 보스 3마리를 잡는다. 보스를 잡을 때마다 오브를 강화·세공한다.</div>
 </section>
@@ -351,15 +393,111 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
         <li><b class="hl">범위 조정</b> 규모 문제로 태그 방식으로 축소</li>
         <li><b class="hl">보스전</b> 마법 사용 대상으로 추가</li>
       </ul>
-      <p class="muted" style="margin-top:auto">VARCO 3D 생성 보스 6종</p>
+      <div class="chips" style="margin-top:auto">
+        <button class="chip on" data-ph="17-gis-1-데이터">실제 지도</button>
+        <button class="chip" data-ph="11-원경">필드 환경</button>
+        <button class="chip" data-key="blender-arena" data-ph="16-건물-게임">Claude 모델링</button>
+        <button class="chip" data-key="08-동물-여우-이동" data-ph="11-원경">동물 AI</button>
+      </div>
     </div>
-    <div class="media" data-key="03-보스모델" data-ph="08-동물"></div>
+    <div class="media" data-ph="17-gis-1-데이터"></div>
   </div>
   <div class="note">환경 실험이 먼저였고, 마법 조합은 하고 싶었던 것. 범위가 커져 태그로 줄였고, 보스는 마법을 쓸 대상으로 넣었다.</div>
 </section>
+<!-- 4 주문과 속성 -->
+<section class="slide" id="s4" data-title="주문·속성 시스템">
+  <p class="kicker">01 · 게임</p>
+  <h1>주문·속성 시스템</h1>
+  <div class="el-grid">
+    <figure class="el-cell" data-el="fire"><div class="media" data-key="06-주문-화염" data-ph="06-화염" data-notag></div><figcaption><b>화염</b> 화상 피해</figcaption></figure>
+    <figure class="el-cell" data-el="ice"><div class="media" data-key="06-주문-얼음" data-ph="06-얼음" data-notag></div><figcaption><b>얼음</b> 이동 둔화</figcaption></figure>
+    <figure class="el-cell" data-el="bolt"><div class="media" data-key="06-주문-전기" data-ph="06-전기" data-notag></div><figcaption><b>전기</b> 주변 적에게 연쇄</figcaption></figure>
+    <figure class="el-cell" data-el="light"><div class="media" data-key="06-주문-빛" data-ph="06-빛" data-notag></div><figcaption><b>빛</b> 천광 폭격: 하늘에서 빛줄기 낙하</figcaption></figure>
+    <figure class="el-cell" data-el="earth"><div class="media" data-key="06-주문-토" data-ph="06-토" data-notag></div><figcaption><b>땅</b> 클라드니 기둥: 바닥 무늬를 따라 기둥 생성</figcaption></figure>
+    <div class="el-rules">
+      <ul class="pts">
+        <li>주력 주문(좌클릭): 장착 오브 계통 기준</li>
+        <li>보조 주문(Q·E): 장전 후 좌클릭 발사</li>
+        <li>오브 세공: 주력 주문 성질 변경</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note">속성 5종 주문을 한 화면에 동시에 재생. 오른쪽 아래 칸이 공통 규칙.</div>
+</section>
+<!-- 스킬 구성 -->
+<section class="slide" id="s14" data-title="스킬 구성">
+  <p class="kicker">01 · 게임</p>
+  <h1>스킬 구성</h1>
+  <div class="cols">
+    <div class="col">
+      <ul class="pts">
+        <li><b class="hl">주력 주문</b> 좌클릭, 오브 5종, 오브별 세공 분기 2개</li>
+        <li><b class="hl">보조 주문</b> Q·E, 충전 횟수만큼 장전, 조준점 아래 발수 게이지</li>
+        <li><b class="hl">궁극</b> V, 장착 스킬 거대화, 시간·적중으로 충전, Lv2 해금</li>
+      </ul>
+      <table class="orbs">
+        <tr><th style="color:var(--fire-b)">화염 오브</th><td>화상 중첩</td><td>연소 폭발</td></tr>
+        <tr><th style="color:var(--ice-b)">얼음 오브</th><td>빙결</td><td>한기 증폭</td></tr>
+        <tr><th style="color:var(--bolt-b)">전기 오브</th><td>연쇄 확장</td><td>과부하</td></tr>
+        <tr><th style="color:var(--light-b)">빛 오브</th><td>표식 증폭</td><td>광휘 관통</td></tr>
+        <tr><th style="color:var(--earth-b)">땅 오브</th><td>균열 심화</td><td>여진</td></tr>
+      </table>
+      <div class="chips" style="margin-top:auto">
+        <button class="chip on" data-ph="14-궁극-발동" data-t="">궁극 발동</button>
+        <button class="chip" data-ph="14-궁극-충전" data-t="">궁극 충전</button>
+        <button class="chip" data-ph="14-마법책-궁극" data-t="">마법책 궁극 칸</button>
+      </div>
+    </div>
+    <div class="media" data-key="14-스킬" data-ph="14-궁극-발동"></div>
+  </div>
+  <div class="note">주력은 오브가 정하고 세공으로 갈라진다. 보조는 Q·E, 궁극은 V. 궁극은 장착한 스킬을 크게 만들어 쓴다(#465).</div>
+</section>
+<!-- 보스원정 현황판 -->
+<section class="slide" id="s16" data-title="보스원정 현황판">
+  <p class="kicker">01 · 게임</p>
+  <h1>보스원정 현황판</h1>
+  <div class="cols">
+    <div class="col">
+      <ul class="pts">
+        <li>B 키로 여는 지도형 현황판</li>
+        <li>보스 3마리 노드, 원정 진행 단계 표시</li>
+        <li>시작 창·현황판·포털 표식이 같은 원정 모델 공유</li>
+      </ul>
+      <div class="chips" style="margin-top:auto">
+        <button class="chip on" data-ph="12-현황판-게임" data-t="">게임</button>
+        <button class="chip" data-ph="12-현황판-목업" data-t="">v3 목업</button>
+      </div>
+    </div>
+    <div class="media" data-key="12-현황판" data-ph="12-현황판-게임"></div>
+  </div>
+  <div class="note">원정 진행은 HUD가 아니라 이 현황판에서만 본다(#685). 지도형은 목업 v3 그대로 구현.</div>
+</section>
+<!-- 랭킹·온라인 -->
+<section class="slide" id="s17" data-title="랭킹·온라인">
+  <p class="kicker">01 · 게임</p>
+  <h1>랭킹 던전·온라인</h1>
+  <div class="cols">
+    <div class="col">
+      <ul class="pts">
+        <li><b class="hl">랭킹 던전</b> 강화를 다 채운 오브로 입장, 보스 6종 패턴을 쓰는 고정 표적, 제한 시간 3분</li>
+        <li><b class="hl">개인 랭킹</b> 슬롯별 최고 기록</li>
+        <li><b class="hl">온라인 순위</b> Unity 온라인 서비스(UGS)로 기록 제출·전체 순위</li>
+        <li><b class="hl">계정</b> 익명 시작, 구글 계정 연결, 클라우드 저장 동기화</li>
+      </ul>
+      <div class="chips" style="margin-top:auto">
+        <button class="chip on" data-ph="13-랭킹-온라인" data-t="">온라인 순위</button>
+        <button class="chip" data-ph="13-랭킹-설명창" data-t="">순위 상세</button>
+        <button class="chip" data-ph="13-랭킹-개인" data-t="">개인 랭킹</button>
+        <button class="chip" data-ph="13-로그인" data-t="">계정 로그인</button>
+      </div>
+    </div>
+    <div class="media" data-key="13-랭킹" data-ph="13-랭킹-온라인"></div>
+  </div>
+  <div class="note">#105 개인 랭킹 → #599 온라인 순위, #418 로그인·클라우드 저장. 로컬 저장이 정본이고 온라인은 뒤에서 비교·동기화.</div>
+</section>
 <!-- GIS 1: 데이터 흐름 -->
 <section class="slide" id="gis" data-title="GIS 디지털 트윈">
-  <p class="kicker">01 · 게임</p>
+  <p class="kicker">02 · Claude로 만든 것</p>
   <h1>GIS 디지털 트윈 환경 구성</h1>
   <div class="gis-grid">
     <div class="gis-left">
@@ -416,21 +554,21 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
         <path class="ln" d="M644 434 H692" marker-end="url(#gis-ar)"/>
 
         <!-- 3열: 필드 데이터 -->
-        <rect class="box" x="700" y="64" width="270" height="100" rx="6"/>
+        <rect class="box" x="700" y="64" width="286" height="100" rx="6"/>
         <text class="t" x="720" y="106">높이맵</text>
         <text class="s" x="720" y="140">16bit · 1025² · 타일</text>
-        <rect class="box" x="700" y="224" width="270" height="100" rx="6"/>
+        <rect class="box" x="700" y="224" width="286" height="100" rx="6"/>
         <text class="t" x="720" y="266">스플랫</text>
-        <text class="s" x="720" y="300">잔디·흙길·바위·진흙</text>
-        <rect class="box" x="700" y="384" width="270" height="100" rx="6"/>
+        <text class="s" x="716" y="300" textLength="256" lengthAdjust="spacingAndGlyphs">잔디·흙길·바위·진흙</text>
+        <rect class="box" x="700" y="384" width="286" height="100" rx="6"/>
         <text class="t" x="720" y="426">배치 JSON</text>
         <text class="s" x="720" y="460">건물·물·나무·길</text>
 
         <!-- 모음선 -->
-        <path class="ln" d="M970 114 H1000 M970 274 H1000 M970 434 H1000 M1000 100 V400"/>
-        <path class="ln" d="M1000 100 H1032" marker-end="url(#gis-ar)"/>
-        <path class="ln" d="M1000 222 H1032" marker-end="url(#gis-ar)"/>
-        <path class="ln" d="M1000 344 H1032" marker-end="url(#gis-ar)"/>
+        <path class="ln" d="M986 114 H1008 M986 274 H1008 M986 434 H1008 M1008 100 V434"/>
+        <path class="ln" d="M1008 100 H1032" marker-end="url(#gis-ar)"/>
+        <path class="ln" d="M1008 222 H1032" marker-end="url(#gis-ar)"/>
+        <path class="ln" d="M1008 344 H1032" marker-end="url(#gis-ar)"/>
 
         <!-- 4열: 게임 적용 4단계 -->
         <rect class="box" x="1040" y="48" width="340" height="104" rx="6" style="stroke:var(--earth-b)"/>
@@ -479,7 +617,7 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
 
 <!-- GIS 2: 단계별 결과 -->
 <section class="slide" id="gis-steps" data-title="GIS 구성 단계">
-  <p class="kicker">01 · 게임</p>
+  <p class="kicker">02 · Claude로 만든 것</p>
   <h1>GIS 환경 구성 단계</h1>
   <div class="cols">
     <div class="col">
@@ -503,89 +641,51 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
   </div>
   <div class="note">칩을 차례로 눌러 데이터에서 미니맵까지 보여 준다. 지형은 나무 없이 높이·길·물만 올린 에디터 화면, 건물은 외곽선을 높이만큼 올린 첫 판, 필드는 식생까지 올린 화면. 미니맵은 왼쪽이 게임 미니맵, 오른쪽이 같은 자리를 위에서 본 장면이다.</div>
 </section>
-<!-- 4 주문과 속성 -->
-<section class="slide" id="s4" data-title="주문·속성 시스템">
-  <p class="kicker">01 · 게임</p>
-  <h1>주문·속성 시스템</h1>
-  <div class="cols">
-    <div class="col">
-      <div class="chips" id="el-tabs">
-        <button class="chip on" data-el="fire"  data-key="06-주문-화염" data-ph="06-화염">화염</button>
-        <button class="chip" data-el="ice"   data-key="06-주문-얼음" data-ph="06-얼음">얼음</button>
-        <button class="chip" data-el="bolt"  data-key="06-주문-전기" data-ph="06-전기">전기</button>
-        <button class="chip" data-el="light" data-key="06-주문-빛"   data-ph="06-빛">빛</button>
-        <button class="chip" data-el="earth" data-key="06-주문-토"   data-ph="06-토">땅</button>
-      </div>
-      <div class="desc" id="el-desc"></div>
-      <ul class="pts" style="margin-top:28px">
-        <li>주력 주문(좌클릭): 장착 오브 계통 기준</li>
-        <li>보조 주문(Q·E): 장전 후 좌클릭 발사</li>
-        <li>오브 세공: 주력 주문 성질 변경</li>
-      </ul>
-    </div>
-    <div class="media" data-key="06-주문-화염" data-ph="06-화염"></div>
-  </div>
-  <div class="note">영상 전에 규칙을 먼저 설명한다. 탭으로 속성을 보여 준다.</div>
-</section>
 <!-- 5 보스 패턴 -->
 <section class="slide" id="s5" data-title="보스 패턴">
-  <p class="kicker">01 · 게임</p>
-  <h1>보스 패턴 <span class="muted" style="font-size:28px;font-weight:400">보스별 약점·저항, 예고 범위 2종</span></h1>
+  <p class="kicker">02 · Claude로 만든 것</p>
+  <h1>보스 패턴 <span class="muted" style="font-size:28px;font-weight:400">보스 6종 · 패턴 2개씩, 공격 전 바닥에 예고 범위</span></h1>
+  <div class="boss-grid">
+    <div class="boss-row"><div class="bh"><b>보스 큐브</b><span class="bw none">약점 없음</span><span class="br none">저항 없음</span></div><figure><div class="media" data-key="05-보스큐브-충격파" data-ph="04-보스전" data-notag></div><figcaption>충격파</figcaption></figure><figure><div class="media" data-key="05-보스큐브-내려찍기" data-ph="04-보스전" data-notag></div><figcaption>내려찍기</figcaption></figure></div>
+    <div class="boss-row"><div class="bh"><b>얼음 결정탑</b><span class="bw" style="--c:var(--fire-b)">화염 ×1.5</span><span class="br" style="--c:var(--ice-b)">얼음 ×0.5</span></div><figure><div class="media" data-key="05-보스얼음결정탑-직선강타" data-ph="04-보스전" data-notag></div><figcaption>직선강타</figcaption></figure><figure><div class="media" data-key="05-보스얼음결정탑-고리폭발" data-ph="04-보스전" data-notag></div><figcaption>고리폭발</figcaption></figure></div>
+    <div class="boss-row"><div class="bh"><b>전기 코어</b><span class="bw" style="--c:var(--earth-b)">땅 ×1.5</span><span class="br" style="--c:var(--bolt-b)">전기 ×0.5</span></div><figure><div class="media" data-key="05-보스전기코어-방사줄기" data-ph="04-보스전" data-notag></div><figcaption>방사줄기</figcaption></figure><figure><div class="media" data-key="05-보스전기코어-연쇄낙뢰" data-ph="04-보스전" data-notag></div><figcaption>연쇄낙뢰</figcaption></figure></div>
+    <div class="boss-row"><div class="bh"><b>용암 핵</b><span class="bw" style="--c:var(--ice-b)">얼음 ×1.5</span><span class="br" style="--c:var(--fire-b)">화염 ×0.5</span></div><figure><div class="media" data-key="05-보스용암핵-용암분출" data-ph="04-보스전" data-notag></div><figcaption>용암분출</figcaption></figure><figure><div class="media" data-key="05-보스용암핵-열파고리" data-ph="04-보스전" data-notag></div><figcaption>열파고리</figcaption></figure></div>
+    <div class="boss-row"><div class="bh"><b>자이로스코프</b><span class="bw" style="--c:var(--bolt-b)">전기 ×1.5</span><span class="br" style="--c:var(--light-b)">빛 ×0.5</span></div><figure><div class="media" data-key="05-보스자이로스코프-직선강타" data-ph="04-보스전" data-notag></div><figcaption>직선강타</figcaption></figure><figure><div class="media" data-key="05-보스자이로스코프-충격파" data-ph="04-보스전" data-notag></div><figcaption>충격파</figcaption></figure></div>
+    <div class="boss-row"><div class="bh"><b>문양 기둥</b><span class="bw" style="--c:var(--light-b)">빛 ×1.5</span><span class="br" style="--c:var(--earth-b)">땅 ×0.5</span></div><figure><div class="media" data-key="05-보스문양기둥-내려찍기" data-ph="04-보스전" data-notag></div><figcaption>내려찍기</figcaption></figure><figure><div class="media" data-key="05-보스문양기둥-고리폭발" data-ph="04-보스전" data-notag></div><figcaption>고리폭발</figcaption></figure></div>
+  </div>
+  <div class="note">보스마다 패턴 두 개를 동시에 재생. 예고 범위(원·직선·도넛·방사)가 먼저 나오고 공격이 들어온다. 약점 ×1.5, 저항 ×0.5.</div>
+</section>
+<!-- 일반 몬스터 -->
+<section class="slide" id="s15" data-title="일반 몬스터">
+  <p class="kicker">02 · Claude로 만든 것</p>
+  <h1>일반 몬스터</h1>
   <div class="cols">
     <div class="col">
       <ul class="pts">
-        <li>공격 전 바닥에 예고 범위 표시</li>
-        <li>2페이즈: 속도 증가·연속 공격</li>
+        <li><b class="hl">무리 상태</b> 무관심 → 감지 → 공격 → 퇴각, 구역 단위 재생성</li>
+        <li><b class="hl">전투 역할</b> 근접 돌진, 사격, 폭탄, 저격, 방패</li>
+        <li><b class="hl">공격 전조</b> 0.5초 이상 몸 펌프·깜빡임·바닥 띠·조준선 → 완벽 회피와 연결</li>
+        <li><b class="hl">보상</b> 경험치, 세공석 조각</li>
+        <li><b class="hl">보스방 자폭병</b> 접근 후 정지, 0.5초 예고 뒤 자폭</li>
       </ul>
-      <div class="vz-boss" data-viz="boss"></div>
+      <div class="chips" style="margin-top:auto">
+        <button class="chip on" data-ph="15-몬스터-외형" data-t="">외형</button>
+        <button class="chip" data-ph="15-몬스터-무리" data-t="">혼합 무리</button>
+        <button class="chip" data-ph="15-몬스터-저격" data-t="">저격 조준선</button>
+        <button class="chip" data-ph="15-몬스터-방패" data-t="">방패</button>
+        <button class="chip" data-key="07-몬스터-크롤러-공격" data-ph="15-몬스터-외형">근접 공격</button>
+        <button class="chip" data-key="07-몬스터-술사-공격" data-ph="15-몬스터-외형">원거리 공격</button>
+        <button class="chip" data-key="07-몬스터-크롤러-사망" data-ph="15-몬스터-외형">처치</button>
+        <button class="chip" data-ph="15-자폭병" data-t="">자폭병</button>
+      </div>
     </div>
-    <div class="media" data-key="05-보스큐브-충격파" data-ph="05-예고1"></div>
+    <div class="media" data-key="15-몬스터" data-ph="15-몬스터-외형"></div>
   </div>
-  <div class="note">보스 패턴은 따로 찍은 영상. 예고 범위가 나오고 공격이 들어오는 장면.</div>
-</section>
-<!-- 7 Claude와 일한 방식 -->
-<section class="slide" id="s6" data-title="Claude 협업 구조">
-  <p class="kicker">02 · Claude 협업</p>
-  <h1>Claude 협업 구조</h1>
-  <div class="pipe">
-    <div class="step"><b>이슈</b><span>GitHub 보드</span></div><i>→</i>
-    <div class="step"><b>계획</b><span>Claude</span></div><i>→</i>
-    <div class="step"><b>구현</b><span>Codex</span></div><i>→</i>
-    <div class="step"><b>시험</b><span>Unity 자동 시험</span></div><i>→</i>
-    <div class="step"><b>PR·확인</b><span>화면은 직접 확인</span></div>
-  </div>
-  <div class="vz-dev">
-    <div class="stats">
-      <div class="stat"><div class="n" data-to="2168">0</div><div class="l">커밋</div></div>
-      <div class="stat"><div class="n" data-to="381">0</div><div class="l">병합 PR</div></div>
-      <div class="stat"><div class="n" data-to="279">0</div><div class="l">닫은 이슈</div></div>
-      <div class="stat"><div class="n" data-to="29">0</div><div class="l">개발 일수</div></div>
-    </div>
-    <div class="vz-chart">
-      <h3>일별 커밋<span>9/29 ~ 10/27 · 10/27 00:50 집계</span></h3>
-      <div data-viz="commits"></div>
-    </div>
-  </div>
-  <div class="note">이슈 하나를 작업 공간 하나에서 처리한다. 계획은 Claude, 구현은 Codex, 시험 통과 뒤 PR. 결정은 바로 위키에 적어 세션이 바뀌어도 맥락 유지. 한 판 자동 플레이 시험으로 기존 기능 고장을 PR 전에 발견. 커밋·PR 수가 많은 이유: 이슈를 작게 나누고 PR마다 자동 시험. 다듬기 구간(10/17~24)은 원래 OBT 계획이었으나 공개 테스트는 열지 않았다.</div>
-</section>
-<!-- 8 막힌 점과 해결 -->
-<section class="slide" id="s7" data-title="문제와 해결">
-  <p class="kicker">02 · Claude 협업</p>
-  <h1>문제와 해결</h1>
-  <div class="fb-grid" style="grid-template-columns:1fr;flex:none">
-    <div class="fb"><p class="q">AI의 화면 결과 자체 합격 처리</p><p class="a">캡처 시험 분리, 화면 직접 확인 후 이슈 종료</p></div>
-  </div>
-  <p class="muted" style="margin:28px 0 0;font-size:28px"><b style="color:var(--ink)">같은 지적의 반복</b> → 점점 강한 장치로 교정</p>
-  <div class="vz-stairs">
-    <div class="vz-stair"><span class="k">1단</span><h3>대화로 지적</h3><p>세션이 끝나면 사라짐<br>다음 세션에서 재발</p></div>
-    <div class="vz-stair"><span class="k">2단</span><h3>규칙 파일</h3><p>AGENTS.md·작업 습관 문서에 기록<br>모든 세션이 시작할 때 읽음</p></div>
-    <div class="vz-stair"><span class="k">3단 · 규칙으로도 재발</span><h3>훅 자동 차단</h3><p>도구 호출 전후 검사 스크립트<br><code>영어 답 차단</code> <code>새 워크트리 차단</code> <code>Unity 인스턴스 고정</code></p></div>
-  </div>
-  <div class="note">시간이 남으면: 세션 여럿이 같은 폴더를 고쳐 충돌 → 저장소 복사본 5개. VARCO 3D 애니메이션 FBX가 클립 0개 → Blender로 다시 내보냄.</div>
+  <div class="note">필드 남쪽 몬스터 구역(#388), 공격 전조(#469), 전투 역할 4종(#636), 자폭병(#320).</div>
 </section>
 <!-- UI 개선 과정 -->
 <section class="slide" id="s8" data-title="UI 개선 과정">
-  <p class="kicker">02 · Claude 협업</p>
+  <p class="kicker">02 · Claude로 만든 것</p>
   <h1>UI 개선 과정 <span class="muted" style="font-size:28px;font-weight:400">같은 화면의 수정 전·후</span></h1>
   <div class="chips ui-tabs">
     <button class="chip on" data-set="hud">필드 HUD</button>
@@ -624,7 +724,7 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
 #varco figcaption small { display: block; font-size: 13px; font-weight: 400; color: #d0c498; }
 </style>
 <section class="slide" id="varco" data-title="VARCO 3D 에셋">
-  <p class="kicker">02 · Claude 협업</p>
+  <p class="kicker">02 · Claude로 만든 것</p>
   <h1>VARCO 3D 에셋 생성 <span class="muted" style="font-size:28px;font-weight:400">MCP로 연결한 에이전트가 생성 워크플로 직접 구성·실행</span></h1>
   <div class="vc-head">
     <b>콘셉트 이미지</b><i>→</i><b>부품 이미지</b><i>→</i><b>3D 모델</b><i>→</i><b>Unity 조립·배치</b>
@@ -660,30 +760,53 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
 </section>
 <!-- Blender MCP 모델링 -->
 <section class="slide" id="s9" data-title="Blender MCP 모델링">
-  <p class="kicker">02 · Claude 협업</p>
+  <p class="kicker">02 · Claude로 만든 것</p>
   <h1>Blender MCP 모델링 <span class="muted" style="font-size:28px;font-weight:400">Claude가 MCP(AI의 도구 연결)로 Blender 직접 조작</span></h1>
-  <div class="cols">
-    <div class="col">
-      <div class="vz-chev"><div>블로킹</div><div>기계 구조</div><div>디테일</div><div>재질·조명</div><div>리그·모션</div><div class="last">Unity 반입</div></div>
-      <p class="vz-chev-cap">단계마다 새 세션: 긴 대화 누적 방지</p>
-      <ul class="pts">
-        <li><b class="hl">게임 반입</b> 공원 폐허 건물 11채</li>
-        <li><b class="hl">기록</b> 호출마다 장면 지문 저장 → 변화 구간만 남긴 타임랩스 자동 편집</li>
-      </ul>
-      <div class="chips" style="margin-top:auto">
-        <button class="chip on" data-key="blender-city" data-ph="16-건물-게임">건물 (게임 반입)</button>
-        <button class="chip" data-key="blender-spider" data-ph="11-원경">거미포탑</button>
-        <button class="chip" data-key="blender-howitzer" data-ph="11-원경">중곡사포</button>
-        <button class="chip" data-key="blender-arena" data-ph="11-원경">병풍 경기장</button>
-      </div>
-    </div>
-    <div class="media" data-key="blender-city" data-ph="16-건물-게임"></div>
+  <div class="vz-chev"><div>블로킹</div><div>기계 구조</div><div>디테일</div><div>재질·조명</div><div>리그·모션</div><div class="last">Unity 반입</div></div>
+  <div class="bl-grid">
+    <figure><div class="media" data-key="blender-city" data-ph="16-건물-게임" data-notag></div><figcaption><b>공원 폐허 건물</b> 11채 · 게임 반입</figcaption></figure>
+    <figure><div class="media" data-key="blender-spider" data-ph="16-건물-게임" data-notag></div><figcaption><b>거미 포탑</b> 몬스터 · 걷기 리그</figcaption></figure>
+    <figure><div class="media" data-key="blender-howitzer" data-ph="16-건물-게임" data-notag></div><figcaption><b>중곡사포</b> 고정 포대 · 발사 모션</figcaption></figure>
+    <figure><div class="media" data-key="blender-arena" data-ph="16-건물-게임" data-notag></div><figcaption><b>병풍 경기장</b> 보스방 소품</figcaption></figure>
   </div>
-  <div class="note">모델링도 코드처럼 Claude에게 맡겼다. 단계마다 새 세션, 결과는 타임랩스로 남겼다.</div>
+  <div class="note">모델링도 코드처럼 Claude에게 맡겼다. 단계마다 새 세션(긴 대화 누적 방지). 영상은 단계마다 결과 화면 한 장씩(0.75초) 넘긴 것.</div>
+</section>
+<!-- 7 Claude와 일한 방식 -->
+<section class="slide" id="s6" data-title="Claude 협업 구조">
+  <p class="kicker">03 · Claude 협업 방식</p>
+  <h1>Claude 협업 구조</h1>
+  <div class="pipe2">
+    <div class="st2 me"><div class="hd"><em>1</em><b>이슈</b></div><span class="who">사람·Claude</span><span class="sub">GitHub 보드</span><ul><li>기능을 작은 이슈로 분할</li><li>완료 조건·검증 방법 명시</li></ul></div>
+    <i>→</i>
+    <div class="st2 claude"><div class="hd"><em>2</em><b>계획</b></div><span class="who">Claude</span><span class="sub">계획.md</span><ul><li>코드를 읽고 고칠 곳 결정</li><li>설계 결정은 위키에 기록</li></ul></div>
+    <i>→</i>
+    <div class="st2 codex"><div class="hd"><em>3</em><b>구현</b></div><span class="who">Codex</span><span class="sub">작업 공간 5개</span><ul><li>계획대로 코드 수정</li><li>이슈별 브랜치 병행</li></ul></div>
+    <i>→</i>
+    <div class="st2 unity"><div class="hd"><em>4</em><b>시험</b></div><span class="who">Unity</span><span class="sub">자동 시험</span><ul><li>EditMode·PlayMode 시험</li><li>한 판 자동 플레이(골드 패스)</li></ul></div>
+    <i>→</i>
+    <div class="st2 me"><div class="hd"><em>5</em><b>PR·확인</b></div><span class="who">사람</span><span class="sub">병합</span><ul><li>화면은 캡처로 직접 확인</li><li>통과 후 PR 병합</li></ul></div>
+  </div>
+  <div class="legend2"><span class="me">사람</span><span class="claude">Claude</span><span class="codex">Codex</span><span class="unity">Unity</span></div>
+  <div class="note">이슈 하나를 작업 공간 하나에서 처리한다. 계획은 Claude, 구현은 Codex, 시험 통과 뒤 PR. 결정은 바로 위키에 적어 세션이 바뀌어도 맥락 유지. 한 판 자동 플레이 시험으로 기존 기능 고장을 PR 전에 발견.</div>
+</section>
+<!-- 8 막힌 점과 해결 -->
+<section class="slide" id="s7" data-title="문제와 해결">
+  <p class="kicker">03 · Claude 협업 방식</p>
+  <h1>문제와 해결</h1>
+  <div class="fb-grid" style="grid-template-columns:1fr;flex:none">
+    <div class="fb"><p class="q">AI의 화면 결과 자체 합격 처리</p><p class="a">캡처 시험 분리, 화면 직접 확인 후 이슈 종료</p></div>
+  </div>
+  <p class="muted" style="margin:28px 0 0;font-size:28px"><b style="color:var(--ink)">같은 지적의 반복</b> → 점점 강한 장치로 교정</p>
+  <div class="vz-stairs">
+    <div class="vz-stair"><span class="k">1단</span><h3>대화로 지적</h3><p>세션이 끝나면 사라짐<br>다음 세션에서 재발</p></div>
+    <div class="vz-stair"><span class="k">2단</span><h3>규칙 파일</h3><p>AGENTS.md·작업 습관 문서에 기록<br>모든 세션이 시작할 때 읽음</p></div>
+    <div class="vz-stair"><span class="k">3단 · 규칙으로도 재발</span><h3>훅 자동 차단</h3><p>도구 호출 전후 검사 스크립트<br><code>영어 답 차단</code> <code>새 워크트리 차단</code> <code>Unity 인스턴스 고정</code></p></div>
+  </div>
+  <div class="note">시간이 남으면: 세션 여럿이 같은 폴더를 고쳐 충돌 → 저장소 복사본 5개. VARCO 3D 애니메이션 FBX가 클립 0개 → Blender로 다시 내보냄.</div>
 </section>
 <!-- 9 작업 노하우 -->
 <section class="slide" id="s10" data-title="협업 노하우">
-  <p class="kicker">02 · Claude 협업</p>
+  <p class="kicker">03 · Claude 협업 방식</p>
   <h1>협업 노하우</h1>
   <ol class="rules">
     <li><b>오케스트레이션</b><span>계획·조율 Claude, 구현 Codex, 교차 검토 Gemini·DeepSeek 분담</span></li>
@@ -695,7 +818,7 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
 </section>
 <!-- 6 피드백과 바뀐 부분 -->
 <section class="slide" id="s11" data-title="피드백과 자체 점검">
-  <p class="kicker">03 · 피드백</p>
+  <p class="kicker">04 · 피드백</p>
   <h1>피드백과 자체 점검 <span class="muted" style="font-size:28px;font-weight:400">비공개 테스트(CBT) 테스터 2명 · 기능 지적은 대부분 자체 플레이</span></h1>
   <div class="fb-grid">
     <div class="fb"><span class="stage">테스터 2명</span><p class="q">볼륨 부족</p><p class="a">원거리 몬스터 추가 (필드 밀도 보강은 미완)</p></div>
@@ -705,9 +828,27 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
   </div>
   <div class="note">OBT는 따로 열지 않았다. CBT는 팀플 팀원 2명, 피드백은 볼륨이 적다는 정도. 기능 지적은 대부분 직접 해 보며 찾았다.</div>
 </section>
+<!-- 개발 내용 요약 -->
+<section class="slide" id="dev" data-title="개발 내용 요약">
+  <p class="kicker">05 · 마무리</p>
+  <h1>개발 내용 요약</h1>
+  <div class="vz-dev">
+    <div class="stats">
+      <div class="stat"><div class="n" data-to="2168">0</div><div class="l">커밋</div></div>
+      <div class="stat"><div class="n" data-to="381">0</div><div class="l">병합 PR</div></div>
+      <div class="stat"><div class="n" data-to="279">0</div><div class="l">닫은 이슈</div></div>
+      <div class="stat"><div class="n" data-to="29">0</div><div class="l">개발 일수</div></div>
+    </div>
+    <div class="vz-chart">
+      <h3>일별 커밋<span>9/29 ~ 10/27 · 10/27 00:50 집계</span></h3>
+      <div data-viz="commits"></div>
+    </div>
+  </div>
+  <div class="note">커밋·PR 수가 많은 이유: 이슈를 작게 나누고 PR마다 자동 시험. 다듬기 구간(10/17~24)은 원래 OBT 계획이었으나 공개 테스트는 열지 않았다.</div>
+</section>
 <!-- 10 자평과 다음 -->
 <section class="slide" id="s12" data-title="자평 및 향후 계획">
-  <p class="kicker">04 · 마무리</p>
+  <p class="kicker">05 · 마무리</p>
   <h1>자평 및 향후 계획</h1>
   <div class="wrap3">
     <div class="panel done"><h2>✓ 완성</h2><ul class="pts"><li>보스원정 한 판 정산까지 완주</li><li>주문 5속성, 오브 세공</li><li>튜토리얼</li></ul></div>
@@ -726,108 +867,9 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
   <div class="shade"></div>
   <div class="title-block">
     <p class="logo">질의응답</p>
-    <p class="who">Wild Arcana · 김성훈<br><span class="muted">다음 장부터 부록: 스킬 구성 · 일반 몬스터 · 보스원정 현황판 · 랭킹·온라인</span></p>
+    <p class="who">Wild Arcana · 김성훈</p>
   </div>
   <div class="note">예상 질문: Claude 사용량 한도는? / 코드를 직접 짠 비율은? / AI 3D 모델 품질 문제는? / 다시 하면 바꿀 것은?</div>
-</section>
-<!-- 스킬 구성 -->
-<section class="slide" id="s14" data-title="스킬 구성">
-  <p class="kicker">부록</p>
-  <h1>스킬 구성</h1>
-  <div class="cols">
-    <div class="col">
-      <ul class="pts">
-        <li><b class="hl">주력 주문</b> 좌클릭, 오브 5종, 오브별 세공 분기 2개</li>
-        <li><b class="hl">보조 주문</b> Q·E, 충전 횟수만큼 장전, 조준점 아래 발수 게이지</li>
-        <li><b class="hl">궁극</b> V, 장착 스킬 거대화, 시간·적중으로 충전, Lv2 해금</li>
-      </ul>
-      <table class="orbs">
-        <tr><th style="color:var(--fire-b)">화염 오브</th><td>화상 중첩</td><td>연소 폭발</td></tr>
-        <tr><th style="color:var(--ice-b)">얼음 오브</th><td>빙결</td><td>한기 증폭</td></tr>
-        <tr><th style="color:var(--bolt-b)">전기 오브</th><td>연쇄 확장</td><td>과부하</td></tr>
-        <tr><th style="color:var(--light-b)">빛 오브</th><td>표식 증폭</td><td>광휘 관통</td></tr>
-        <tr><th style="color:var(--earth-b)">땅 오브</th><td>균열 심화</td><td>여진</td></tr>
-      </table>
-      <div class="chips" style="margin-top:auto">
-        <button class="chip on" data-ph="14-궁극-발동" data-t="">궁극 발동</button>
-        <button class="chip" data-ph="14-궁극-충전" data-t="">궁극 충전</button>
-        <button class="chip" data-ph="14-마법책-궁극" data-t="">마법책 궁극 칸</button>
-      </div>
-    </div>
-    <div class="media" data-key="14-스킬" data-ph="14-궁극-발동"></div>
-  </div>
-  <div class="note">주력은 오브가 정하고 세공으로 갈라진다. 보조는 Q·E, 궁극은 V. 궁극은 장착한 스킬을 크게 만들어 쓴다(#465).</div>
-</section>
-<!-- 일반 몬스터 -->
-<section class="slide" id="s15" data-title="일반 몬스터">
-  <p class="kicker">부록</p>
-  <h1>일반 몬스터</h1>
-  <div class="cols">
-    <div class="col">
-      <ul class="pts">
-        <li><b class="hl">무리 상태</b> 무관심 → 감지 → 공격 → 퇴각, 구역 단위 재생성</li>
-        <li><b class="hl">전투 역할</b> 근접 돌진, 사격, 폭탄, 저격, 방패</li>
-        <li><b class="hl">공격 전조</b> 0.5초 이상 몸 펌프·깜빡임·바닥 띠·조준선 → 완벽 회피와 연결</li>
-        <li><b class="hl">보상</b> 경험치, 세공석 조각</li>
-        <li><b class="hl">보스방 자폭병</b> 접근 후 정지, 0.5초 예고 뒤 자폭</li>
-      </ul>
-      <div class="chips" style="margin-top:auto">
-        <button class="chip on" data-ph="15-몬스터-외형" data-t="">외형</button>
-        <button class="chip" data-ph="15-몬스터-무리" data-t="">혼합 무리</button>
-        <button class="chip" data-ph="15-몬스터-저격" data-t="">저격 조준선</button>
-        <button class="chip" data-ph="15-몬스터-방패" data-t="">방패</button>
-        <button class="chip" data-key="07-몬스터-크롤러-공격" data-ph="15-몬스터-외형">근접 공격</button>
-        <button class="chip" data-key="07-몬스터-술사-공격" data-ph="15-몬스터-외형">원거리 공격</button>
-        <button class="chip" data-key="07-몬스터-크롤러-사망" data-ph="15-몬스터-외형">처치</button>
-        <button class="chip" data-ph="15-자폭병" data-t="">자폭병</button>
-      </div>
-    </div>
-    <div class="media" data-key="15-몬스터" data-ph="15-몬스터-외형"></div>
-  </div>
-  <div class="note">필드 남쪽 몬스터 구역(#388), 공격 전조(#469), 전투 역할 4종(#636), 자폭병(#320).</div>
-</section>
-<!-- 보스원정 현황판 -->
-<section class="slide" id="s16" data-title="보스원정 현황판">
-  <p class="kicker">부록</p>
-  <h1>보스원정 현황판</h1>
-  <div class="cols">
-    <div class="col">
-      <ul class="pts">
-        <li>B 키로 여는 지도형 현황판</li>
-        <li>보스 3마리 노드, 원정 진행 단계 표시</li>
-        <li>시작 창·현황판·포털 표식이 같은 원정 모델 공유</li>
-      </ul>
-      <div class="chips" style="margin-top:auto">
-        <button class="chip on" data-ph="12-현황판-게임" data-t="">게임</button>
-        <button class="chip" data-ph="12-현황판-목업" data-t="">v3 목업</button>
-      </div>
-    </div>
-    <div class="media" data-key="12-현황판" data-ph="12-현황판-게임"></div>
-  </div>
-  <div class="note">원정 진행은 HUD가 아니라 이 현황판에서만 본다(#685). 지도형은 목업 v3 그대로 구현.</div>
-</section>
-<!-- 랭킹·온라인 -->
-<section class="slide" id="s17" data-title="랭킹·온라인">
-  <p class="kicker">부록</p>
-  <h1>랭킹 던전·온라인</h1>
-  <div class="cols">
-    <div class="col">
-      <ul class="pts">
-        <li><b class="hl">랭킹 던전</b> 강화를 다 채운 오브로 입장, 보스 6종 패턴을 쓰는 고정 표적, 제한 시간 3분</li>
-        <li><b class="hl">개인 랭킹</b> 슬롯별 최고 기록</li>
-        <li><b class="hl">온라인 순위</b> Unity 온라인 서비스(UGS)로 기록 제출·전체 순위</li>
-        <li><b class="hl">계정</b> 익명 시작, 구글 계정 연결, 클라우드 저장 동기화</li>
-      </ul>
-      <div class="chips" style="margin-top:auto">
-        <button class="chip on" data-ph="13-랭킹-온라인" data-t="">온라인 순위</button>
-        <button class="chip" data-ph="13-랭킹-설명창" data-t="">순위 상세</button>
-        <button class="chip" data-ph="13-랭킹-개인" data-t="">개인 랭킹</button>
-        <button class="chip" data-ph="13-로그인" data-t="">계정 로그인</button>
-      </div>
-    </div>
-    <div class="media" data-key="13-랭킹" data-ph="13-랭킹-온라인"></div>
-  </div>
-  <div class="note">#105 개인 랭킹 → #599 온라인 순위, #418 로그인·클라우드 저장. 로컬 저장이 정본이고 온라인은 뒤에서 비교·동기화.</div>
 </section>
 
 <div id="foot"><span class="name">Wild Arcana</span><span id="stitle"></span><button id="prev" title="이전 (←)">‹</button><button id="next" title="다음 (→)">›</button><span id="num"></span></div>
@@ -986,7 +1028,7 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
     var d = document.getElementById('el-desc');
     d.innerHTML = '<h2 class="el-name" style="color:var(--' + c.getAttribute('data-el') + '-b)">' + e[0] + '</h2><p>' + e[1] + '</p>';
   }
-  showEl(document.querySelector('#el-tabs .chip.on'));
+  var elOn = document.querySelector('#el-tabs .chip.on'); if (elOn) showEl(elOn);
 
   // ── UI 개선 과정: 같은 화면 수정 전·후 ─────────────────
   // 이미지는 media/ph/ui-<키>-전.jpg / -후.jpg. 아이콘은 ui-아이콘-전-NN.png / -후-NN.svg(10개).
