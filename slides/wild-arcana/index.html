@@ -1,0 +1,744 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wild Arcana 발표</title>
+<!--
+  Wild Arcana 발표 페이지 (2026-10-27 발표·시연).
+  - 오프라인 전용: CDN·외부 폰트 없음. 폴더째 옮겨 index.html을 연다.
+  - 조작: ←/→·스페이스·PageUp/PageDown 이동, Home/End 처음·끝, F 전체 화면, N 발표 메모, L 밝은 화면.
+  - 영상: media/<키>-loop.mp4 → media/<키>.mp4 → media/<키>.gif → media/ph/<자리표시>.jpg 순서로 찾는다(make_media.py가 만든다).
+  - 한 판 흐름처럼 한 영상 안에서 단계를 건너뛰는 칩은 data-t(초)를 채우면 그 시각으로 이동한다.
+  슬라이드 순서·문구 근거: Docs/발표/기획.md (영상 구성은 위키 소개영상-구성안.md)
+-->
+<style>
+:root {
+  /* Docs/UI목업/v3/tokens.json */
+  --surface-900: #0d0f0e;
+  --surface-800: #151816;
+  --surface-700: #1e211f;
+  --surface-600: #2a2d2a;
+  --ink: #f4f1ea;
+  --muted: #a59c88;
+  --line: #7a776c;
+  --line-subtle: #3b3e38;
+  --accent: #d0c498;
+  --accent-bright: #f1e8ad;
+  --warm: #f2a33a;
+  --ok: #6fdc94;
+  --danger: #e8737b;
+  --target: #45fffc;
+  --fire: #d86d3c;   --fire-b: #e6a080;
+  --ice: #7fd6ff;    --ice-b: #ace4ff;
+  --bolt: #b17ce3;   --bolt-b: #ccaaed;
+  --light: #fdd43c;  --light-b: #fee380;
+  --earth: #86604b;  --earth-b: #b0988a;
+  --bg: var(--surface-900);
+  --panel: var(--surface-800);
+  --card: var(--surface-700);
+  --sans: "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
+  --serif: "Noto Serif KR", "Batang", serif;
+}
+/* 밝은 방(프로젝터)용: L 키. tokens.json에 밝은 테마가 없어 시작 버튼 면(title-button-bg)을 바탕으로 쓴다. */
+:root[data-theme="light"] {
+  --bg: #ece9e1;
+  --panel: #ffffff;
+  --card: #f6f4ee;
+  --ink: #151816;
+  --muted: #5b5547;
+  --line: #a59c88;
+  --line-subtle: #d6d1c4;
+  --accent: #7a6a2c;
+  --accent-bright: #5b4d17;
+  --warm: #b8650a;
+  --fire-b: #b24e22; --ice-b: #1f7fae; --bolt-b: #7a43b5; --light-b: #8f7200; --earth-b: #6b4a37;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+body { font-family: var(--sans); color: var(--ink); }
+
+#stage {
+  position: absolute; left: 50%; top: 50%;
+  width: 1920px; height: 1080px;
+  transform-origin: 0 0;
+  background: var(--bg);
+  overflow: hidden;
+}
+.slide {
+  position: absolute; inset: 0;
+  padding: 72px 96px 96px;
+  display: none;
+  flex-direction: column;
+}
+.slide.on { display: flex; animation: fade .35s ease; }
+@keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.kicker { font-size: 26px; font-weight: 700; color: var(--warm); letter-spacing: .04em; margin: 0 0 10px; }
+h1 { font-family: var(--serif); font-size: 64px; line-height: 1.2; margin: 0 0 32px; font-weight: 900; }
+h2 { font-size: 34px; margin: 0 0 14px; }
+p, li { font-size: 32px; line-height: 1.55; }
+.muted { color: var(--muted); }
+ul.pts { margin: 0; padding: 0; list-style: none; }
+ul.pts li { padding-left: 34px; position: relative; margin-bottom: 14px; }
+ul.pts li::before { content: ""; position: absolute; left: 4px; top: .62em; width: 12px; height: 12px; border-radius: 2px; background: var(--accent); }
+b.hl { color: var(--accent-bright); }
+
+.cols { flex: 1; display: grid; grid-template-columns: 640px 1fr; gap: 64px; min-height: 0; }
+.col { display: flex; flex-direction: column; min-height: 0; }
+
+/* 영상 칸 */
+.media {
+  position: relative; flex: 1; min-height: 0;
+  background: #000; border-radius: 6px; overflow: hidden;
+  border: 1px solid var(--line-subtle);
+}
+.media video, .media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; }
+.media .tag {
+  position: absolute; right: 16px; bottom: 14px;
+  font-size: 18px; padding: 4px 12px; border-radius: 3px;
+  background: rgba(13,15,14,.78); color: #a59c88; border: 1px solid #3b3e38;
+}
+.media .tag.rec { color: #6fdc94; border-color: #1e4d33; }
+.media .empty {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column;
+  color: #a59c88; font-size: 30px; gap: 8px;
+}
+.media .empty small { font-size: 20px; }
+.media .cap {
+  position: absolute; left: 0; right: 0; top: 0; padding: 16px 22px;
+  font-size: 26px; font-weight: 700; color: #f4f1ea;
+  background: linear-gradient(rgba(0,0,0,.65), transparent);
+  pointer-events: none;
+}
+
+/* 칩·탭 */
+.chips { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 18px; }
+.chip {
+  font: inherit; font-size: 26px; font-weight: 700;
+  min-height: 56px; padding: 8px 24px; border-radius: 28px;
+  background: var(--card); color: var(--ink);
+  border: 1px solid var(--line); cursor: pointer;
+  transition: background .12s, border-color .12s;
+}
+.chip:hover { border-color: var(--accent-bright); }
+.chip.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.chip:focus-visible { outline: 2px solid var(--accent-bright); outline-offset: 3px; }
+.flow .chip { position: relative; }
+#s2 .flow { gap: 8px; }
+#s2 .flow .chip { font-size: 22px; padding: 6px 16px; min-height: 48px; }
+#s2 .flow .arrow { font-size: 22px; }
+.flow .arrow { align-self: center; color: var(--muted); font-size: 28px; }
+
+.desc {
+  background: var(--panel); border: 1px solid var(--line-subtle); border-radius: 6px;
+  padding: 24px 28px; min-height: 150px;
+}
+.desc h2 { color: var(--accent-bright); }
+.desc p { margin: 0; }
+
+/* 표지·Q&A */
+.cover { padding: 0; }
+.cover .media { position: absolute; inset: 0; border: 0; border-radius: 0; }
+.cover .media img, .cover .media video { object-fit: cover; }
+.cover .shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(13,15,14,.94) 0%, rgba(13,15,14,.7) 42%, rgba(13,15,14,.05) 75%); }
+.cover .title-block { position: absolute; left: 120px; bottom: 150px; color: #f4f1ea; }
+.cover .logo { font-family: var(--serif); font-size: 140px; font-weight: 900; line-height: 1; margin: 0 0 24px; letter-spacing: .01em; }
+.cover .logo span { color: #f2a33a; }
+.cover .sub { font-size: 38px; margin: 0 0 56px; color: #d0c498; }
+.cover .who { font-size: 32px; line-height: 1.6; margin: 0; color: #f4f1ea; }
+.cover .who .muted { color: #a59c88; }
+
+/* 6 주문 탭 색 */
+.chip[data-el="fire"]  { border-color: var(--fire); }
+.chip[data-el="ice"]   { border-color: var(--ice); }
+.chip[data-el="bolt"]  { border-color: var(--bolt); }
+.chip[data-el="light"] { border-color: var(--light); }
+.chip[data-el="earth"] { border-color: var(--earth); }
+.chip[data-el="fire"].on  { background: var(--fire);  border-color: var(--fire);  color: #151816; }
+.chip[data-el="ice"].on   { background: var(--ice);   border-color: var(--ice);   color: #151816; }
+.chip[data-el="bolt"].on  { background: var(--bolt);  border-color: var(--bolt);  color: #151816; }
+.chip[data-el="light"].on { background: var(--light); border-color: var(--light); color: #151816; }
+.chip[data-el="earth"].on { background: var(--earth); border-color: var(--earth); color: #f4f1ea; }
+.el-name { font-weight: 900; }
+
+/* 10 개발 과정 */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
+.stat { background: var(--panel); border: 1px solid var(--line-subtle); border-radius: 6px; padding: 22px 26px; }
+.stat .n { font-size: 72px; font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; color: var(--accent-bright); }
+.stat .l { font-size: 24px; color: var(--muted); margin-top: 10px; }
+.timeline { position: relative; margin: 4px 0 34px; }
+.tl-bar { display: flex; height: 64px; border-radius: 6px; overflow: hidden; border: 1px solid var(--line-subtle); }
+.tl-seg { display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; color: #151816; transform-origin: left; transform: scaleX(0); transition: transform .5s ease; }
+.slide.on .tl-seg { transform: scaleX(1); }
+.tl-seg:nth-child(1) { background: #d0c498; transition-delay: .1s; }
+.tl-seg:nth-child(2) { background: #f2a33a; transition-delay: .35s; }
+.tl-seg:nth-child(3) { background: #7fd6ff; transition-delay: .6s; }
+.tl-seg:nth-child(4) { background: #6fdc94; transition-delay: .85s; }
+.tl-dates { display: flex; font-size: 20px; color: var(--muted); margin-top: 8px; }
+.tl-dates span { flex: 1; }
+.dev-grid { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; min-height: 0; }
+.panel { background: var(--panel); border: 1px solid var(--line-subtle); border-radius: 6px; padding: 26px 30px; overflow: hidden; }
+.panel p, .panel li { font-size: 26px; }
+.panel .tabbody { display: none; } .panel .tabbody.on { display: block; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.pair h2 { font-size: 28px; }
+.prob { margin-bottom: 18px; }
+.prob .q { font-weight: 700; } .prob .a { color: var(--muted); }
+.prob .a::before { content: "→ "; color: var(--ok); }
+.ext { color: var(--warm); font-weight: 700; font-size: .8em; border: 1px solid currentColor; border-radius: 3px; padding: 0 8px; margin-left: 6px; }
+
+/* 11 마무리 */
+.wrap3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 28px; }
+.wrap3 .panel h2 { font-size: 30px; }
+.wrap3 .done h2 { color: var(--ok); }
+.wrap3 .todo h2 { color: var(--danger); }
+.wrap3 .next h2 { color: var(--ice-b); }
+.thanks { font-family: var(--serif); font-size: 56px; font-weight: 900; }
+
+
+/* 피드백·막힌 점 카드 */
+.fb-grid { flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: 28px; min-height: 0; }
+.fb { position: relative; background: var(--panel); border: 1px solid var(--line-subtle); border-radius: 6px; padding: 30px 34px; display: flex; flex-direction: column; justify-content: center; }
+.fb .stage { position: absolute; top: 18px; right: 22px; font-size: 20px; font-weight: 700; color: var(--warm); }
+.fb .iss { position: absolute; bottom: 16px; right: 22px; font-size: 20px; color: var(--muted); }
+.fb .q { margin: 0 0 14px; font-size: 32px; color: var(--muted); }
+.fb .a { margin: 0; font-size: 34px; font-weight: 700; }
+.fb .a::before { content: "→ "; color: var(--ok); }
+
+/* 일한 방식 */
+.pipe { display: flex; align-items: stretch; gap: 14px; margin-bottom: 30px; }
+.pipe .step { flex: 1; background: var(--panel); border: 1px solid var(--line-subtle); border-radius: 6px; padding: 18px 20px; display: flex; flex-direction: column; gap: 6px; }
+.pipe .step b { font-size: 32px; color: var(--accent-bright); }
+.pipe .step span { font-size: 22px; color: var(--muted); }
+.pipe i { align-self: center; font-style: normal; font-size: 30px; color: var(--muted); }
+
+/* 노하우 */
+ol.rules { margin: 0; padding: 0; list-style: none; counter-reset: r; display: flex; flex-direction: column; gap: 40px; }
+ol.rules li { counter-increment: r; display: grid; grid-template-columns: 72px 1fr; grid-template-rows: auto auto; column-gap: 20px; }
+ol.rules li::before { content: counter(r); grid-row: 1 / 3; font-size: 56px; font-weight: 900; color: var(--warm); line-height: 1; }
+ol.rules b { font-size: 42px; margin-bottom: 6px; }
+ol.rules span { font-size: 31px; color: var(--muted); }
+code { font-family: Consolas, "D2Coding", monospace; font-size: .9em; background: var(--card); border: 1px solid var(--line-subtle); border-radius: 3px; padding: 1px 8px; color: var(--ink); }
+
+
+/* UI 개선 과정 */
+.tri { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; min-height: 0; align-content: center; }
+.tri figure { margin: 0; display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+.tri img { width: 100%; aspect-ratio: 16 / 9; object-fit: contain; background: #000; border: 1px solid var(--line-subtle); border-radius: 6px; }
+.tri figcaption { font-size: 26px; color: var(--muted); }
+.tri figcaption b { color: var(--accent-bright); margin-right: 10px; }
+
+/* 아래 막대 */
+#foot { position: absolute; left: 0; right: 0; bottom: 0; height: 56px; display: flex; align-items: center; padding: 0 96px; gap: 24px; font-size: 20px; color: var(--muted); z-index: 5; }
+#foot .name { flex: 1; }
+#foot button { font: inherit; font-size: 22px; width: 48px; height: 40px; border-radius: 4px; background: transparent; color: var(--muted); border: 1px solid var(--line-subtle); cursor: pointer; }
+#foot button:hover { color: var(--ink); border-color: var(--line); }
+#num { font-variant-numeric: tabular-nums; min-width: 80px; text-align: right; }
+#bar { position: absolute; left: 0; bottom: 0; height: 6px; background: var(--warm); transition: width .3s ease; z-index: 6; }
+.cover.on ~ #foot { color: #a59c88; }
+
+/* 발표 메모(N) */
+#notes { position: absolute; left: 96px; right: 96px; bottom: 70px; z-index: 7; display: none;
+  background: rgba(13,15,14,.94); color: #f4f1ea; border: 1px solid #f2a33a; border-radius: 6px; padding: 18px 26px; font-size: 26px; line-height: 1.5; }
+#notes.on { display: block; }
+#notes b { color: #f2a33a; margin-right: 12px; }
+.note { display: none; }
+#help { position: absolute; right: 24px; top: 20px; z-index: 7; font-size: 18px; color: var(--muted); opacity: 0; transition: opacity .3s; }
+#help.on { opacity: 1; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+<!-- 1 표지 -->
+<section class="slide cover" id="s1" data-title="표지">
+  <div class="media" data-key="01-표지" data-ph="00-표지" data-notag></div>
+  <div class="shade"></div>
+  <div class="title-block">
+    <p class="logo">Wild <span>Arcana</span></p>
+    <p class="sub">3인칭 마법 액션 보스 러쉬</p>
+    <p class="who">김성훈 · 개인 프로젝트 최종 발표<br><span class="muted">Unity 6 1인 개발 · 2026. 9. 29 ~ 10. 27</span></p>
+  </div>
+  <div class="note">이름, 게임 이름, 한 달 동안 혼자 만들었다는 것.</div>
+</section>
+
+<!-- 2 어떤 게임인가 -->
+<section class="slide" id="s2" data-title="게임 소개">
+  <p class="kicker">01 · 게임</p>
+  <h1>게임 소개</h1>
+  <div class="cols">
+    <div class="col">
+      <ul class="pts">
+        <li><b class="hl">장르</b> 3인칭 마법 액션 보스 러쉬</li>
+        <li><b class="hl">목표</b> 보스 3마리 처치</li>
+        <li><b class="hl">진행</b> 필드 → 원정 시작대 → 보스원정</li>
+        <li><b class="hl">전투</b> 공격 예고 범위 회피 후 주문 공격</li>
+        <li><b class="hl">성장</b> 보스 처치 보상으로 오브 강화·세공</li>
+      </ul>
+      <div class="chips flow" style="margin-top:auto">
+        <button class="chip on" data-ph="02-시작화면" data-t="">시작</button><span class="arrow">→</span>
+        <button class="chip" data-ph="02-필드전경" data-t="">필드</button><span class="arrow">→</span>
+        <button class="chip" data-ph="04-포털" data-t="">원정 시작대</button><span class="arrow">→</span>
+        <button class="chip" data-ph="04-보스전" data-t="">보스전</button><span class="arrow">→</span>
+        <button class="chip" data-ph="04-승리정산" data-t="">정산</button>
+      </div>
+    </div>
+    <div class="media" data-key="04-한판흐름" data-ph="02-시작화면"></div>
+  </div>
+  <div class="note">필드에서 보스원정을 떠나 보스 3마리를 잡는다. 보스를 잡을 때마다 오브를 강화·세공한다.</div>
+</section>
+
+<!-- 3 왜 만들었나 -->
+<section class="slide" id="s3" data-title="개발 동기">
+  <p class="kicker">01 · 게임</p>
+  <h1>개발 동기</h1>
+  <div class="cols">
+    <div class="col">
+      <ul class="pts">
+        <li><b class="hl">출발점</b> 상호작용 환경 구축 실험 (AI 3D 생성, Claude 모델링, GIS 디지털 트윈, 동물 AI)</li>
+        <li><b class="hl">목표</b> 자유로운 마법 조합 (초기안: 속성 없이 코딩하듯 마법 작성)</li>
+        <li><b class="hl">범위 조정</b> 규모 문제로 태그 방식으로 축소</li>
+        <li><b class="hl">보스전</b> 마법 사용 대상으로 추가</li>
+      </ul>
+      <p class="muted" style="margin-top:auto">VARCO 3D 생성 보스 6종</p>
+    </div>
+    <div class="media" data-key="03-보스모델" data-ph="08-동물"></div>
+  </div>
+  <div class="note">환경 실험이 먼저였고, 마법 조합은 하고 싶었던 것. 범위가 커져 태그로 줄였고, 보스는 마법을 쓸 대상으로 넣었다.</div>
+</section>
+
+<!-- 4 주문과 속성 -->
+<section class="slide" id="s4" data-title="주문·속성 시스템">
+  <p class="kicker">01 · 게임</p>
+  <h1>주문·속성 시스템</h1>
+  <div class="cols">
+    <div class="col">
+      <div class="chips" id="el-tabs">
+        <button class="chip on" data-el="fire"  data-key="06-주문-화염" data-ph="06-화염">화염</button>
+        <button class="chip" data-el="ice"   data-key="06-주문-얼음" data-ph="06-얼음">얼음</button>
+        <button class="chip" data-el="bolt"  data-key="06-주문-전기" data-ph="06-전기">전기</button>
+        <button class="chip" data-el="light" data-key="06-주문-빛"   data-ph="06-빛">빛</button>
+        <button class="chip" data-el="earth" data-key="06-주문-토"   data-ph="06-토">토</button>
+      </div>
+      <div class="desc" id="el-desc"></div>
+      <ul class="pts" style="margin-top:28px">
+        <li>주력 주문(좌클릭): 장착 오브 계통 기준</li>
+        <li>보조 주문(Q·E): 장전 후 좌클릭 발사</li>
+        <li>오브 세공: 주력 주문 성질 변경</li>
+      </ul>
+    </div>
+    <div class="media" data-key="06-주문-화염" data-ph="06-화염"></div>
+  </div>
+  <div class="note">시연 전에 규칙을 먼저 설명한다. 탭으로 속성을 보여 준다.</div>
+</section>
+
+<!-- 5 보스 패턴 -->
+<section class="slide" id="s5" data-title="보스 패턴">
+  <p class="kicker">01 · 게임</p>
+  <h1>보스 패턴</h1>
+  <div class="cols">
+    <div class="col">
+      <ul class="pts">
+        <li>보스별 고유 패턴</li>
+        <li>공격 전 바닥에 예고 범위 표시</li>
+        <li>2페이즈: 속도 증가·연속 공격</li>
+      </ul>
+      <div class="chips" style="margin-top:auto">
+        <button class="chip on" data-key="05-보스1" data-ph="05-예고1">보스 1</button>
+        <button class="chip" data-key="05-보스2" data-ph="05-예고2">보스 2</button>
+        <button class="chip" data-key="05-보스3" data-ph="04-보스전">보스 3</button>
+      </div>
+    </div>
+    <div class="media" data-key="05-보스1" data-ph="05-예고1"></div>
+  </div>
+  <div class="note">보스 패턴은 따로 찍은 영상. 예고 범위가 나오고 공격이 들어오는 장면.</div>
+</section>
+
+<!-- 보스원정 현황판 -->
+<section class="slide" id="s6" data-title="보스원정 현황판">
+  <p class="kicker">01 · 게임</p>
+  <h1>보스원정 현황판</h1>
+  <div class="cols">
+    <div class="col">
+      <ul class="pts">
+        <li>B 키로 여는 지도형 현황판</li>
+        <li>보스 3마리 노드, 원정 진행 단계 표시</li>
+        <li>시작 창·현황판·포털 표식이 같은 원정 모델 공유</li>
+      </ul>
+      <div class="chips" style="margin-top:auto">
+        <button class="chip on" data-ph="12-현황판-게임" data-t="">게임</button>
+        <button class="chip" data-ph="12-현황판-목업" data-t="">v3 목업</button>
+      </div>
+    </div>
+    <div class="media" data-key="12-현황판" data-ph="12-현황판-게임"></div>
+  </div>
+  <div class="note">원정 진행은 HUD가 아니라 이 현황판에서만 본다(#685). 지도형은 목업 v3 그대로 구현.</div>
+</section>
+
+<!-- 랭킹·온라인 -->
+<section class="slide" id="s7" data-title="랭킹·온라인">
+  <p class="kicker">01 · 게임</p>
+  <h1>랭킹 던전·온라인</h1>
+  <div class="cols">
+    <div class="col">
+      <ul class="pts">
+        <li><b class="hl">랭킹 던전</b> 완성 오브 소지 시 입장, 6대 보스 패턴의 고정 큐브, 제한 시간 3분</li>
+        <li><b class="hl">개인 랭킹</b> 슬롯별 최고 기록</li>
+        <li><b class="hl">온라인 순위</b> UGS Leaderboards 기록 제출·전체 순위</li>
+        <li><b class="hl">계정</b> 익명 시작, 구글 계정 연결, 클라우드 저장 동기화</li>
+      </ul>
+      <div class="chips" style="margin-top:auto">
+        <button class="chip on" data-ph="13-랭킹-온라인" data-t="">온라인 순위</button>
+        <button class="chip" data-ph="13-랭킹-설명창" data-t="">순위 상세</button>
+        <button class="chip" data-ph="13-랭킹-개인" data-t="">개인 랭킹</button>
+        <button class="chip" data-ph="13-로그인" data-t="">계정 로그인</button>
+      </div>
+    </div>
+    <div class="media" data-key="13-랭킹" data-ph="13-랭킹-온라인"></div>
+  </div>
+  <div class="note">#105 개인 랭킹 → #599 온라인 순위, #418 로그인·클라우드 저장. 로컬 저장이 정본이고 온라인은 뒤에서 비교·동기화.</div>
+</section>
+
+<!-- 6 피드백과 바뀐 부분 -->
+<section class="slide" id="s8" data-title="피드백 반영">
+  <p class="kicker">02 · 피드백</p>
+  <h1>피드백 반영 <span class="muted" style="font-size:28px;font-weight:400">CBT 팀원 2명 · 기능 지적은 대부분 자체 플레이</span></h1>
+  <div class="fb-grid">
+    <div class="fb"><span class="stage">팀원 2명</span><p class="q">볼륨 부족</p><p class="a">원거리 몬스터 추가 (필드 밀도 보강은 미완)</p><span class="iss">#625 · #628</span></div>
+    <div class="fb"><span class="stage">자체 플레이</span><p class="q">조준점·캐릭터 겹침으로 시야 가림</p><p class="a">캐릭터 화면 하단 배치, 조준점 세로 이동</p><span class="iss">#286</span></div>
+    <div class="fb"><span class="stage">자체 플레이</span><p class="q">보스 공격 단조로움·낮은 난이도</p><p class="a">패턴 순서 무작위, 2페이즈 가속, 연속 공격</p><span class="iss">#386</span></div>
+    <div class="fb"><span class="stage">자체 플레이</span><p class="q">첫 플레이 시 조작 파악 어려움</p><p class="a">기본 조작 9단계 튜토리얼</p><span class="iss">#604</span></div>
+  </div>
+  <div class="note">OBT는 따로 열지 않았다. CBT는 팀플 팀원 2명, 피드백은 볼륨이 적다는 정도. 기능 지적은 대부분 직접 해 보며 찾았다.</div>
+</section>
+
+<!-- 7 Claude와 일한 방식 -->
+<section class="slide" id="s9" data-title="Claude 협업 구조">
+  <p class="kicker">03 · Claude 협업</p>
+  <h1>Claude 협업 구조</h1>
+  <div class="pipe">
+    <div class="step"><b>이슈</b><span>GitHub 보드</span></div><i>→</i>
+    <div class="step"><b>계획</b><span>Claude</span></div><i>→</i>
+    <div class="step"><b>구현</b><span>Codex</span></div><i>→</i>
+    <div class="step"><b>시험</b><span>Unity 자동 시험</span></div><i>→</i>
+    <div class="step"><b>PR·확인</b><span>화면은 직접 확인</span></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="n" data-to="2142">0</div><div class="l">커밋</div></div>
+    <div class="stat"><div class="n" data-to="378">0</div><div class="l">병합 PR</div></div>
+    <div class="stat"><div class="n" data-to="277">0</div><div class="l">닫은 이슈</div></div>
+    <div class="stat"><div class="n" data-to="29">0</div><div class="l">개발 일수</div></div>
+  </div>
+  <div class="cols" style="grid-template-columns:1fr 1fr;gap:48px">
+    <ul class="pts">
+      <li>결정 사항 즉시 위키 기록 → 세션 교체 후에도 맥락 유지</li>
+      <li>계획·검토 Claude, 구현 Codex 분담 → 사용량 절감</li>
+      <li>한 판 자동 플레이 시험 → 회귀 오류를 PR 전에 발견</li>
+    </ul>
+    <p class="muted" style="font-size:26px;margin:0">커밋·PR 수: 이슈 소단위 분할, PR별 자동 시험<br>캐릭터·보스 모델: VARCO 3D 생성<br>외부 에셋: VFX 팩, 환경 팩, 스카이박스</p>
+  </div>
+  <div class="note">이슈 하나를 작업 공간 하나에서 처리한다. 계획은 Claude, 구현은 Codex, 시험 통과 뒤 PR.</div>
+</section>
+
+<!-- 8 막힌 점과 해결 -->
+<section class="slide" id="s10" data-title="문제와 해결">
+  <p class="kicker">03 · Claude 협업</p>
+  <h1>문제와 해결</h1>
+  <div class="fb-grid" style="grid-template-columns:1fr">
+    <div class="fb"><p class="q">AI의 화면 결과 자체 합격 처리</p><p class="a">캡처 시험 분리, 화면 직접 확인 후 이슈 종료</p></div>
+    <div class="fb"><p class="q">같은 지적의 반복</p><p class="a">규칙 파일화, 2회 위반 시 훅으로 자동 차단</p></div>
+  </div>
+  <div class="note">시간이 남으면: 세션 여럿이 같은 폴더를 고쳐 충돌 → 저장소 복사본 5개. VARCO 3D 애니메이션 FBX가 클립 0개 → Blender로 다시 내보냄.</div>
+</section>
+
+<!-- UI 개선 과정 -->
+<section class="slide" id="s11" data-title="UI 개선 과정">
+  <p class="kicker">03 · Claude 협업</p>
+  <h1>UI 개선 과정 <span class="muted" style="font-size:28px;font-weight:400">v2 목업 → v3 목업 → 게임</span></h1>
+  <div class="chips ui-tabs">
+    <button class="chip on" data-set="hud">필드 HUD</button>
+    <button class="chip" data-set="마법책">마법책</button>
+    <button class="chip" data-set="시작">시작 화면</button>
+  </div>
+  <div class="tri">
+    <figure><img data-stage="v2" alt=""><figcaption><b>v2 목업</b> 배치·흐름 확인용 와이어프레임</figcaption></figure>
+    <figure><img data-stage="v3" alt=""><figcaption><b>v3 목업</b> 디자인 문법, 색·간격 토큰 확정</figcaption></figure>
+    <figure><img data-stage="game" alt=""><figcaption><b>게임</b> 토큰 값 그대로 Unity UI에 적용</figcaption></figure>
+  </div>
+  <p class="muted" style="font-size:26px;margin:22px 0 0">목업: Claude Design 캔버스, 저장소에 PNG·HTML 사본 → 구현은 Codex → 게임 캡처와 목업 비교 후 수정</p>
+  <div class="note">처음엔 배치만 잡은 회색 상자(v2), 그다음 색·간격 규칙을 정한 v3, 마지막이 실제 게임 화면.</div>
+</section>
+
+<!-- 9 작업 노하우 -->
+<section class="slide" id="s12" data-title="협업 노하우">
+  <p class="kicker">03 · Claude 협업</p>
+  <h1>협업 노하우</h1>
+  <ol class="rules">
+    <li><b>오케스트레이션</b><span>계획·조율 Claude, 구현 Codex, 검토 agy(Gemini) 분담. 사용량 분산</span></li>
+    <li><b>위키 기록</b><span>결정 사항을 날짜·이유와 함께 기록. 새 세션이 위키에서 맥락 탐색</span></li>
+    <li><b>자체 탐색·자체 검토</b><span>파일 위치를 알려 주지 않고 탐색 지시. 작업 후 자체 검토와 타 모델 교차 검토</span></li>
+    <li><b>대화 대신 규칙 파일 수정</b><span>반복되는 지적은 규칙 파일에 반영. 화면 결과는 직접 확인 후 종료</span></li>
+  </ol>
+  <div class="note">특별한 프롬프트 문장은 없었다. 오케스트레이션, 위키 기록, 스스로 찾고 검토하라는 지시가 대부분이었다.</div>
+</section>
+
+<!-- 10 자평과 다음 -->
+<section class="slide" id="s13" data-title="자평 및 향후 계획">
+  <p class="kicker">04 · 마무리</p>
+  <h1>자평 및 향후 계획</h1>
+  <div class="wrap3">
+    <div class="panel done"><h2>✓ 완성</h2><ul class="pts"><li>보스원정 한 판 정산까지 완주</li><li>주문 5속성, 오브 세공</li><li>튜토리얼</li></ul></div>
+    <div class="panel todo"><h2>× 미완</h2><ul class="pts"><li>효과음 (제거)</li><li>보스 E·F 전용 패턴</li><li>숙련 시스템</li></ul></div>
+    <div class="panel next"><h2>→ 향후 계획</h2><ul class="pts"><li>사운드 재도입</li><li>온라인 랭킹</li><li>PV 촬영 도구</li></ul></div>
+  </div>
+  <div class="cols" style="grid-template-columns: 1fr 1fr; gap:40px">
+    <div class="col" style="justify-content:flex-end"><p class="thanks">감사합니다</p><p class="muted">Wild Arcana · 김성훈</p></div>
+    <div class="media" data-key="12-마무리" data-ph="11-원경"></div>
+  </div>
+  <div class="note">된 것·덜 된 것·다음.</div>
+</section>
+
+<div id="foot"><span class="name">Wild Arcana</span><span id="stitle"></span><button id="prev" title="이전 (←)">‹</button><button id="next" title="다음 (→)">›</button><span id="num"></span></div>
+<div id="bar"></div>
+<div id="notes"><b>메모</b><span id="notes-text"></span></div>
+<div id="help">← → 이동 · F 전체 화면 · N 메모 · L 밝은 화면</div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var stage = document.getElementById('stage');
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var cur = 0;
+
+  // 1920×1080 무대를 창에 맞춘다.
+  function fit() {
+    var s = Math.min(innerWidth / 1920, innerHeight / 1080);
+    stage.style.transform = 'scale(' + s + ') translate(-50%, -50%)';
+  }
+  addEventListener('resize', fit); fit();
+
+  // ── 영상 칸 ──────────────────────────────────────────────
+  // key의 영상이 있으면 영상, 없으면 ph 이미지. 찾은 결과는 기억한다.
+  // 단계 칩으로 시각을 건너뛰는 슬라이드(full)는 원본 길이 판을 먼저, 나머지는 짧은 루프 판을 먼저 찾는다.
+  var probeCache = {};
+  function probe(key, done, full) {
+    var ck = key + (full ? '|full' : '');
+    if (ck in probeCache) { done(probeCache[ck]); return; }
+    var cands = ['media/' + key + '-loop.mp4', 'media/' + key + '.mp4'];
+    if (full) cands.reverse();
+    key = ck;
+    (function tryNext(i) {
+      if (i >= cands.length) {
+        // 영상이 없으면 같은 키의 GIF를 찾는다.
+        var g = new Image(), gs = 'media/' + key.split('|')[0] + '.gif';
+        g.onload = function () { probeCache[key] = gs; done(gs); };
+        g.onerror = function () { probeCache[key] = null; done(null); };
+        g.src = gs;
+        return;
+      }
+      var v = document.createElement('video');
+      v.preload = 'metadata'; v.muted = true;
+      v.onloadedmetadata = function () { probeCache[key] = cands[i]; v.removeAttribute('src'); v.load(); done(cands[i]); };
+      v.onerror = function () { tryNext(i + 1); };
+      v.src = cands[i];
+    })(0);
+  }
+
+  function Media(el) {
+    this.el = el; this.key = null; this.src = null;
+    this.notag = el.hasAttribute('data-notag');
+    this.full = el.hasAttribute('data-full') || !!el.closest('.slide').querySelector('.chip[data-t]');
+    this.video = document.createElement('video');
+    this.video.muted = true; this.video.loop = true; this.video.playsInline = true;
+    this.video.setAttribute('playsinline', ''); this.video.preload = 'auto';
+    this.img = document.createElement('img'); this.img.alt = '';
+    this.tag = document.createElement('span'); this.tag.className = 'tag';
+    this.empty = document.createElement('div'); this.empty.className = 'empty';
+    this.video.style.display = this.img.style.display = this.empty.style.display = 'none';
+    el.appendChild(this.video); el.appendChild(this.img); el.appendChild(this.empty);
+    if (!this.notag) el.appendChild(this.tag);
+    this.set(el.getAttribute('data-key'), el.getAttribute('data-ph'), null);
+  }
+  Media.prototype.set = function (key, ph, t) {
+    var self = this;
+    self.ph = ph || self.ph;
+    if (key && key !== self.key) {
+      self.key = key;
+      probe(key, function (src) { if (self.key === key) self.show(src, t); }, self.full);
+    } else {
+      self.show(self.src, t);
+    }
+  };
+  Media.prototype.show = function (src, t) {
+    var v = this.video;
+    var hasT = t !== null && t !== undefined && t !== '';
+    if (src && /\.gif$/.test(src) && !this.forcePh) {
+      v.pause(); v.style.display = 'none'; this.src = src;
+      this.img.onerror = null; this.img.src = src;
+      this.img.style.display = ''; this.empty.style.display = 'none';
+      this.tag.textContent = '녹화'; this.tag.className = 'tag rec';
+      return;
+    }
+    if (src && !/\.gif$/.test(src) && (hasT || !this.forcePh)) {
+      if (this.src !== src) { v.src = src; this.src = src; }
+      if (hasT) { var seek = function () { v.currentTime = +t; }; v.readyState >= 1 ? seek() : v.addEventListener('loadedmetadata', seek, { once: true }); }
+      v.style.display = ''; this.img.style.display = 'none'; this.empty.style.display = 'none';
+      this.tag.textContent = '녹화'; this.tag.className = 'tag rec';
+      if (this.el.closest('.slide').classList.contains('on')) v.play().catch(function () {});
+      return;
+    }
+    // 영상이 없거나, 칩이 시각 없이 자리표시만 가리킬 때
+    v.pause(); v.style.display = 'none';
+    if (src === null) this.src = null;
+    var img = this.img, empty = this.empty, self = this;
+    if (this.ph) {
+      img.onerror = function () { img.style.display = 'none'; self.showEmpty(); };
+      img.src = 'media/ph/' + this.ph + '.jpg';
+      img.style.display = ''; empty.style.display = 'none';
+      this.tag.textContent = '녹화 전 자리표시'; this.tag.className = 'tag';
+    } else { img.style.display = 'none'; this.showEmpty(); }
+  };
+  Media.prototype.showEmpty = function () {
+    this.empty.innerHTML = '녹화 예정<small>media/' + this.key + '.mp4</small>';
+    this.empty.style.display = '';
+    this.tag.textContent = '';
+  };
+  Media.prototype.play = function () { if (this.video.style.display !== 'none' && this.src && !/\.gif$/.test(this.src)) this.video.play().catch(function () {}); };
+  Media.prototype.pause = function () { this.video.pause(); };
+
+  var medias = [];
+  slides.forEach(function (s) {
+    s._medias = Array.prototype.map.call(s.querySelectorAll('.media'), function (el) { var m = new Media(el); el._m = m; medias.push(m); return m; });
+  });
+
+  // 칩: 같은 슬라이드의 첫 영상 칸을 바꾼다.
+  // data-key가 있으면 다른 영상으로, data-t가 있으면 그 시각으로, 둘 다 없으면 data-ph 자리표시로.
+  function bindChips(group, onPick) {
+    var chips = group.querySelectorAll('.chip');
+    Array.prototype.forEach.call(chips, function (c) {
+      c.addEventListener('click', function () {
+        Array.prototype.forEach.call(chips, function (o) { o.classList.toggle('on', o === c); });
+        onPick(c);
+      });
+    });
+  }
+  slides.forEach(function (s) {
+    var m = s._medias[0];
+    Array.prototype.forEach.call(s.querySelectorAll('.chips'), function (g) {
+      if (g.classList.contains('ui-tabs')) return;
+      bindChips(g, function (c) {
+        var t = c.getAttribute('data-t');
+        var key = c.getAttribute('data-key');
+        // 한 영상 안의 단계 칩: 시각이 비어 있으면 그 단계 자리표시를 보여 준다.
+        m.forcePh = !key && !t;
+        m.set(key, c.getAttribute('data-ph'), t);
+        if (c.hasAttribute('data-el')) showEl(c);
+      });
+    });
+  });
+
+  // 탭으로 바꿀 영상도 미리 찾아 둔다(없는 파일 확인이 느려 탭 전환이 늦지 않게).
+  Array.prototype.forEach.call(document.querySelectorAll('.chip[data-key]'), function (c) { probe(c.getAttribute('data-key'), function () {}); });
+
+  // ── 6 주문 설명 ─────────────────────────────────────────
+  var EL = {
+    fire:  ['화염', '화상 피해'],
+    ice:   ['얼음', '이동 둔화'],
+    bolt:  ['전기', '주변 적에게 연쇄'],
+    light: ['빛',   '천광 폭격: 하늘에서 빛줄기 낙하'],
+    earth: ['토',   '클라드니 기둥: 바닥 무늬를 따라 기둥 생성']
+  };
+  function showEl(c) {
+    var e = EL[c.getAttribute('data-el')];
+    var d = document.getElementById('el-desc');
+    d.innerHTML = '<h2 class="el-name" style="color:var(--' + c.getAttribute('data-el') + '-b)">' + e[0] + '</h2><p>' + e[1] + '</p>';
+  }
+  showEl(document.querySelector('#el-tabs .chip.on'));
+
+  // ── UI 개선 과정: 단계별 이미지 3장 ─────────────────────
+  var UI_SETS = {
+    hud:   { v2: 'ui-hud-v2',    v3: 'ui-hud-v3',    game: '02-필드전경' },
+    '마법책': { v2: 'ui-마법책-v2', v3: 'ui-마법책-v3', game: '07-마법책' },
+    '시작': { v2: 'ui-시작-v2',   v3: 'ui-시작-v3',   game: '13-로그인' }
+  };
+  Array.prototype.forEach.call(document.querySelectorAll('.ui-tabs'), function (g) {
+    var tri = g.parentNode.querySelector('.tri');
+    function pick(set) {
+      Array.prototype.forEach.call(tri.querySelectorAll('img'), function (im) { im.src = 'media/ph/' + UI_SETS[set][im.getAttribute('data-stage')] + '.jpg'; });
+    }
+    bindChips(g, function (c) { pick(c.getAttribute('data-set')); });
+    pick(g.querySelector('.chip.on').getAttribute('data-set'));
+  });
+
+  // ── 7 일한 방식: 숫자 ───────────────────────────────────
+  function countUp(slide) {
+    Array.prototype.forEach.call(slide.querySelectorAll('.n[data-to]'), function (n) {
+      var to = +n.getAttribute('data-to'), t0 = performance.now(), dur = 1200;
+      (function step(now) {
+        var p = Math.min(1, (now - t0) / dur); p = 1 - Math.pow(1 - p, 3);
+        n.textContent = Math.round(to * p).toLocaleString('ko-KR');
+        if (p < 1) requestAnimationFrame(step);
+      })(t0);
+    });
+  }
+
+  // ── 이동 ────────────────────────────────────────────────
+  function go(i) {
+    i = Math.max(0, Math.min(slides.length - 1, i));
+    slides[cur].classList.remove('on');
+    slides[cur]._medias.forEach(function (m) { m.pause(); });
+    cur = i;
+    var s = slides[cur];
+    s.classList.add('on');
+    s._medias.forEach(function (m) { m.play(); });
+    if (s.querySelector('.n[data-to]')) countUp(s);
+    document.getElementById('num').textContent = (cur + 1) + ' / ' + slides.length;
+    document.getElementById('stitle').textContent = s.getAttribute('data-title');
+    document.getElementById('bar').style.width = ((cur + 1) / slides.length * 100) + '%';
+    var note = s.querySelector('.note');
+    document.getElementById('notes-text').textContent = note ? note.textContent : '';
+    if (location.hash !== '#' + (cur + 1)) history.replaceState(null, '', '#' + (cur + 1));
+  }
+  document.getElementById('prev').addEventListener('click', function () { go(cur - 1); });
+  document.getElementById('next').addEventListener('click', function () { go(cur + 1); });
+
+  function toggleFull() {
+    if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen().catch(function () {});
+  }
+  addEventListener('keydown', function (e) {
+    if (e.ctrlKey || e.metaKey || e.altKey && e.code !== 'AltLeft') return;
+    switch (e.code) {
+      case 'ArrowRight': case 'PageDown': case 'Space': go(cur + 1); break;
+      case 'ArrowLeft': case 'PageUp': go(cur - 1); break;
+      case 'Home': go(0); break;
+      case 'End': go(slides.length - 1); break;
+      case 'KeyF': toggleFull(); break;
+      case 'KeyN': document.getElementById('notes').classList.toggle('on'); break;
+      case 'KeyL':
+        var r = document.documentElement;
+        if (r.getAttribute('data-theme') === 'light') r.removeAttribute('data-theme'); else r.setAttribute('data-theme', 'light');
+        break;
+      default: return;
+    }
+    e.preventDefault();
+  });
+  // 버튼 포커스가 스페이스를 먹지 않게, 클릭 뒤 포커스를 푼다.
+  document.addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) b.blur(); });
+
+  var help = document.getElementById('help');
+  help.classList.add('on'); setTimeout(function () { help.classList.remove('on'); }, 4000);
+
+  function fromHash() {
+    var n = parseInt(location.hash.slice(1), 10);
+    if (!isNaN(n) && n - 1 !== cur) go(n - 1);
+  }
+  addEventListener('hashchange', fromHash);
+  var start = parseInt(location.hash.slice(1), 10);
+  slides[0].classList.add('on');
+  go(isNaN(start) ? 0 : start - 1);
+})();
+</script>
+</body>
+</html>
