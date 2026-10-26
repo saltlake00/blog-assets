@@ -334,6 +334,14 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
 .bl-grid { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 16px 28px; }
 .bl-grid figure { margin: 0; display: flex; flex-direction: column; min-height: 0; } .bl-grid .media video, .bl-grid .media img { object-fit: cover; }
 .bl-grid figcaption { padding: 8px 2px 0; font-size: 22px; color: var(--muted); } .bl-grid figcaption b { font-size: 26px; color: var(--ink); margin-right: 8px; }
+/* AI 묶음: 필드 보스·몬스터·동물 */
+.fboss-grid { flex: 1; min-height: 0; display: grid; grid-template-rows: 1fr 1fr; gap: 20px; }
+.fboss-grid .boss-row { grid-template-columns: 320px 1fr 1fr; padding: 14px; gap: 14px; }
+.fboss-grid .bh span { color: var(--muted); font-size: 22px; } .fboss-grid .bh .hl2 { color: var(--accent-bright); font-weight: 700; }
+.tiles { flex: 1; min-height: 0; display: grid; gap: 16px 20px; } .tiles.t3 { grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr 1fr; } .tiles.t4 { grid-template-columns: repeat(4, 1fr); grid-template-rows: 1fr 1fr; }
+.tiles figure { margin: 0; display: flex; flex-direction: column; min-height: 0; } .tiles .media video, .tiles .media img { object-fit: cover; }
+.tiles figcaption { padding: 8px 2px 0; font-size: 21px; color: var(--muted); white-space: nowrap; } .tiles figcaption b { font-size: 24px; color: var(--ink); margin-right: 8px; }
+.tile-text { display: flex; align-items: center; } .tile-text .pts li { font-size: 23px; margin-bottom: 8px; }
 </style>
 <link rel="stylesheet" href="도표.css">
 </head>
@@ -495,9 +503,77 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
   </div>
   <div class="note">#105 개인 랭킹 → #599 온라인 순위, #418 로그인·클라우드 저장. 로컬 저장이 정본이고 온라인은 뒤에서 비교·동기화.</div>
 </section>
+<!-- 5 보스 패턴 -->
+<section class="slide" id="s5" data-title="보스">
+  <p class="kicker">02 · AI</p>
+  <h1>보스 <span class="muted" style="font-size:28px;font-weight:400">보스 6종 · 패턴 2개씩, 공격 전 바닥에 예고 범위</span></h1>
+  <div class="boss-grid">
+    <div class="boss-row"><div class="bh"><b>보스 큐브</b><span class="bw none">약점 없음</span><span class="br none">저항 없음</span></div><figure><div class="media" data-key="05-보스큐브-충격파" data-ph="04-보스전" data-notag></div><figcaption>충격파</figcaption></figure><figure><div class="media" data-key="05-보스큐브-내려찍기" data-ph="04-보스전" data-notag></div><figcaption>내려찍기</figcaption></figure></div>
+    <div class="boss-row"><div class="bh"><b>얼음 결정탑</b><span class="bw" style="--c:var(--fire-b)">화염 ×1.5</span><span class="br" style="--c:var(--ice-b)">얼음 ×0.5</span></div><figure><div class="media" data-key="05-보스얼음결정탑-직선강타" data-ph="04-보스전" data-notag></div><figcaption>직선강타</figcaption></figure><figure><div class="media" data-key="05-보스얼음결정탑-고리폭발" data-ph="04-보스전" data-notag></div><figcaption>고리폭발</figcaption></figure></div>
+    <div class="boss-row"><div class="bh"><b>전기 코어</b><span class="bw" style="--c:var(--earth-b)">땅 ×1.5</span><span class="br" style="--c:var(--bolt-b)">전기 ×0.5</span></div><figure><div class="media" data-key="05-보스전기코어-방사줄기" data-ph="04-보스전" data-notag></div><figcaption>방사줄기</figcaption></figure><figure><div class="media" data-key="05-보스전기코어-연쇄낙뢰" data-ph="04-보스전" data-notag></div><figcaption>연쇄낙뢰</figcaption></figure></div>
+    <div class="boss-row"><div class="bh"><b>용암 핵</b><span class="bw" style="--c:var(--ice-b)">얼음 ×1.5</span><span class="br" style="--c:var(--fire-b)">화염 ×0.5</span></div><figure><div class="media" data-key="05-보스용암핵-용암분출" data-ph="04-보스전" data-notag></div><figcaption>용암분출</figcaption></figure><figure><div class="media" data-key="05-보스용암핵-열파고리" data-ph="04-보스전" data-notag></div><figcaption>열파고리</figcaption></figure></div>
+    <div class="boss-row"><div class="bh"><b>자이로스코프</b><span class="bw" style="--c:var(--bolt-b)">전기 ×1.5</span><span class="br" style="--c:var(--light-b)">빛 ×0.5</span></div><figure><div class="media" data-key="05-보스자이로스코프-직선강타" data-ph="04-보스전" data-notag></div><figcaption>직선강타</figcaption></figure><figure><div class="media" data-key="05-보스자이로스코프-충격파" data-ph="04-보스전" data-notag></div><figcaption>충격파</figcaption></figure></div>
+    <div class="boss-row"><div class="bh"><b>문양 기둥</b><span class="bw" style="--c:var(--light-b)">빛 ×1.5</span><span class="br" style="--c:var(--earth-b)">땅 ×0.5</span></div><figure><div class="media" data-key="05-보스문양기둥-내려찍기" data-ph="04-보스전" data-notag></div><figcaption>내려찍기</figcaption></figure><figure><div class="media" data-key="05-보스문양기둥-고리폭발" data-ph="04-보스전" data-notag></div><figcaption>고리폭발</figcaption></figure></div>
+  </div>
+  <div class="note">보스마다 패턴 두 개를 동시에 재생. 예고 범위(원·직선·도넛·방사)가 먼저 나오고 공격이 들어온다. 약점 ×1.5, 저항 ×0.5.</div>
+</section>
+<section class="slide" id="fboss" data-title="필드 보스">
+  <p class="kicker">02 · AI</p>
+  <h1>필드 보스 <span class="muted" style="font-size:28px;font-weight:400">필드에서 만나는 수호자, 처치하면 주문 해금</span></h1>
+  <div class="fboss-grid">
+    <div class="boss-row"><div class="bh"><b>거미 포탑 수호자</b><span>이동하며 겨냥 원 3개 → 지연 포격</span><span>처치 시 결정 드롭</span><span class="hl2">지연 포격·천광 폭격 해금</span></div><figure><div class="media" data-ph="18-필드보스-거미-겨냥" data-notag></div><figcaption>겨냥 원 3개</figcaption></figure><figure><div class="media" data-ph="18-필드보스-거미-출현" data-notag></div><figcaption>출현 알림</figcaption></figure></div>
+    <div class="boss-row"><div class="bh"><b>중곡사포 고정 포대</b><span>외곽 군락에 고정 배치</span><span>큰 예고 원 → 곡사 포탄</span><span class="hl2">Blender MCP로 모델링</span></div><figure><div class="media" data-ph="18-필드보스-포대-예고" data-notag></div><figcaption>예고 원</figcaption></figure><figure><div class="media" data-ph="18-필드보스-포대-포탄" data-notag></div><figcaption>포탄 비행</figcaption></figure></div>
+  </div>
+  <div class="note">거미 포탑 수호자(#701), SF 중곡사포 고정 포대(#707). 둘 다 Blender MCP로 만든 모델.</div>
+</section>
+<!-- 일반 몬스터 -->
+<section class="slide" id="s15" data-title="일반 몬스터">
+  <p class="kicker">02 · AI</p>
+  <h1>일반 몬스터</h1>
+  <div class="cols">
+    <div class="col">
+      <ul class="pts">
+        <li><b class="hl">무리 상태</b> 무관심 → 감지 → 공격 → 퇴각, 구역 단위 재생성</li>
+        <li><b class="hl">전투 역할</b> 근접 돌진, 사격, 폭탄, 저격, 방패</li>
+        <li><b class="hl">공격 전조</b> 0.5초 이상 몸 펌프·깜빡임·바닥 띠·조준선 → 완벽 회피와 연결</li>
+        <li><b class="hl">보상</b> 경험치, 세공석 조각</li>
+        <li><b class="hl">보스방 자폭병</b> 접근 후 정지, 0.5초 예고 뒤 자폭</li>
+      </ul>
+    </div>
+    <div class="tiles t3">
+      <figure><div class="media" data-key="07-몬스터-크롤러-공격" data-ph="15-몬스터-외형" data-notag></div><figcaption>근접 돌진</figcaption></figure>
+      <figure><div class="media" data-key="07-몬스터-술사-공격" data-ph="15-몬스터-외형" data-notag></div><figcaption>원거리 사격</figcaption></figure>
+      <figure><div class="media" data-key="07-몬스터-포탑-공격" data-ph="15-몬스터-외형" data-notag></div><figcaption>포탑 사격</figcaption></figure>
+      <figure><div class="media" data-key="07-몬스터-크롤러-사망" data-ph="15-몬스터-외형" data-notag></div><figcaption>처치</figcaption></figure>
+      <figure><div class="media" data-ph="15-몬스터-저격" data-notag></div><figcaption>저격 조준선</figcaption></figure>
+      <figure><div class="media" data-ph="15-자폭병" data-notag></div><figcaption>보스방 자폭병</figcaption></figure>
+    </div>
+  </div>
+  <div class="note">필드 남쪽 몬스터 구역(#388), 공격 전조(#469), 전투 역할 4종(#636), 자폭병(#320).</div>
+</section>
+<section class="slide" id="animal" data-title="동물">
+  <p class="kicker">02 · AI</p>
+  <h1>동물 <span class="muted" style="font-size:28px;font-weight:400">필드 동물 7종, 플레이어·소리·서로에게 반응</span></h1>
+  <div class="tiles t4">
+    <figure><div class="media" data-key="08-동물-닭-바라보기" data-ph="11-원경" data-notag></div><figcaption><b>닭</b> 바라보기</figcaption></figure>
+    <figure><div class="media" data-key="08-동물-꽃사슴-달아나기" data-ph="11-원경" data-notag></div><figcaption><b>꽃사슴</b> 달아나기</figcaption></figure>
+    <figure><div class="media" data-key="08-동물-여우-경계" data-ph="11-원경" data-notag></div><figcaption><b>여우</b> 경계</figcaption></figure>
+    <figure><div class="media" data-key="08-동물-말-달아나기" data-ph="11-원경" data-notag></div><figcaption><b>말</b> 달아나기</figcaption></figure>
+    <figure><div class="media" data-key="08-동물-고라니-달아나기" data-ph="11-원경" data-notag></div><figcaption><b>고라니</b> 달아나기</figcaption></figure>
+    <figure><div class="media" data-key="08-동물-삵-달아나기" data-ph="11-원경" data-notag></div><figcaption><b>삵</b> 달아나기</figcaption></figure>
+    <figure><div class="media" data-key="08-동물-늑대-달아나기" data-ph="11-원경" data-notag></div><figcaption><b>늑대</b> 달아나기</figcaption></figure>
+    <div class="tile-text"><ul class="pts">
+      <li>평온 → 주시 → 경계 → 도주</li>
+      <li>무공격이면 안전 판정, 맞으면 공황</li>
+      <li>여우가 닭 사냥, 닭 무리 반격</li>
+      <li>주문 소리에 반응</li>
+    </ul></div>
+  </div>
+  <div class="note">동물 생태(#7·#35·#152), 소리 반응(#311). 영상은 종마다 반응 장면.</div>
+</section>
 <!-- GIS 1: 데이터 흐름 -->
 <section class="slide" id="gis" data-title="GIS 디지털 트윈">
-  <p class="kicker">02 · Claude로 만든 것</p>
+  <p class="kicker">03 · Claude로 만든 것</p>
   <h1>GIS 디지털 트윈 환경 구성</h1>
   <div class="gis-grid">
     <div class="gis-left">
@@ -617,7 +693,7 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
 
 <!-- GIS 2: 단계별 결과 -->
 <section class="slide" id="gis-steps" data-title="GIS 구성 단계">
-  <p class="kicker">02 · Claude로 만든 것</p>
+  <p class="kicker">03 · Claude로 만든 것</p>
   <h1>GIS 환경 구성 단계</h1>
   <div class="cols">
     <div class="col">
@@ -641,51 +717,9 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
   </div>
   <div class="note">칩을 차례로 눌러 데이터에서 미니맵까지 보여 준다. 지형은 나무 없이 높이·길·물만 올린 에디터 화면, 건물은 외곽선을 높이만큼 올린 첫 판, 필드는 식생까지 올린 화면. 미니맵은 왼쪽이 게임 미니맵, 오른쪽이 같은 자리를 위에서 본 장면이다.</div>
 </section>
-<!-- 5 보스 패턴 -->
-<section class="slide" id="s5" data-title="보스 패턴">
-  <p class="kicker">02 · Claude로 만든 것</p>
-  <h1>보스 패턴 <span class="muted" style="font-size:28px;font-weight:400">보스 6종 · 패턴 2개씩, 공격 전 바닥에 예고 범위</span></h1>
-  <div class="boss-grid">
-    <div class="boss-row"><div class="bh"><b>보스 큐브</b><span class="bw none">약점 없음</span><span class="br none">저항 없음</span></div><figure><div class="media" data-key="05-보스큐브-충격파" data-ph="04-보스전" data-notag></div><figcaption>충격파</figcaption></figure><figure><div class="media" data-key="05-보스큐브-내려찍기" data-ph="04-보스전" data-notag></div><figcaption>내려찍기</figcaption></figure></div>
-    <div class="boss-row"><div class="bh"><b>얼음 결정탑</b><span class="bw" style="--c:var(--fire-b)">화염 ×1.5</span><span class="br" style="--c:var(--ice-b)">얼음 ×0.5</span></div><figure><div class="media" data-key="05-보스얼음결정탑-직선강타" data-ph="04-보스전" data-notag></div><figcaption>직선강타</figcaption></figure><figure><div class="media" data-key="05-보스얼음결정탑-고리폭발" data-ph="04-보스전" data-notag></div><figcaption>고리폭발</figcaption></figure></div>
-    <div class="boss-row"><div class="bh"><b>전기 코어</b><span class="bw" style="--c:var(--earth-b)">땅 ×1.5</span><span class="br" style="--c:var(--bolt-b)">전기 ×0.5</span></div><figure><div class="media" data-key="05-보스전기코어-방사줄기" data-ph="04-보스전" data-notag></div><figcaption>방사줄기</figcaption></figure><figure><div class="media" data-key="05-보스전기코어-연쇄낙뢰" data-ph="04-보스전" data-notag></div><figcaption>연쇄낙뢰</figcaption></figure></div>
-    <div class="boss-row"><div class="bh"><b>용암 핵</b><span class="bw" style="--c:var(--ice-b)">얼음 ×1.5</span><span class="br" style="--c:var(--fire-b)">화염 ×0.5</span></div><figure><div class="media" data-key="05-보스용암핵-용암분출" data-ph="04-보스전" data-notag></div><figcaption>용암분출</figcaption></figure><figure><div class="media" data-key="05-보스용암핵-열파고리" data-ph="04-보스전" data-notag></div><figcaption>열파고리</figcaption></figure></div>
-    <div class="boss-row"><div class="bh"><b>자이로스코프</b><span class="bw" style="--c:var(--bolt-b)">전기 ×1.5</span><span class="br" style="--c:var(--light-b)">빛 ×0.5</span></div><figure><div class="media" data-key="05-보스자이로스코프-직선강타" data-ph="04-보스전" data-notag></div><figcaption>직선강타</figcaption></figure><figure><div class="media" data-key="05-보스자이로스코프-충격파" data-ph="04-보스전" data-notag></div><figcaption>충격파</figcaption></figure></div>
-    <div class="boss-row"><div class="bh"><b>문양 기둥</b><span class="bw" style="--c:var(--light-b)">빛 ×1.5</span><span class="br" style="--c:var(--earth-b)">땅 ×0.5</span></div><figure><div class="media" data-key="05-보스문양기둥-내려찍기" data-ph="04-보스전" data-notag></div><figcaption>내려찍기</figcaption></figure><figure><div class="media" data-key="05-보스문양기둥-고리폭발" data-ph="04-보스전" data-notag></div><figcaption>고리폭발</figcaption></figure></div>
-  </div>
-  <div class="note">보스마다 패턴 두 개를 동시에 재생. 예고 범위(원·직선·도넛·방사)가 먼저 나오고 공격이 들어온다. 약점 ×1.5, 저항 ×0.5.</div>
-</section>
-<!-- 일반 몬스터 -->
-<section class="slide" id="s15" data-title="일반 몬스터">
-  <p class="kicker">02 · Claude로 만든 것</p>
-  <h1>일반 몬스터</h1>
-  <div class="cols">
-    <div class="col">
-      <ul class="pts">
-        <li><b class="hl">무리 상태</b> 무관심 → 감지 → 공격 → 퇴각, 구역 단위 재생성</li>
-        <li><b class="hl">전투 역할</b> 근접 돌진, 사격, 폭탄, 저격, 방패</li>
-        <li><b class="hl">공격 전조</b> 0.5초 이상 몸 펌프·깜빡임·바닥 띠·조준선 → 완벽 회피와 연결</li>
-        <li><b class="hl">보상</b> 경험치, 세공석 조각</li>
-        <li><b class="hl">보스방 자폭병</b> 접근 후 정지, 0.5초 예고 뒤 자폭</li>
-      </ul>
-      <div class="chips" style="margin-top:auto">
-        <button class="chip on" data-ph="15-몬스터-외형" data-t="">외형</button>
-        <button class="chip" data-ph="15-몬스터-무리" data-t="">혼합 무리</button>
-        <button class="chip" data-ph="15-몬스터-저격" data-t="">저격 조준선</button>
-        <button class="chip" data-ph="15-몬스터-방패" data-t="">방패</button>
-        <button class="chip" data-key="07-몬스터-크롤러-공격" data-ph="15-몬스터-외형">근접 공격</button>
-        <button class="chip" data-key="07-몬스터-술사-공격" data-ph="15-몬스터-외형">원거리 공격</button>
-        <button class="chip" data-key="07-몬스터-크롤러-사망" data-ph="15-몬스터-외형">처치</button>
-        <button class="chip" data-ph="15-자폭병" data-t="">자폭병</button>
-      </div>
-    </div>
-    <div class="media" data-key="15-몬스터" data-ph="15-몬스터-외형"></div>
-  </div>
-  <div class="note">필드 남쪽 몬스터 구역(#388), 공격 전조(#469), 전투 역할 4종(#636), 자폭병(#320).</div>
-</section>
 <!-- UI 개선 과정 -->
 <section class="slide" id="s8" data-title="UI 개선 과정">
-  <p class="kicker">02 · Claude로 만든 것</p>
+  <p class="kicker">03 · Claude로 만든 것</p>
   <h1>UI 개선 과정 <span class="muted" style="font-size:28px;font-weight:400">같은 화면의 수정 전·후</span></h1>
   <div class="chips ui-tabs">
     <button class="chip on" data-set="hud">필드 HUD</button>
@@ -724,7 +758,7 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
 #varco figcaption small { display: block; font-size: 13px; font-weight: 400; color: #d0c498; }
 </style>
 <section class="slide" id="varco" data-title="VARCO 3D 에셋">
-  <p class="kicker">02 · Claude로 만든 것</p>
+  <p class="kicker">03 · Claude로 만든 것</p>
   <h1>VARCO 3D 에셋 생성 <span class="muted" style="font-size:28px;font-weight:400">MCP로 연결한 에이전트가 생성 워크플로 직접 구성·실행</span></h1>
   <div class="vc-head">
     <b>콘셉트 이미지</b><i>→</i><b>부품 이미지</b><i>→</i><b>3D 모델</b><i>→</i><b>Unity 조립·배치</b>
@@ -760,7 +794,7 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
 </section>
 <!-- Blender MCP 모델링 -->
 <section class="slide" id="s9" data-title="Blender MCP 모델링">
-  <p class="kicker">02 · Claude로 만든 것</p>
+  <p class="kicker">03 · Claude로 만든 것</p>
   <h1>Blender MCP 모델링 <span class="muted" style="font-size:28px;font-weight:400">Claude가 MCP(AI의 도구 연결)로 Blender 직접 조작</span></h1>
   <div class="vz-chev"><div>블로킹</div><div>기계 구조</div><div>디테일</div><div>재질·조명</div><div>리그·모션</div><div class="last">Unity 반입</div></div>
   <div class="bl-grid">
@@ -773,7 +807,7 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
 </section>
 <!-- 7 Claude와 일한 방식 -->
 <section class="slide" id="s6" data-title="Claude 협업 구조">
-  <p class="kicker">03 · Claude 협업 방식</p>
+  <p class="kicker">04 · Claude 협업 방식</p>
   <h1>Claude 협업 구조</h1>
   <div class="pipe2">
     <div class="st2 me"><div class="hd"><em>1</em><b>이슈</b></div><span class="who">사람·Claude</span><span class="sub">GitHub 보드</span><ul><li>기능을 작은 이슈로 분할</li><li>완료 조건·검증 방법 명시</li></ul></div>
@@ -791,7 +825,7 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
 </section>
 <!-- 8 막힌 점과 해결 -->
 <section class="slide" id="s7" data-title="문제와 해결">
-  <p class="kicker">03 · Claude 협업 방식</p>
+  <p class="kicker">04 · Claude 협업 방식</p>
   <h1>문제와 해결</h1>
   <div class="fb-grid" style="grid-template-columns:1fr;flex:none">
     <div class="fb"><p class="q">AI의 화면 결과 자체 합격 처리</p><p class="a">캡처 시험 분리, 화면 직접 확인 후 이슈 종료</p></div>
@@ -806,7 +840,7 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
 </section>
 <!-- 9 작업 노하우 -->
 <section class="slide" id="s10" data-title="협업 노하우">
-  <p class="kicker">03 · Claude 협업 방식</p>
+  <p class="kicker">04 · Claude 협업 방식</p>
   <h1>협업 노하우</h1>
   <ol class="rules">
     <li><b>오케스트레이션</b><span>계획·조율 Claude, 구현 Codex, 교차 검토 Gemini·DeepSeek 분담</span></li>
@@ -818,7 +852,7 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
 </section>
 <!-- 6 피드백과 바뀐 부분 -->
 <section class="slide" id="s11" data-title="피드백과 자체 점검">
-  <p class="kicker">04 · 피드백</p>
+  <p class="kicker">05 · 피드백</p>
   <h1>피드백과 자체 점검 <span class="muted" style="font-size:28px;font-weight:400">비공개 테스트(CBT) 테스터 2명 · 기능 지적은 대부분 자체 플레이</span></h1>
   <div class="fb-grid">
     <div class="fb"><span class="stage">테스터 2명</span><p class="q">볼륨 부족</p><p class="a">원거리 몬스터 추가 (필드 밀도 보강은 미완)</p></div>
@@ -830,7 +864,7 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
 </section>
 <!-- 개발 내용 요약 -->
 <section class="slide" id="dev" data-title="개발 내용 요약">
-  <p class="kicker">05 · 마무리</p>
+  <p class="kicker">06 · 마무리</p>
   <h1>개발 내용 요약</h1>
   <div class="vz-dev">
     <div class="stats">
@@ -848,7 +882,7 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
 </section>
 <!-- 10 자평과 다음 -->
 <section class="slide" id="s12" data-title="자평 및 향후 계획">
-  <p class="kicker">05 · 마무리</p>
+  <p class="kicker">06 · 마무리</p>
   <h1>자평 및 향후 계획</h1>
   <div class="wrap3">
     <div class="panel done"><h2>✓ 완성</h2><ul class="pts"><li>보스원정 한 판 정산까지 완주</li><li>주문 5속성, 오브 세공</li><li>튜토리얼</li></ul></div>
