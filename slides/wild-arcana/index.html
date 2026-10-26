@@ -339,7 +339,7 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
 .fboss-grid .boss-row { grid-template-columns: 320px 1fr 1fr; padding: 14px; gap: 14px; }
 .fboss-grid .bh span { color: var(--muted); font-size: 22px; } .fboss-grid .bh .hl2 { color: var(--accent-bright); font-weight: 700; }
 .tiles { flex: 1; min-height: 0; display: grid; gap: 16px 20px; } .tiles.t3 { grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr 1fr; } .tiles.t4 { grid-template-columns: repeat(4, 1fr); grid-template-rows: 1fr 1fr; }
-.tiles figure { margin: 0; display: flex; flex-direction: column; min-height: 0; } .tiles .media video, .tiles .media img { object-fit: cover; }
+.tiles figure { margin: 0; display: flex; flex-direction: column; min-height: 0; } .tiles .media video, .tiles .media img { object-fit: cover; } .tiles.t3 .media video, .tiles.t3 .media img { object-fit: contain; }
 .tiles figcaption { padding: 8px 2px 0; font-size: 21px; color: var(--muted); white-space: nowrap; } .tiles figcaption b { font-size: 24px; color: var(--ink); margin-right: 8px; }
 .tile-text { display: flex; align-items: center; } .tile-text .pts li { font-size: 23px; margin-bottom: 8px; }
 </style>
@@ -522,7 +522,7 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
   <h1>필드 보스 <span class="muted" style="font-size:28px;font-weight:400">필드에서 만나는 수호자, 처치하면 주문 해금</span></h1>
   <div class="fboss-grid">
     <div class="boss-row"><div class="bh"><b>거미 포탑 수호자</b><span>이동하며 겨냥 원 3개 → 지연 포격</span><span>처치 시 결정 드롭</span><span class="hl2">지연 포격·천광 폭격 해금</span></div><figure><div class="media" data-key="18-필드보스-거미" data-ph="18-필드보스-거미-겨냥" data-notag></div><figcaption>지연 포격</figcaption></figure><figure><div class="media" data-key="18-필드보스-거미-이동" data-ph="18-필드보스-거미-출현" data-notag></div><figcaption>이동</figcaption></figure></div>
-    <div class="boss-row"><div class="bh"><b>중곡사포 고정 포대</b><span>외곽 군락에 고정 배치</span><span>큰 예고 원 → 곡사 포탄</span><span class="hl2">Blender MCP로 모델링</span></div><figure><div class="media" data-ph="18-필드보스-포대-예고" data-notag></div><figcaption>예고 원</figcaption></figure><figure><div class="media" data-ph="18-필드보스-포대-포탄" data-notag></div><figcaption>포탄 비행</figcaption></figure></div>
+    <div class="boss-row"><div class="bh"><b>중곡사포 고정 포대</b><span>외곽 군락에 고정 배치</span><span>큰 예고 원 → 곡사 포탄</span><span class="hl2">Blender MCP로 모델링</span></div><figure><div class="media" data-key="18-필드보스-포대" data-ph="18-필드보스-포대-예고" data-notag></div><figcaption>예고 원 → 착탄</figcaption></figure><figure><div class="media" data-ph="18-필드보스-포대-포탄" data-notag></div><figcaption>포탄 비행</figcaption></figure></div>
   </div>
   <div class="note">거미 포탑 수호자(#701), SF 중곡사포 고정 포대(#707). 둘 다 Blender MCP로 만든 모델.</div>
 </section>
@@ -541,12 +541,12 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
       </ul>
     </div>
     <div class="tiles t3">
-      <figure><div class="media" data-key="07-몬스터-크롤러-공격" data-ph="15-몬스터-외형" data-notag></div><figcaption>근접 돌진</figcaption></figure>
-      <figure><div class="media" data-key="07-몬스터-술사-공격" data-ph="15-몬스터-외형" data-notag></div><figcaption>원거리 사격</figcaption></figure>
-      <figure><div class="media" data-key="07-몬스터-포탑-공격" data-ph="15-몬스터-외형" data-notag></div><figcaption>포탑 사격</figcaption></figure>
-      <figure><div class="media" data-key="07-몬스터-크롤러-사망" data-ph="15-몬스터-외형" data-notag></div><figcaption>처치</figcaption></figure>
-      <figure><div class="media" data-ph="15-몬스터-저격" data-notag></div><figcaption>저격 조준선</figcaption></figure>
-      <figure><div class="media" data-ph="15-자폭병" data-notag></div><figcaption>보스방 자폭병</figcaption></figure>
+      <figure><div class="media" data-key="07-몬스터-근접-공격" data-ph="15-몬스터-외형" data-notag></div><figcaption>근접 돌진</figcaption></figure>
+      <figure><div class="media" data-key="07-몬스터-사격-공격" data-ph="15-몬스터-외형" data-notag></div><figcaption>사격</figcaption></figure>
+      <figure><div class="media" data-key="07-몬스터-폭탄-공격" data-ph="15-몬스터-외형" data-notag></div><figcaption>폭탄 투척</figcaption></figure>
+      <figure><div class="media" data-key="07-몬스터-저격-공격" data-ph="15-몬스터-외형" data-notag></div><figcaption>저격 조준선</figcaption></figure>
+      <figure><div class="media" data-key="07-몬스터-방패-공격" data-ph="15-몬스터-외형" data-notag></div><figcaption>방패</figcaption></figure>
+      <figure><div class="media" data-key="07-몬스터-근접-사망" data-ph="15-몬스터-외형" data-notag></div><figcaption>처치</figcaption></figure>
     </div>
   </div>
   <div class="note">필드 남쪽 몬스터 구역(#388), 공격 전조(#469), 전투 역할 4종(#636), 자폭병(#320).</div>
