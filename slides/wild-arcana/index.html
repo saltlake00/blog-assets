@@ -223,11 +223,24 @@ code { font-family: Consolas, "D2Coding", monospace; font-size: .9em; background
 
 
 /* UI 개선 과정 */
-.tri { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; min-height: 0; align-content: center; }
-.tri figure { margin: 0; display: flex; flex-direction: column; gap: 12px; min-height: 0; }
-.tri img { width: 100%; aspect-ratio: 16 / 9; object-fit: contain; background: #000; border: 1px solid var(--line-subtle); border-radius: 6px; }
-.tri figcaption { font-size: 26px; color: var(--muted); }
-.tri figcaption b { color: var(--accent-bright); margin-right: 10px; }
+.ba { flex: 1; display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px; min-height: 0; align-items: center; }
+.ba figure { margin: 0; display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+.ba img { width: 100%; aspect-ratio: 16 / 9; object-fit: contain; background: #000; border: 1px solid var(--line-subtle); border-radius: 6px; }
+.ba figcaption { font-size: 26px; color: var(--muted); min-height: 2.6em; }
+.ba figcaption b { display: block; color: var(--accent-bright); font-size: 28px; }
+.ba figure.before figcaption b { color: var(--muted); }
+.ba-arrow { color: var(--muted); font-size: 44px; }
+.ba-icons { flex: 1; display: none; flex-direction: column; justify-content: center; gap: 30px; min-height: 0; }
+.ba-icons.on { display: flex; }
+.ba-row { display: flex; flex-direction: column; gap: 14px; }
+.ba-row p { margin: 0; font-size: 26px; color: var(--muted); }
+.ba-row p b { color: var(--accent-bright); margin-right: 12px; }
+.ba-row.before p b { color: var(--muted); }
+.ba-ic { display: flex; gap: 26px; }
+.ba-ic span { width: 136px; height: 136px; border-radius: 50%; background: #121413; display: grid; place-items: center; overflow: hidden; flex: none; }
+.ba-ic img { width: 100%; height: 100%; }
+.ba-ic.svg img { width: 64%; height: 64%; }
+.ba-fix { font-size: 26px; margin: 18px 0 0; }
 
 
 /* 스킬 구성: 오브 세공 분기 */
@@ -396,19 +409,25 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
 <!-- UI 개선 과정 -->
 <section class="slide" id="s8" data-title="UI 개선 과정">
   <p class="kicker">02 · Claude 협업</p>
-  <h1>UI 개선 과정 <span class="muted" style="font-size:28px;font-weight:400">v2 목업 → v3 목업 → 게임</span></h1>
+  <h1>UI 개선 과정 <span class="muted" style="font-size:28px;font-weight:400">같은 화면의 수정 전·후</span></h1>
   <div class="chips ui-tabs">
-    <button class="chip on" data-set="hud">필드 HUD</button>
-    <button class="chip" data-set="마법책">마법책</button>
-    <button class="chip" data-set="시작">시작 화면</button>
+    <button class="chip on" data-set="마법책">마법책</button>
+    <button class="chip" data-set="원정">원정 시작</button>
+    <button class="chip" data-set="입장">던전 입장</button>
+    <button class="chip" data-set="랭킹">랭킹</button>
+    <button class="chip" data-set="아이콘">주문 아이콘</button>
   </div>
-  <div class="tri">
-    <figure><img data-stage="v2" alt=""><figcaption><b>v2 목업</b> 배치·흐름 확인용 와이어프레임</figcaption></figure>
-    <figure><img data-stage="v3" alt=""><figcaption><b>v3 목업</b> 디자인 문법, 색·간격 토큰 확정</figcaption></figure>
-    <figure><img data-stage="game" alt=""><figcaption><b>게임</b> 색·간격 값(토큰)을 Unity UI에 적용</figcaption></figure>
+  <div class="ba">
+    <figure class="before"><img data-side="전" alt=""><figcaption><b>수정 전</b><span data-cap="전"></span></figcaption></figure>
+    <div class="ba-arrow">→</div>
+    <figure><img data-side="후" alt=""><figcaption><b>수정 후</b><span data-cap="후"></span></figcaption></figure>
   </div>
-  <p class="muted" style="font-size:26px;margin:22px 0 0">목업: Claude Design 캔버스, 저장소에 PNG·HTML 사본 → 구현은 Codex → 게임 캡처와 목업 비교 후 수정</p>
-  <div class="note">처음엔 배치만 잡은 회색 상자(v2), 그다음 색·간격 규칙을 정한 v3, 마지막이 실제 게임 화면.</div>
+  <div class="ba-icons">
+    <div class="ba-row before"><p><b>수정 전</b>코드로 그린 선 글리프(PNG 텍스처), 빛·땅 주문은 HUD 칸 비어 있음</p><div class="ba-ic" data-icons="전"></div></div>
+    <div class="ba-row"><p><b>수정 후</b>AI 시안 이미지 → 벡터 추적(SVG), 주문 10종 모두 다른 그림</p><div class="ba-ic svg" data-icons="후"></div></div>
+  </div>
+  <p class="muted ba-fix">과정: 게임 캡처 → 사용자 지적 → 목업과 비교 → Codex 수정 → 같은 구도로 다시 캡처</p>
+  <div class="note">트러블슈팅처럼 같은 구도로 찍어 비교. 마법책 #370: 이름 잘림·창 0.67배 → 1배·한 줄 목록. 원정 시작 #593: 카드 3장 → 현황판과 같은 지도. 던전 입장 #384: "배경이 너무 잘 보여서 구리다" → 흐림·어둡힘. 랭킹 #105: "심심하고 아쉽다" → 순위 표식·속성색·상세 열. 주문 아이콘 #720: "너무 단순하다" → VARCO 시안 10장을 vtracer로 추적한 SVG, HUD 아이콘 26 → 40px.</div>
 </section>
 <!-- Blender MCP 모델링 -->
 <section class="slide" id="s9" data-title="Blender MCP 모델링">
@@ -737,16 +756,31 @@ table.orbs td { padding: 6px 18px; color: var(--ink); border-left: 1px solid var
   }
   showEl(document.querySelector('#el-tabs .chip.on'));
 
-  // ── UI 개선 과정: 단계별 이미지 3장 ─────────────────────
+  // ── UI 개선 과정: 같은 화면 수정 전·후 ─────────────────
+  // 이미지는 media/ph/ui-<키>-전.jpg / -후.jpg. 아이콘은 ui-아이콘-전-NN.png / -후-NN.svg(10개).
   var UI_SETS = {
-    hud:   { v2: 'ui-hud-v2',    v3: 'ui-hud-v3',    game: '02-필드전경' },
-    '마법책': { v2: 'ui-마법책-v2', v3: 'ui-마법책-v3', game: '07-마법책' },
-    '시작': { v2: 'ui-시작-v2',   v3: 'ui-시작-v3',   game: '13-로그인' }
+    '마법책': { 전: '창 0.67배 축소, 주문 이름 잘림', 후: '창 1배, 한 줄 목록·속성 필터, 글자 13px 이상' },
+    '원정': { 전: '봉인 카드 3장 나열', 후: '현황판과 같은 지도형: 던전 3곳 + 허브' },
+    '입장': { 전: '뒤 배경이 그대로 비침, 창이 묻힘', 후: '배경 흐림·어둡힘, 창 뒤 금빛 번짐' },
+    '랭킹': { 전: '글자 위주 목록', 후: '1~3위 표식, 속성색 구, 숙련 칩, 상세 열' },
+    '아이콘': { icons: 10, 과정: '과정: 사용자 지적 → AI 시안 이미지 10장 → 벡터 추적(SVG) → 슬롯 40px 크기 확인 → Unity 적용' }
   };
   Array.prototype.forEach.call(document.querySelectorAll('.ui-tabs'), function (g) {
-    var tri = g.parentNode.querySelector('.tri');
+    var s = g.parentNode, ba = s.querySelector('.ba'), ic = s.querySelector('.ba-icons');
+    var fix = s.querySelector('.ba-fix'), fix0 = fix.textContent;
+    Array.prototype.forEach.call(ic.querySelectorAll('[data-icons]'), function (row) {
+      var side = row.getAttribute('data-icons'), ext = side === '전' ? '.png' : '.svg', h = '';
+      for (var i = 1; i <= UI_SETS['아이콘'].icons; i++) h += '<span><img src="media/ph/ui-아이콘-' + side + '-' + (i < 10 ? '0' : '') + i + ext + '" alt=""></span>';
+      row.innerHTML = h;
+    });
     function pick(set) {
-      Array.prototype.forEach.call(tri.querySelectorAll('img'), function (im) { im.src = 'media/ph/' + UI_SETS[set][im.getAttribute('data-stage')] + '.jpg'; });
+      var d = UI_SETS[set], isIcon = !!d.icons;
+      ba.style.display = isIcon ? 'none' : '';
+      ic.classList.toggle('on', isIcon);
+      fix.textContent = d.과정 || fix0;
+      if (isIcon) return;
+      Array.prototype.forEach.call(ba.querySelectorAll('img'), function (im) { im.src = 'media/ph/ui-' + set + '-' + im.getAttribute('data-side') + '.jpg'; });
+      Array.prototype.forEach.call(ba.querySelectorAll('[data-cap]'), function (c) { c.textContent = d[c.getAttribute('data-cap')]; });
     }
     bindChips(g, function (c) { pick(c.getAttribute('data-set')); });
     pick(g.querySelector('.chip.on').getAttribute('data-set'));
