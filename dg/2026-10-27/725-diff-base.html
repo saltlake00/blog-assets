@@ -1,0 +1,339 @@
+<div class="dg-725-diff-base">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&family=JetBrains+Mono:wght@500&display=swap');
+
+.dg-725-diff-base *{box-sizing:border-box !important;}
+.dg-725-diff-base{
+  container-type:inline-size !important;
+  width:100% !important;
+  max-width:960px !important;
+  margin:0 auto !important;
+  padding:0 !important;
+  background:#FAF9F5 !important;
+  color:#3D3D3A !important;
+  font-family:'Noto Sans KR','Malgun Gothic',sans-serif !important;
+  font-size:14px !important;
+  line-height:1.55 !important;
+  word-break:keep-all !important;
+}
+.dg-725-diff-base .dg-plate{
+  background:#FFFFFF !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:12px !important;
+  padding:20px 22px !important;
+}
+.dg-725-diff-base .dg-title{
+  font-family:'Noto Serif KR','Nanum Myeongjo',serif !important;
+  font-weight:700 !important;
+  font-size:22px !important;
+  line-height:1.4 !important;
+  letter-spacing:-0.01em !important;
+  color:#141413 !important;
+}
+.dg-725-diff-base .dg-sub{
+  margin-top:6px !important;
+  font-size:13px !important;
+  line-height:1.55 !important;
+  color:#5E5D59 !important;
+}
+.dg-725-diff-base .dg-mono{
+  font-family:'JetBrains Mono',monospace !important;
+  font-size:12px !important;
+  color:#3D3D3A !important;
+  overflow-wrap:anywhere !important;
+}
+.dg-725-diff-base .dg-body{
+  display:grid !important;
+  grid-template-columns:minmax(0,1.35fr) minmax(0,1fr) !important;
+  gap:12px !important;
+  margin-top:14px !important;
+}
+.dg-725-diff-base .dg-col{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:10px !important;
+  min-width:0 !important;
+}
+.dg-725-diff-base .dg-card{
+  background:#F5F3EC !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:5px !important;
+  padding:12px 14px !important;
+  min-width:0 !important;
+}
+.dg-725-diff-base .dg-card-h{
+  display:flex !important;
+  align-items:baseline !important;
+  justify-content:space-between !important;
+  gap:8px !important;
+  font-size:12px !important;
+  line-height:1.4 !important;
+  color:#3D3D3A !important;
+  font-weight:500 !important;
+}
+.dg-725-diff-base .dg-card-h em{
+  font-style:normal !important;
+  font-weight:400 !important;
+  font-size:12px !important;
+  color:#87867F !important;
+}
+.dg-725-diff-base .dg-graph{
+  display:block !important;
+  width:100% !important;
+  height:auto !important;
+  margin-top:4px !important;
+}
+
+.dg-725-diff-base .gl{font-family:'Noto Sans KR',sans-serif !important;font-size:13px !important;fill:#73716A !important;}
+.dg-725-diff-base .gm{font-family:'JetBrains Mono',monospace !important;font-size:12px !important;fill:#87867F !important;}
+
+.dg-725-diff-base .dg-legend{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  gap:14px !important;
+  margin-top:4px !important;
+  font-size:12px !important;
+  line-height:1.4 !important;
+  color:#73716A !important;
+}
+.dg-725-diff-base .dg-key{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:5px !important;
+}
+.dg-725-diff-base .dg-dot{
+  display:inline-block !important;
+  width:8px !important;
+  height:8px !important;
+  border-radius:50% !important;
+}
+.dg-725-diff-base .dg-dot.me{background:#C6613F !important;}
+.dg-725-diff-base .dg-dot.other{background:#5E5D59 !important;}
+
+.dg-725-diff-base .dg-cmp{
+  background:#F5F3EC !important;
+  border:1px solid #E8E6DC !important;
+  border-left:3px solid #B5402A !important;
+  border-radius:5px !important;
+  padding:9px 12px 10px !important;
+}
+.dg-725-diff-base .dg-cmp.b{border-left-color:#C6613F !important;}
+.dg-725-diff-base .dg-cmp-h{
+  display:flex !important;
+  align-items:center !important;
+  flex-wrap:wrap !important;
+  gap:8px !important;
+}
+.dg-725-diff-base .dg-chip{
+  font-size:12px !important;
+  font-weight:700 !important;
+  line-height:1.2 !important;
+  padding:3px 7px !important;
+  border-radius:3px !important;
+  background:#F0EEE6 !important;
+  border:1px solid #E8E6DC !important;
+  color:#3D3D3A !important;
+}
+.dg-725-diff-base .dg-chip.a{color:#B5402A !important;}
+.dg-725-diff-base .dg-chip.b{color:#A9502F !important;}
+.dg-725-diff-base .dg-range{
+  font-size:12px !important;
+  line-height:1.4 !important;
+  color:#87867F !important;
+}
+.dg-725-diff-base .dg-cmp-d{
+  margin-top:4px !important;
+  font-size:13px !important;
+  line-height:1.5 !important;
+  color:#3D3D3A !important;
+}
+
+.dg-725-diff-base .dg-side{
+  background:#F5F3EC !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:5px !important;
+  padding:14px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  flex:1 1 auto !important;
+  min-width:0 !important;
+}
+.dg-725-diff-base .dg-bars{
+  margin-top:18px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:20px !important;
+}
+.dg-725-diff-base .dg-bar-h{
+  display:flex !important;
+  align-items:baseline !important;
+  justify-content:space-between !important;
+  gap:8px !important;
+  margin-bottom:6px !important;
+}
+.dg-725-diff-base .dg-bar-l{
+  font-size:13px !important;
+  line-height:1.4 !important;
+  color:#3D3D3A !important;
+}
+.dg-725-diff-base .dg-val{
+  font-family:'JetBrains Mono',monospace !important;
+  font-size:14px !important;
+  font-weight:500 !important;
+  white-space:nowrap !important;
+}
+.dg-725-diff-base .dg-val.a{color:#B5402A !important;}
+.dg-725-diff-base .dg-val.b{color:#A9502F !important;}
+.dg-725-diff-base .dg-sym{font-family:'Noto Sans KR',sans-serif !important;font-size:12px !important;}
+.dg-725-diff-base .dg-sym.bad{color:#B5402A !important;}
+.dg-725-diff-base .dg-sym.good{color:#5B7A4B !important;}
+.dg-725-diff-base .dg-track{
+  height:14px !important;
+  background:#F0EEE6 !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:3px !important;
+  overflow:hidden !important;
+}
+.dg-725-diff-base .dg-fill{height:100% !important;border-radius:2px !important;}
+.dg-725-diff-base .dg-fill.a{width:100% !important;background:#B5402A !important;}
+.dg-725-diff-base .dg-fill.b{width:3.75% !important;min-width:6px !important;background:#C6613F !important;}
+.dg-725-diff-base .dg-axis{
+  margin-top:auto !important;
+  padding-top:18px !important;
+}
+.dg-725-diff-base .dg-axis-line{
+  height:1px !important;
+  background:#D1CFC5 !important;
+}
+.dg-725-diff-base .dg-ticks{
+  display:flex !important;
+  justify-content:space-between !important;
+  margin-top:4px !important;
+  font-family:'JetBrains Mono',monospace !important;
+  font-size:12px !important;
+  line-height:1.4 !important;
+  color:#87867F !important;
+}
+
+.dg-725-diff-base .dg-conc{
+  display:flex !important;
+  justify-content:center !important;
+  margin-top:14px !important;
+}
+.dg-725-diff-base .dg-pill{
+  display:inline-block !important;
+  background:#C6613F !important;
+  color:#FFFFFF !important;
+  font-size:13px !important;
+  font-weight:700 !important;
+  line-height:1.5 !important;
+  padding:9px 18px !important;
+  border-radius:999px !important;
+}
+
+@container (max-width:620px){
+  .dg-725-diff-base .dg-plate{padding:18px 16px !important;}
+  .dg-725-diff-base .dg-body{grid-template-columns:minmax(0,1fr) !important;}
+  .dg-725-diff-base .dg-title{font-size:20px !important;}
+  .dg-725-diff-base .dg-side{flex:0 0 auto !important;}
+  .dg-725-diff-base .dg-axis{margin-top:16px !important;padding-top:0 !important;}
+  .dg-725-diff-base .dg-pill{border-radius:12px !important;text-align:center !important;}
+}
+</style>
+
+  <div class="dg-plate">
+    <div class="dg-title">「내 변경」을 세는 기준점이 검토 대상 파일 수를 바꿉니다</div>
+    <div class="dg-sub">두 지점 비교와 <span class="dg-mono">merge-base</span> 비교가 각각 무엇을 「내 변경」으로 세는지 정리합니다.</div>
+
+    <div class="dg-body">
+      <div class="dg-col">
+        <div class="dg-card">
+          <div class="dg-card-h">
+            <span>커밋 그래프</span>
+            <em>점 개수는 그림용입니다</em>
+          </div>
+          <svg class="dg-graph" viewBox="0 0 460 160" role="img" aria-label="기준 브랜치와 내 브랜치가 갈라지는 지점과, 두 비교 기준이 잡는 범위를 나타낸 그림">
+            <text class="gl" x="4" y="45">기준 브랜치</text>
+            <text class="gl" x="4" y="109">내 브랜치</text>
+
+            <text class="gm" x="192" y="26">갈라진 지점 = merge-base</text>
+            <path d="M190 31 L182 38" stroke="#D1CFC5" stroke-width="1.2" fill="none"/>
+
+            <path d="M84 40 H404" stroke="#D1CFC5" stroke-width="2" fill="none"/>
+            <path d="M178 40 C 178 80 200 104 236 104 H404" stroke="#D1CFC5" stroke-width="2" fill="none"/>
+
+            <path d="M178 40 H170 V142 Q170 150 178 150 H392 Q404 150 404 142 V104"
+                  stroke="#C6613F" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+            <path d="M404 40 H436 V104 H404"
+                  stroke="#B5402A" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+
+            <text class="gm" x="290" y="143" text-anchor="middle" style="fill:#C6613F !important">merge-base 비교</text>
+            <text class="gm" x="398" y="76" text-anchor="end" style="fill:#B5402A !important">두 지점 비교 →</text>
+            <circle cx="248" cy="40" r="4" fill="#5E5D59"/>
+            <circle cx="302" cy="40" r="4" fill="#5E5D59"/>
+            <circle cx="356" cy="40" r="4" fill="#5E5D59"/>
+            <circle cx="296" cy="104" r="4" fill="#C6613F"/>
+            <circle cx="350" cy="104" r="4" fill="#C6613F"/>
+
+            <circle cx="404" cy="40" r="5" fill="#FFFFFF" stroke="#3D3D3A" stroke-width="2"/>
+            <circle cx="404" cy="104" r="5" fill="#C6613F"/>
+            <circle cx="178" cy="40" r="5" fill="#C6613F"/>
+          </svg>
+          <div class="dg-legend">
+            <span class="dg-key"><span class="dg-dot me"></span>내 커밋</span>
+            <span class="dg-key"><span class="dg-dot other"></span>그 뒤 기준 브랜치에 병합된 다른 PR 커밋</span>
+          </div>
+        </div>
+
+        <div class="dg-cmp a">
+          <div class="dg-cmp-h">
+            <span class="dg-chip a">두 지점 비교</span>
+            <span class="dg-range">기준 브랜치 끝 ↔ 내 브랜치 끝</span>
+          </div>
+          <div class="dg-cmp-d">내 커밋과, 브랜치를 딴 뒤 기준 브랜치에 병합된 다른 PR의 변경이 함께 들어갑니다.</div>
+        </div>
+
+        <div class="dg-cmp b">
+          <div class="dg-cmp-h">
+            <span class="dg-chip b">merge-base 비교</span>
+            <span class="dg-range">갈라진 지점 ↔ 내 브랜치 끝</span>
+          </div>
+          <div class="dg-cmp-d">갈라진 뒤 내 브랜치에 쌓인 내 커밋만 들어갑니다.</div>
+        </div>
+      </div>
+
+      <div class="dg-col">
+        <div class="dg-side">
+          <div class="dg-card-h">
+            <span>검토 대상 파일 수</span>
+            <em>같은 브랜치 실측</em>
+          </div>
+          <div class="dg-bars">
+            <div class="dg-bar">
+              <div class="dg-bar-h">
+                <span class="dg-bar-l">두 지점 비교</span>
+                <span class="dg-val a">80개 <span class="dg-sym bad">×</span></span>
+              </div>
+              <div class="dg-track"><div class="dg-fill a"></div></div>
+            </div>
+            <div class="dg-bar">
+              <div class="dg-bar-h">
+                <span class="dg-bar-l">merge-base 비교</span>
+                <span class="dg-val b">3개 <span class="dg-sym good">✓</span></span>
+              </div>
+              <div class="dg-track"><div class="dg-fill b"></div></div>
+            </div>
+          </div>
+          <div class="dg-axis">
+            <div class="dg-axis-line"></div>
+            <div class="dg-ticks"><span>0</span><span>40</span><span>80</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dg-conc">
+      <span class="dg-pill">「내 변경」을 세는 기준을 갈라진 지점으로 바꾸면 검토 대상이 내 커밋만 남습니다.</span>
+    </div>
+  </div>
+</div>

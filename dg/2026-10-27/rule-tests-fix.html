@@ -1,0 +1,448 @@
+<div class="dg-rule-tests-fix">
+<style>
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&display=swap");
+
+.dg-rule-tests-fix{
+  box-sizing:border-box !important;
+  container-type:inline-size !important;
+  max-width:960px !important;
+  margin:0 auto !important;
+  padding:18px 20px 16px !important;
+  background:#FFFFFF !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:12px !important;
+  color:#3D3D3A !important;
+  font-family:'Noto Sans KR','Malgun Gothic',-apple-system,sans-serif !important;
+  font-size:14px !important;
+  line-height:1.5 !important;
+  word-break:keep-all !important;
+  -webkit-font-smoothing:antialiased !important;
+}
+
+.dg-rule-tests-fix .dg-title{
+  font-family:'Noto Serif KR','Batang',serif !important;
+  font-weight:700 !important;
+  font-size:22px !important;
+  line-height:1.35 !important;
+  letter-spacing:-0.01em !important;
+  color:#141413 !important;
+}
+
+.dg-rule-tests-fix .dg-grid{
+  display:grid !important;
+  grid-template-columns:232px 34px minmax(0,1fr) !important;
+  margin-top:14px !important;
+}
+
+.dg-rule-tests-fix .dg-head{
+  display:flex !important;
+  align-items:baseline !important;
+  justify-content:space-between !important;
+  gap:8px !important;
+  padding:0 0 7px 0 !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+  letter-spacing:0.04em !important;
+  color:#73716A !important;
+}
+.dg-rule-tests-fix .dg-head .dg-head-sub{
+  font-size:11px !important;
+  font-weight:400 !important;
+  letter-spacing:0 !important;
+  color:#87867F !important;
+}
+.dg-rule-tests-fix .dg-head--rows{
+  padding:0 12px 7px 12px !important;
+}
+.dg-rule-tests-fix .dg-head--rows .dg-head-sub{
+  font-weight:500 !important;
+}
+.dg-rule-tests-fix .dg-head > span{
+  white-space:nowrap !important;
+}
+
+.dg-rule-tests-fix .dg-rules{
+  grid-column:1 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:10px !important;
+  min-width:0 !important;
+}
+.dg-rule-tests-fix .dg-rule{
+  flex:1 1 0 !important;
+  box-sizing:border-box !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:6px !important;
+  padding:10px 12px 11px !important;
+  background:#F5F3EC !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:5px !important;
+}
+.dg-rule-tests-fix .dg-rtop{
+  display:flex !important;
+  align-items:center !important;
+  gap:6px !important;
+  min-width:0 !important;
+}
+.dg-rule-tests-fix .dg-rnum{
+  flex:0 0 auto !important;
+  box-sizing:border-box !important;
+  width:18px !important;
+  height:18px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  background:#FFFFFF !important;
+  border:1px solid #D1CFC5 !important;
+  border-radius:3px !important;
+  font-size:11px !important;
+  font-weight:700 !important;
+  line-height:1 !important;
+  color:#5E5D59 !important;
+}
+.dg-rule-tests-fix .dg-rname{
+  font-size:13px !important;
+  font-weight:700 !important;
+  line-height:1.4 !important;
+  color:#141413 !important;
+}
+.dg-rule-tests-fix .dg-muls{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  gap:4px !important;
+}
+.dg-rule-tests-fix .dg-chip{
+  box-sizing:border-box !important;
+  padding:2px 5px !important;
+  background:#FFFFFF !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:3px !important;
+  font-size:11px !important;
+  line-height:1.5 !important;
+  color:#5E5D59 !important;
+  white-space:nowrap !important;
+}
+.dg-rule-tests-fix .dg-chip b{
+  font-family:'JetBrains Mono','Consolas',monospace !important;
+  font-weight:700 !important;
+  color:#141413 !important;
+}
+.dg-rule-tests-fix .dg-rdesc{
+  font-size:12px !important;
+  line-height:1.45 !important;
+  color:#5E5D59 !important;
+}
+.dg-rule-tests-fix .dg-rnote{
+  font-size:11px !important;
+  font-weight:700 !important;
+  color:#A6781F !important;
+}
+
+.dg-rule-tests-fix .dg-rows{
+  grid-column:3 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:8px !important;
+  min-width:0 !important;
+}
+.dg-rule-tests-fix .dg-row{
+  position:relative !important;
+  box-sizing:border-box !important;
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) auto !important;
+  align-items:center !important;
+  column-gap:10px !important;
+  padding:9px 12px 10px !important;
+  background:#FFFFFF !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:5px !important;
+}
+.dg-rule-tests-fix .dg-row::before{
+  content:"" !important;
+  position:absolute !important;
+  left:-26px !important;
+  top:50% !important;
+  width:26px !important;
+  height:1px !important;
+  background:#D1CFC5 !important;
+}
+.dg-rule-tests-fix .dg-row::after{
+  content:"" !important;
+  position:absolute !important;
+  left:-31px !important;
+  top:50% !important;
+  width:6px !important;
+  height:6px !important;
+  border-left:1px solid #D1CFC5 !important;
+  border-bottom:1px solid #D1CFC5 !important;
+  transform:translateY(-50%) rotate(45deg) !important;
+}
+.dg-rule-tests-fix .dg-main{
+  min-width:0 !important;
+}
+.dg-rule-tests-fix .dg-name{
+  display:flex !important;
+  align-items:center !important;
+  flex-wrap:wrap !important;
+  gap:6px !important;
+  min-width:0 !important;
+}
+.dg-rule-tests-fix .dg-tag{
+  flex:0 0 auto !important;
+  box-sizing:border-box !important;
+  width:17px !important;
+  height:17px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  background:#F0EEE6 !important;
+  border:1px solid #D1CFC5 !important;
+  border-radius:3px !important;
+  font-size:11px !important;
+  font-weight:700 !important;
+  line-height:1 !important;
+  color:#5E5D59 !important;
+}
+.dg-rule-tests-fix .dg-name-t{
+  font-size:14px !important;
+  font-weight:700 !important;
+  color:#141413 !important;
+}
+.dg-rule-tests-fix .dg-code{
+  font-family:'JetBrains Mono','Consolas',monospace !important;
+  font-size:11px !important;
+  color:#B0AEA5 !important;
+  overflow-wrap:anywhere !important;
+}
+.dg-rule-tests-fix .dg-fix{
+  margin-top:3px !important;
+  font-size:12px !important;
+  line-height:1.45 !important;
+  color:#5E5D59 !important;
+}
+.dg-rule-tests-fix .dg-crack{
+  font-weight:700 !important;
+  color:#B5402A !important;
+  margin-right:3px !important;
+}
+.dg-rule-tests-fix .dg-arrow{
+  color:#B0AEA5 !important;
+  padding:0 4px !important;
+}
+.dg-rule-tests-fix .dg-side{
+  display:flex !important;
+  align-items:center !important;
+  gap:8px !important;
+}
+.dg-rule-tests-fix .dg-cnt{
+  box-sizing:border-box !important;
+  flex:0 0 auto !important;
+  padding:1px 5px !important;
+  background:#F0EEE6 !important;
+  border:1px solid #D1CFC5 !important;
+  border-radius:3px !important;
+  font-size:11px !important;
+  font-weight:700 !important;
+  line-height:1.5 !important;
+  color:#A6781F !important;
+  white-space:nowrap !important;
+}
+.dg-rule-tests-fix .dg-res{
+  text-align:right !important;
+}
+.dg-rule-tests-fix .dg-res-v{
+  display:block !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+  line-height:1.5 !important;
+  color:#5B7A4B !important;
+  white-space:nowrap !important;
+}
+.dg-rule-tests-fix .dg-res-v i{
+  font-style:normal !important;
+  margin-right:3px !important;
+}
+.dg-rule-tests-fix .dg-res-s{
+  display:block !important;
+  font-size:11px !important;
+  line-height:1.4 !important;
+  color:#87867F !important;
+  white-space:nowrap !important;
+}
+
+.dg-rule-tests-fix .dg-memo{
+  margin-top:11px !important;
+  font-size:12px !important;
+  line-height:1.5 !important;
+  color:#73716A !important;
+}
+.dg-rule-tests-fix .dg-memo b{
+  font-weight:700 !important;
+  color:#5E5D59 !important;
+}
+.dg-rule-tests-fix .dg-concl{
+  margin-top:12px !important;
+  display:flex !important;
+  justify-content:center !important;
+}
+.dg-rule-tests-fix .dg-pill{
+  box-sizing:border-box !important;
+  max-width:100% !important;
+  padding:8px 18px !important;
+  background:#C6613F !important;
+  border-radius:999px !important;
+  font-size:13px !important;
+  font-weight:700 !important;
+  line-height:1.4 !important;
+  text-align:center !important;
+  color:#FFFFFF !important;
+}
+
+@container (max-width:560px){
+  .dg-rule-tests-fix .dg-grid{
+    display:block !important;
+  }
+  .dg-rule-tests-fix .dg-rules{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:8px !important;
+  }
+  .dg-rule-tests-fix .dg-rules .dg-head{
+    grid-column:1 / -1 !important;
+  }
+  .dg-rule-tests-fix .dg-rows{
+    margin-top:14px !important;
+  }
+  .dg-rule-tests-fix .dg-row::before,
+  .dg-rule-tests-fix .dg-row::after{
+    content:none !important;
+  }
+}
+
+@container (max-width:440px){
+  .dg-rule-tests-fix .dg-row{
+    grid-template-columns:minmax(0,1fr) !important;
+    align-items:start !important;
+  }
+  .dg-rule-tests-fix .dg-side{
+    margin-top:6px !important;
+    justify-content:flex-start !important;
+  }
+  .dg-rule-tests-fix .dg-res{
+    text-align:left !important;
+  }
+  .dg-rule-tests-fix .dg-res-s{
+    white-space:normal !important;
+  }
+  .dg-rule-tests-fix .dg-pill{
+    display:block !important;
+    width:100% !important;
+  }
+}
+
+@container (max-width:340px){
+  .dg-rule-tests-fix .dg-rules{
+    grid-template-columns:minmax(0,1fr) !important;
+  }
+}
+</style>
+
+<div class="dg-title">규칙 두 가지를 바꾸자 주문 시험 10건이 실패했습니다</div>
+
+<div class="dg-grid">
+  <div class="dg-rules">
+    <div class="dg-head">
+      <span>바뀐 규칙</span>
+      <span class="dg-head-sub">10-25 OBT 피드백</span>
+    </div>
+
+    <div class="dg-rule">
+      <div class="dg-rtop">
+        <span class="dg-rnum">①</span>
+        <span class="dg-rname">슬롯 칸 역할 보정</span>
+      </div>
+      <div class="dg-muls">
+        <span class="dg-chip">주력 피해 <b>×0.7</b></span>
+        <span class="dg-chip">충전 <b>×1.5</b></span>
+        <span class="dg-chip">Q 피해 <b>×1.3</b></span>
+        <span class="dg-chip">재충전 <b>×1.3</b></span>
+      </div>
+    </div>
+
+    <div class="dg-rule">
+      <div class="dg-rtop">
+        <span class="dg-rnum">②</span>
+        <span class="dg-rname">보조 주문 묶음 장전</span>
+      </div>
+      <div class="dg-rdesc">장전된 상태에서 같은 주문 버튼을 다시 누르면 장전이 취소됩니다.</div>
+      <div class="dg-rnote">의도된 동작입니다</div>
+    </div>
+  </div>
+
+  <div class="dg-rows">
+    <div class="dg-head dg-head--rows">
+      <span>따라오지 못한 시험</span>
+      <span class="dg-head-sub">고친 뒤 결과</span>
+    </div>
+
+    <div class="dg-row">
+      <div class="dg-main">
+        <div class="dg-name">
+          <span class="dg-tag">①</span>
+          <span class="dg-name-t">화상·장판</span>
+          <span class="dg-code">BurnRule · LingerField</span>
+        </div>
+        <div class="dg-fix"><span class="dg-crack">×</span>기대값의 1.3배 피해<span class="dg-arrow">→</span>시험에서 칸 보정을 끄고 장전을 재사용했습니다.</div>
+      </div>
+      <div class="dg-side">
+        <span class="dg-cnt">실패 5건</span>
+        <div class="dg-res">
+          <span class="dg-res-v"><i>✓</i>49건 모두 통과</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dg-row">
+      <div class="dg-main">
+        <div class="dg-name">
+          <span class="dg-tag">①</span>
+          <span class="dg-name-t">연쇄</span>
+          <span class="dg-code">ChainRule</span>
+        </div>
+        <div class="dg-fix"><span class="dg-crack">×</span>기대 피해 불일치<span class="dg-arrow">→</span>준비부를 칸 보정과 번개 기본 피해 23에 맞췄습니다.</div>
+      </div>
+      <div class="dg-side">
+        <span class="dg-cnt">실패 3건</span>
+        <div class="dg-res">
+          <span class="dg-res-v"><i>✓</i>124건 중 122건 통과</span>
+          <span class="dg-res-s">남은 2건은 아래 얼음창</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dg-row">
+      <div class="dg-main">
+        <div class="dg-name">
+          <span class="dg-tag">②</span>
+          <span class="dg-name-t">얼음창</span>
+          <span class="dg-code">IceSpear</span>
+        </div>
+        <div class="dg-fix"><span class="dg-crack">×</span>두 번째 보조 발사 실패<span class="dg-arrow">→</span>장전돼 있으면 다시 누르지 않게 했습니다.</div>
+      </div>
+      <div class="dg-side">
+        <span class="dg-cnt">실패 2건</span>
+        <div class="dg-res">
+          <span class="dg-res-v"><i>✓</i>43건 모두 통과</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="dg-memo">제품 코드는 그대로 두고, <b>시험 준비 코드만</b> 수정했습니다.</div>
+
+<div class="dg-concl">
+  <div class="dg-pill">규칙이 바뀌면 시험도 그 규칙을 따라가야 통과합니다</div>
+</div>
+</div>
