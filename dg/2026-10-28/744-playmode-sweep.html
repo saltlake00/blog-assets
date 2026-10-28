@@ -1,0 +1,262 @@
+<div class="dg-744-playmode-sweep">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&family=JetBrains+Mono:wght@500&display=swap');
+
+.dg-744-playmode-sweep{
+  container-type:inline-size !important;
+  max-width:960px !important;
+  margin:0 auto !important;
+}
+.dg-744-playmode-sweep .dgs-board{
+  box-sizing:border-box !important;
+  background:#FFFFFF !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:12px !important;
+  padding:26px 28px 24px !important;
+  font-family:'Noto Sans KR',system-ui,-apple-system,sans-serif !important;
+  color:#141413 !important;
+  word-break:keep-all !important;
+  overflow-wrap:anywhere !important;
+  font-variant-numeric:tabular-nums !important;
+}
+.dg-744-playmode-sweep .dgs-h1{
+  font-family:'Noto Serif KR','Noto Sans KR',serif !important;
+  font-weight:700 !important;
+  font-size:22px !important;
+  line-height:1.4 !important;
+  letter-spacing:-0.01em !important;
+  color:#141413 !important;
+}
+.dg-744-playmode-sweep .dgs-sub{
+  margin-top:6px !important;
+  font-size:13px !important;
+  line-height:1.5 !important;
+  color:#73716A !important;
+}
+.dg-744-playmode-sweep .dgs-body{
+  display:grid !important;
+  grid-template-columns:minmax(0,260px) minmax(0,1fr) !important;
+  gap:18px !important;
+  margin-top:20px !important;
+  align-items:start !important;
+}
+.dg-744-playmode-sweep .dgs-sum{
+  box-sizing:border-box !important;
+  background:#F5F3EC !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:5px !important;
+  padding:16px 16px 14px !important;
+}
+.dg-744-playmode-sweep .dgs-cap{
+  font-size:12px !important;
+  line-height:1.4 !important;
+  letter-spacing:0.02em !important;
+  color:#87867F !important;
+}
+.dg-744-playmode-sweep .dgs-total{
+  margin-top:2px !important;
+  font-size:26px !important;
+  font-weight:700 !important;
+  line-height:1.15 !important;
+  color:#141413 !important;
+}
+.dg-744-playmode-sweep .dgs-unit{
+  margin-left:3px !important;
+  font-size:13px !important;
+  font-weight:500 !important;
+  color:#5E5D59 !important;
+}
+.dg-744-playmode-sweep .dgs-bar{
+  display:flex !important;
+  height:26px !important;
+  margin-top:12px !important;
+  background:#F0EEE6 !important;
+  border-radius:3px !important;
+  overflow:hidden !important;
+}
+.dg-744-playmode-sweep .dgs-seg-pass{flex:1 1 auto !important;background:#D1CFC5 !important;}
+.dg-744-playmode-sweep .dgs-seg-skip{flex:0 0 3px !important;background:#A6781F !important;}
+.dg-744-playmode-sweep .dgs-seg-fail{flex:0 0 5.4% !important;background:#B5402A !important;}
+.dg-744-playmode-sweep .dgs-legend{margin-top:12px !important;}
+.dg-744-playmode-sweep .dgs-lrow{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:8px !important;
+  padding:4px 0 !important;
+  font-size:13px !important;
+  line-height:1.4 !important;
+  color:#3D3D3A !important;
+}
+.dg-744-playmode-sweep .dgs-lrow + .dgs-lrow{border-top:1px solid #E8E6DC !important;}
+.dg-744-playmode-sweep .dgs-lname{display:flex !important;align-items:center !important;gap:7px !important;}
+.dg-744-playmode-sweep .dgs-sym{font-size:12px !important;font-weight:700 !important;line-height:1 !important;}
+.dg-744-playmode-sweep .dgs-sym-ok{color:#5B7A4B !important;}
+.dg-744-playmode-sweep .dgs-sym-mid{color:#A6781F !important;}
+.dg-744-playmode-sweep .dgs-sym-bad{color:#B5402A !important;}
+.dg-744-playmode-sweep .dgs-count{font-size:14px !important;font-weight:700 !important;color:#141413 !important;}
+.dg-744-playmode-sweep .dgs-count-bad{color:#B5402A !important;}
+.dg-744-playmode-sweep .dgs-rcap{
+  margin:0 0 8px 2px !important;
+  font-size:12px !important;
+  line-height:1.4 !important;
+  letter-spacing:0.02em !important;
+  color:#87867F !important;
+}
+.dg-744-playmode-sweep .dgs-grid{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:12px !important;
+}
+.dg-744-playmode-sweep .dgs-branch{
+  box-sizing:border-box !important;
+  background:#F5F3EC !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:5px !important;
+  padding:13px 14px !important;
+}
+.dg-744-playmode-sweep .dgs-btop{display:flex !important;align-items:flex-start !important;gap:8px !important;}
+.dg-744-playmode-sweep .dgs-num{
+  flex:0 0 auto !important;
+  padding:1px 6px !important;
+  font-family:'JetBrains Mono',ui-monospace,monospace !important;
+  font-size:12px !important;
+  font-weight:500 !important;
+  line-height:17px !important;
+  color:#3D3D3A !important;
+  background:#F0EEE6 !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:3px !important;
+}
+.dg-744-playmode-sweep .dgs-cause{
+  min-height:36px !important;
+  font-size:12px !important;
+  line-height:1.5 !important;
+  color:#3D3D3A !important;
+}
+.dg-744-playmode-sweep .dgs-track{
+  height:8px !important;
+  margin-top:8px !important;
+  background:#E8E6DC !important;
+  border-radius:3px !important;
+  overflow:hidden !important;
+}
+.dg-744-playmode-sweep .dgs-fill{
+  height:8px !important;
+  background:#87867F !important;
+  border-radius:3px !important;
+}
+.dg-744-playmode-sweep .dgs-res{
+  display:flex !important;
+  align-items:flex-start !important;
+  gap:5px !important;
+  margin-top:8px !important;
+  font-size:12px !important;
+  line-height:1.5 !important;
+  color:#A9502F !important;
+}
+.dg-744-playmode-sweep .dgs-res .dgs-sym{margin-top:1px !important;}
+.dg-744-playmode-sweep .dgs-foot{
+  display:flex !important;
+  justify-content:center !important;
+  margin-top:18px !important;
+}
+.dg-744-playmode-sweep .dgs-pill{
+  padding:9px 20px !important;
+  background:#C6613F !important;
+  border-radius:999px !important;
+  font-size:13px !important;
+  font-weight:500 !important;
+  line-height:1.4 !important;
+  color:#FFFFFF !important;
+  text-align:center !important;
+}
+@container (max-width:700px){
+  .dg-744-playmode-sweep .dgs-body{grid-template-columns:minmax(0,1fr) !important;}
+}
+@container (max-width:520px){
+  .dg-744-playmode-sweep .dgs-board{padding:18px 16px 18px !important;}
+  .dg-744-playmode-sweep .dgs-h1{font-size:19px !important;}
+}
+@container (max-width:460px){
+  .dg-744-playmode-sweep .dgs-grid{grid-template-columns:minmax(0,1fr) !important;}
+}
+</style>
+
+<div class="dgs-board">
+  <div class="dgs-h1">PlayMode 전체 시험, 실패는 네 원인으로 정리됐습니다</div>
+  <div class="dgs-sub">다섯 묶음을 약 47분 동안 돌린 결과입니다</div>
+
+  <div class="dgs-body">
+    <div class="dgs-sum">
+      <div class="dgs-cap">전체 실행</div>
+      <div class="dgs-total">1,289<span class="dgs-unit">건</span></div>
+      <div class="dgs-bar">
+        <div class="dgs-seg-pass"></div>
+        <div class="dgs-seg-skip"></div>
+        <div class="dgs-seg-fail"></div>
+      </div>
+      <div class="dgs-legend">
+        <div class="dgs-lrow">
+          <span class="dgs-lname"><span class="dgs-sym dgs-sym-ok">✓</span>통과</span>
+          <span class="dgs-count">1,216</span>
+        </div>
+        <div class="dgs-lrow">
+          <span class="dgs-lname"><span class="dgs-sym dgs-sym-mid">―</span>건너뜀</span>
+          <span class="dgs-count">4</span>
+        </div>
+        <div class="dgs-lrow">
+          <span class="dgs-lname"><span class="dgs-sym dgs-sym-bad">×</span>실패</span>
+          <span class="dgs-count dgs-count-bad">69</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dgs-right">
+      <div class="dgs-rcap">실패를 원인별로 나눴습니다</div>
+      <div class="dgs-grid">
+        <div class="dgs-branch">
+          <div class="dgs-btop">
+            <div class="dgs-num">48</div>
+            <div class="dgs-cause">칸 보정·묶음 장전 규칙 변경</div>
+          </div>
+          <div class="dgs-track"><div class="dgs-fill" style="width:100% !important"></div></div>
+          <div class="dgs-res"><span class="dgs-sym dgs-sym-ok">✓</span><span>재실행 264건 중 250건 통과 · 남은 14건은 아래 주문 규칙 실패</span></div>
+        </div>
+
+        <div class="dgs-branch">
+          <div class="dgs-btop">
+            <div class="dgs-num">14</div>
+            <div class="dgs-cause">주문 규칙 인자 수·고정 기대값</div>
+          </div>
+          <div class="dgs-track"><div class="dgs-fill" style="width:29.2% !important"></div></div>
+          <div class="dgs-res"><span class="dgs-sym dgs-sym-ok">✓</span><span>관련 묶음 90건 모두 통과</span></div>
+        </div>
+
+        <div class="dgs-branch">
+          <div class="dgs-btop">
+            <div class="dgs-num">4</div>
+            <div class="dgs-cause">월드·몬스터 씬 변경</div>
+          </div>
+          <div class="dgs-track"><div class="dgs-fill" style="width:8.3% !important"></div></div>
+          <div class="dgs-res"><span class="dgs-sym dgs-sym-ok">✓</span><span>고친 시험 8건 모두 통과</span></div>
+        </div>
+
+        <div class="dgs-branch">
+          <div class="dgs-btop">
+            <div class="dgs-num">3</div>
+            <div class="dgs-cause">UI 버튼·카드 배치 변경</div>
+          </div>
+          <div class="dgs-track"><div class="dgs-fill" style="width:6.3% !important"></div></div>
+          <div class="dgs-res"><span class="dgs-sym dgs-sym-ok">✓</span><span>관련 묶음 28건 모두 통과</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dgs-foot">
+    <div class="dgs-pill">제품 코드는 그대로, 시험만 수정했습니다</div>
+  </div>
+</div>
+
+</div>

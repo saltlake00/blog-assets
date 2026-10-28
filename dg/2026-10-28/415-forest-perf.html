@@ -1,0 +1,284 @@
+<div class="dg-415-forest-perf">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&display=swap');
+
+.dg-415-forest-perf{
+  container-type:inline-size !important;
+  box-sizing:border-box !important;
+  max-width:960px !important;
+  margin:0 auto !important;
+  padding:22px 22px 24px !important;
+  background:#FFFFFF !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:12px !important;
+  color-scheme:light !important;
+  font-family:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif !important;
+  color:#141413 !important;
+  line-height:1.45 !important;
+  word-break:keep-all !important;
+  overflow-wrap:anywhere !important;
+}
+.dg-415-forest-perf *{box-sizing:border-box !important;}
+
+.dg-415-forest-perf .dg-eyebrow{
+  font-size:12px !important;
+  font-weight:500 !important;
+  letter-spacing:.08em !important;
+  color:#87867F !important;
+}
+.dg-415-forest-perf .dg-title{
+  margin-top:5px !important;
+  font-family:'Noto Serif KR',Georgia,serif !important;
+  font-size:22px !important;
+  font-weight:700 !important;
+  line-height:1.35 !important;
+  color:#141413 !important;
+}
+.dg-415-forest-perf .dg-sub{
+  margin-top:5px !important;
+  font-size:13px !important;
+  color:#73716A !important;
+}
+
+.dg-415-forest-perf .dg-legend{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  align-items:center !important;
+  gap:7px 16px !important;
+  margin:12px 0 10px !important;
+}
+.dg-415-forest-perf .dg-key{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:6px !important;
+  font-size:12px !important;
+  color:#5E5D59 !important;
+}
+.dg-415-forest-perf .dg-sw{
+  display:inline-block !important;
+  width:16px !important;
+  height:8px !important;
+  border-radius:2px !important;
+}
+.dg-415-forest-perf .dg-sw-avg{background:#3D3D3A !important;}
+.dg-415-forest-perf .dg-sw-p95{background:#D1CFC5 !important;}
+
+.dg-415-forest-perf .dg-panel{
+  background:#FFFFFF !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:12px !important;
+  padding:12px 16px 10px !important;
+}
+.dg-415-forest-perf .dg-group + .dg-group{
+  border-top:1px solid #E8E6DC !important;
+  margin-top:10px !important;
+  padding-top:10px !important;
+}
+.dg-415-forest-perf .dg-group-head{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  align-items:baseline !important;
+  justify-content:space-between !important;
+  gap:2px 10px !important;
+  margin-bottom:6px !important;
+}
+.dg-415-forest-perf .dg-group-name{
+  font-size:13px !important;
+  font-weight:700 !important;
+  color:#3D3D3A !important;
+}
+.dg-415-forest-perf .dg-group-note{
+  font-size:12px !important;
+  color:#87867F !important;
+}
+
+.dg-415-forest-perf .dg-row{
+  display:grid !important;
+  grid-template-columns:104px 1fr 96px !important;
+  column-gap:12px !important;
+  align-items:center !important;
+  padding:4px 0 !important;
+}
+.dg-415-forest-perf .dg-label{
+  font-size:13px !important;
+  font-weight:500 !important;
+  color:#3D3D3A !important;
+}
+.dg-415-forest-perf .dg-track{
+  position:relative !important;
+  height:12px !important;
+  background:#F0EEE6 !important;
+  border-radius:6px !important;
+}
+.dg-415-forest-perf .dg-bar-p95{
+  position:absolute !important;
+  left:0 !important;
+  top:0 !important;
+  height:12px !important;
+  background:#D1CFC5 !important;
+  border-radius:6px !important;
+}
+.dg-415-forest-perf .dg-bar-avg{
+  position:absolute !important;
+  left:0 !important;
+  top:0 !important;
+  height:12px !important;
+  background:#3D3D3A !important;
+  border-radius:6px !important;
+}
+.dg-415-forest-perf .dg-values{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:flex-end !important;
+  gap:1px !important;
+  font-family:'JetBrains Mono',ui-monospace,monospace !important;
+  font-variant-numeric:tabular-nums !important;
+}
+.dg-415-forest-perf .dg-avg{
+  font-size:14px !important;
+  font-weight:700 !important;
+  line-height:1.2 !important;
+  color:#141413 !important;
+}
+.dg-415-forest-perf .dg-p95{
+  font-size:12px !important;
+  line-height:1.2 !important;
+  color:#87867F !important;
+}
+
+.dg-415-forest-perf .dg-axis{
+  position:relative !important;
+  height:16px !important;
+  margin:6px 108px 0 116px !important;
+}
+.dg-415-forest-perf .dg-axis-tick{
+  position:absolute !important;
+  top:2px !important;
+  font-family:'JetBrains Mono',ui-monospace,monospace !important;
+  font-size:12px !important;
+  line-height:1 !important;
+  color:#B0AEA5 !important;
+  transform:translateX(-50%) !important;
+}
+.dg-415-forest-perf .dg-axis-tick:first-child{transform:none !important;}
+.dg-415-forest-perf .dg-axis-tick:last-child{transform:translateX(-100%) !important;}
+
+.dg-415-forest-perf .dg-note{
+  margin-top:10px !important;
+  font-size:12px !important;
+  line-height:1.55 !important;
+  color:#87867F !important;
+}
+.dg-415-forest-perf .dg-concl{
+  width:fit-content !important;
+  max-width:100% !important;
+  margin:12px auto 0 !important;
+  padding:11px 26px !important;
+  background:#C6613F !important;
+  color:#FFFFFF !important;
+  border-radius:999px !important;
+  font-size:14px !important;
+  font-weight:500 !important;
+  line-height:1.4 !important;
+  text-align:center !important;
+}
+
+@container (max-width:560px){
+  .dg-415-forest-perf .dg-row{
+    grid-template-columns:1fr auto !important;
+    grid-template-areas:"label values" "track track" !important;
+    row-gap:7px !important;
+    padding:7px 0 !important;
+  }
+  .dg-415-forest-perf .dg-label{grid-area:label !important;}
+  .dg-415-forest-perf .dg-values{
+    grid-area:values !important;
+    flex-direction:row !important;
+    align-items:baseline !important;
+    gap:10px !important;
+  }
+  .dg-415-forest-perf .dg-track{grid-area:track !important;}
+  .dg-415-forest-perf .dg-axis{margin:8px 0 0 !important;}
+  .dg-415-forest-perf .dg-group-note{text-align:left !important;}
+}
+</style>
+
+  <div class="dg-eyebrow">프레임 시간 비교</div>
+  <div class="dg-title">대리 나무 수와 확장 연결에 따른 프레임 시간</div>
+  <div class="dg-sub">같은 장면 300프레임에서 화면 한 장을 갱신하는 데 걸린 시간입니다. 낮을수록 좋습니다.</div>
+
+  <div class="dg-legend">
+    <span class="dg-key"><span class="dg-sw dg-sw-avg"></span>평균</span>
+    <span class="dg-key"><span class="dg-sw dg-sw-p95"></span>p95 (느린 쪽 5%)</span>
+  </div>
+
+  <div class="dg-panel">
+    <div class="dg-group">
+      <div class="dg-group-head">
+        <span class="dg-group-name">원래 지형 나무만</span>
+      </div>
+      <div class="dg-row">
+        <div class="dg-label">대리 0그루</div>
+        <div class="dg-track">
+          <div class="dg-bar-p95" style="width:60.13% !important"></div>
+          <div class="dg-bar-avg" style="width:54.25% !important"></div>
+        </div>
+        <div class="dg-values">
+          <span class="dg-avg">8.68ms</span>
+          <span class="dg-p95">p95 9.62ms</span>
+        </div>
+      </div>
+      <div class="dg-row">
+        <div class="dg-label">대리 8그루</div>
+        <div class="dg-track">
+          <div class="dg-bar-p95" style="width:75.56% !important"></div>
+          <div class="dg-bar-avg" style="width:58.31% !important"></div>
+        </div>
+        <div class="dg-values">
+          <span class="dg-avg">9.33ms</span>
+          <span class="dg-p95">p95 12.09ms</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dg-group">
+      <div class="dg-group-head">
+        <span class="dg-group-name">확장 지역 연결</span>
+        <span class="dg-group-note">줄기 충돌체 21,679개 추가 · 초기화 411ms(1회)</span>
+      </div>
+      <div class="dg-row">
+        <div class="dg-label">대리 0그루</div>
+        <div class="dg-track">
+          <div class="dg-bar-p95" style="width:92.94% !important"></div>
+          <div class="dg-bar-avg" style="width:63.88% !important"></div>
+        </div>
+        <div class="dg-values">
+          <span class="dg-avg">10.22ms</span>
+          <span class="dg-p95">p95 14.87ms</span>
+        </div>
+      </div>
+      <div class="dg-row">
+        <div class="dg-label">대리 8그루</div>
+        <div class="dg-track">
+          <div class="dg-bar-p95" style="width:93.06% !important"></div>
+          <div class="dg-bar-avg" style="width:64.44% !important"></div>
+        </div>
+        <div class="dg-values">
+          <span class="dg-avg">10.31ms</span>
+          <span class="dg-p95">p95 14.89ms</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dg-axis">
+      <span class="dg-axis-tick" style="left:0 !important">0</span>
+      <span class="dg-axis-tick" style="left:25% !important">4</span>
+      <span class="dg-axis-tick" style="left:50% !important">8</span>
+      <span class="dg-axis-tick" style="left:75% !important">12</span>
+      <span class="dg-axis-tick" style="left:100% !important">16ms</span>
+    </div>
+  </div>
+
+  <div class="dg-note">확장 연결 전후 차이(약 1.5ms)는 다른 날 다른 실행에서 한 번씩 잰 값이라, 충돌체 비용으로 단정하지 않습니다.</div>
+  <div class="dg-concl">대리 나무 8그루의 평균 차이는 1ms 안쪽이었고, 확장 연결 두 조건의 p95는 14.87–14.89ms였습니다.</div>
+</div>
