@@ -1,0 +1,51 @@
+<div class="dg-ui-v4-scale">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&display=swap');
+.dg-ui-v4-scale{container-type:inline-size !important;box-sizing:border-box !important;max-width:960px !important;margin:0 auto !important;padding:22px 22px 20px !important;background:#FFFFFF !important;border:1px solid #E8E6DC !important;border-radius:12px !important;font-family:'Noto Sans KR','Malgun Gothic',sans-serif !important;color:#141413 !important;line-height:1.45 !important;word-break:keep-all !important;overflow-wrap:anywhere !important;}
+.dg-ui-v4-scale *{box-sizing:border-box !important;}
+.dg-ui-v4-scale .dg-eyebrow{font-size:12px !important;font-weight:500 !important;letter-spacing:.08em !important;color:#87867F !important;}
+.dg-ui-v4-scale .dg-title{margin-top:5px !important;font-family:'Noto Serif KR',Georgia,serif !important;font-size:21px !important;font-weight:700 !important;line-height:1.35 !important;color:#141413 !important;}
+.dg-ui-v4-scale .dg-legend{display:flex !important;flex-wrap:wrap !important;gap:6px 16px !important;margin:10px 0 10px !important;}
+.dg-ui-v4-scale .dg-key{display:inline-flex !important;align-items:center !important;gap:6px !important;font-size:12px !important;color:#5E5D59 !important;}
+.dg-ui-v4-scale .dg-sw{display:inline-block !important;width:16px !important;height:8px !important;border-radius:2px !important;}
+.dg-ui-v4-scale .sw-old{background:#D1CFC5 !important;}
+.dg-ui-v4-scale .sw-new{background:#C6613F !important;}
+.dg-ui-v4-scale .dg-groups{display:grid !important;grid-template-columns:repeat(3,minmax(0,1fr)) !important;gap:10px !important;}
+.dg-ui-v4-scale .dg-group{background:#F5F3EC !important;border:1px solid #E8E6DC !important;border-radius:10px !important;padding:10px 12px 8px !important;}
+.dg-ui-v4-scale .dg-ghead{display:flex !important;justify-content:space-between !important;align-items:baseline !important;gap:6px !important;margin-bottom:6px !important;}
+.dg-ui-v4-scale .dg-gname{font-size:13px !important;font-weight:700 !important;color:#3D3D3A !important;}
+.dg-ui-v4-scale .dg-gaxis{font-size:11px !important;color:#87867F !important;font-family:'JetBrains Mono',monospace !important;}
+.dg-ui-v4-scale .dg-row{padding:4px 0 !important;}
+.dg-ui-v4-scale .dg-rhead{display:flex !important;justify-content:space-between !important;align-items:baseline !important;gap:6px !important;}
+.dg-ui-v4-scale .dg-label{font-size:12px !important;font-weight:500 !important;color:#3D3D3A !important;}
+.dg-ui-v4-scale .dg-val{font-size:11.5px !important;font-family:'JetBrains Mono',monospace !important;color:#5E5D59 !important;white-space:nowrap !important;}
+.dg-ui-v4-scale .dg-val b{color:#A9502F !important;font-weight:700 !important;}
+.dg-ui-v4-scale .dg-track{position:relative !important;height:8px !important;margin-top:3px !important;background:#FFFFFF !important;border-radius:4px !important;}
+.dg-ui-v4-scale .dg-old{position:absolute !important;left:0 !important;top:0 !important;height:8px !important;background:#D1CFC5 !important;border-radius:4px !important;}
+.dg-ui-v4-scale .dg-new{position:absolute !important;left:0 !important;top:0 !important;height:8px !important;background:#C6613F !important;border-radius:4px !important;}
+.dg-ui-v4-scale .dg-note{margin-top:10px !important;font-size:12px !important;color:#73716A !important;}
+@container (max-width:640px){.dg-ui-v4-scale .dg-groups{grid-template-columns:1fr !important;}}
+</style>
+<div class="dg-eyebrow">1920×1080 화면 기준 · 단위 px</div>
+<div class="dg-title">이전 목업(v3)보다 글자·버튼·칸을 모두 줄였습니다</div>
+<div class="dg-legend"><span class="dg-key"><span class="dg-sw sw-old"></span>v3 실제 표시 크기</span><span class="dg-key"><span class="dg-sw sw-new"></span>v4</span></div>
+<div class="dg-groups">
+<div class="dg-group"><div class="dg-ghead"><span class="dg-gname">글자</span><span class="dg-gaxis">축 0~24</span></div>
+<div class="dg-row"><div class="dg-rhead"><span class="dg-label">본문</span><span class="dg-val">21 → <b>17</b></span></div><div class="dg-track"><span class="dg-old" style="width:87.5% !important"></span><span class="dg-new" style="width:70.8% !important"></span></div></div>
+<div class="dg-row"><div class="dg-rhead"><span class="dg-label">라벨</span><span class="dg-val">19.5 → <b>15</b></span></div><div class="dg-track"><span class="dg-old" style="width:81.3% !important"></span><span class="dg-new" style="width:62.5% !important"></span></div></div>
+<div class="dg-row"><div class="dg-rhead"><span class="dg-label">캡션</span><span class="dg-val">18 → <b>14</b></span></div><div class="dg-track"><span class="dg-old" style="width:75% !important"></span><span class="dg-new" style="width:58.3% !important"></span></div></div>
+<div class="dg-row"><div class="dg-rhead"><span class="dg-label">화면 제목</span><span class="dg-val">24 → <b>20</b></span></div><div class="dg-track"><span class="dg-old" style="width:100% !important"></span><span class="dg-new" style="width:83.3% !important"></span></div></div>
+</div>
+<div class="dg-group"><div class="dg-ghead"><span class="dg-gname">버튼·클릭</span><span class="dg-gaxis">축 0~72</span></div>
+<div class="dg-row"><div class="dg-rhead"><span class="dg-label">주요 버튼 높이</span><span class="dg-val">72 → <b>44</b></span></div><div class="dg-track"><span class="dg-old" style="width:100% !important"></span><span class="dg-new" style="width:61.1% !important"></span></div></div>
+<div class="dg-row"><div class="dg-rhead"><span class="dg-label">일반 버튼 높이</span><span class="dg-val">66 → <b>40</b></span></div><div class="dg-track"><span class="dg-old" style="width:91.7% !important"></span><span class="dg-new" style="width:55.6% !important"></span></div></div>
+<div class="dg-row"><div class="dg-rhead"><span class="dg-label">클릭 영역 최소</span><span class="dg-val">66 → <b>32</b></span></div><div class="dg-track"><span class="dg-old" style="width:91.7% !important"></span><span class="dg-new" style="width:44.4% !important"></span></div></div>
+</div>
+<div class="dg-group"><div class="dg-ghead"><span class="dg-gname">칸·패널</span><span class="dg-gaxis">축 0~480</span></div>
+<div class="dg-row"><div class="dg-rhead"><span class="dg-label">아이템 슬롯</span><span class="dg-val">96 → <b>64</b></span></div><div class="dg-track"><span class="dg-old" style="width:20% !important"></span><span class="dg-new" style="width:13.3% !important"></span></div></div>
+<div class="dg-row"><div class="dg-rhead"><span class="dg-label">미니맵</span><span class="dg-val">약 270 → <b>200</b></span></div><div class="dg-track"><span class="dg-old" style="width:56.3% !important"></span><span class="dg-new" style="width:41.7% !important"></span></div></div>
+<div class="dg-row"><div class="dg-rhead"><span class="dg-label">설명창 폭</span><span class="dg-val">480 → <b>360</b></span></div><div class="dg-track"><span class="dg-old" style="width:100% !important"></span><span class="dg-new" style="width:75% !important"></span></div></div>
+</div>
+</div>
+<div class="dg-note">v3는 1280×720 단위로 적은 수치라 1920 화면에서 1.5배로 표시됐고, 터치 화면용 최소 크기가 들어 있었습니다.</div>
+</div>
