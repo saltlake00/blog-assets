@@ -1,0 +1,43 @@
+<div class="dg-850-hittime">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&display=swap');
+.dg-850-hittime{container-type:inline-size !important;box-sizing:border-box !important;max-width:960px !important;margin:0 auto !important;padding:22px 22px 20px !important;background:#FFFFFF !important;border:1px solid #E8E6DC !important;border-radius:12px !important;font-family:'Noto Sans KR','Malgun Gothic',sans-serif !important;color:#141413 !important;line-height:1.45 !important;word-break:keep-all !important;overflow-wrap:anywhere !important;}
+.dg-850-hittime *{box-sizing:border-box !important;}
+.dg-850-hittime .dg-eyebrow{font-size:12px !important;font-weight:500 !important;letter-spacing:.08em !important;color:#87867F !important;}
+.dg-850-hittime .dg-title{margin-top:5px !important;font-family:'Noto Serif KR',Georgia,serif !important;font-size:21px !important;font-weight:700 !important;line-height:1.35 !important;color:#141413 !important;}
+.dg-850-hittime .dg-start{display:inline-block !important;margin-top:14px !important;background:#141413 !important;color:#FFFFFF !important;border-radius:5px !important;padding:6px 14px !important;font-size:13px !important;font-weight:700 !important;}
+.dg-850-hittime .dg-flow{margin-top:8px !important;display:grid !important;gap:0 !important;}
+.dg-850-hittime .dg-step{display:grid !important;grid-template-columns:minmax(0,1fr) 54px minmax(0,1fr) !important;align-items:stretch !important;}
+.dg-850-hittime .dg-q{background:#F5F3EC !important;border:1px solid #E8E6DC !important;border-radius:5px !important;padding:9px 12px !important;font-size:13px !important;color:#141413 !important;}
+.dg-850-hittime .dg-q small{display:block !important;margin-top:2px !important;font-size:12px !important;color:#73716A !important;}
+.dg-850-hittime .dg-yes{display:flex !important;align-items:center !important;justify-content:center !important;font-size:12px !important;color:#87867F !important;white-space:nowrap !important;}
+.dg-850-hittime .dg-r{border:1px solid #E8E6DC !important;border-radius:5px !important;padding:9px 12px !important;font-size:13px !important;font-weight:700 !important;color:#141413 !important;background:#FFFFFF !important;}
+.dg-850-hittime .dg-r small{display:block !important;margin-top:2px !important;font-size:12px !important;font-weight:400 !important;color:#5E5D59 !important;}
+.dg-850-hittime .dg-r .dg-n{font-family:'JetBrains Mono',monospace !important;}
+.dg-850-hittime .dg-r.is-world{border-left:3px solid #3D3D3A !important;}
+.dg-850-hittime .dg-r.is-key{background:#F5EDE6 !important;border-color:#C6613F !important;border-left:3px solid #C6613F !important;color:#A9502F !important;}
+.dg-850-hittime .dg-r.is-none{color:#73716A !important;border-left:3px solid #B0AEA5 !important;}
+.dg-850-hittime .a-n{display:none !important;}
+.dg-850-hittime .dg-no{padding:3px 0 3px 18px !important;font-size:12px !important;color:#87867F !important;}
+.dg-850-hittime .dg-note{margin-top:12px !important;font-size:12px !important;color:#73716A !important;}
+@container (max-width:560px){
+.dg-850-hittime .dg-step{grid-template-columns:1fr !important;}
+.dg-850-hittime .dg-yes{justify-content:flex-start !important;padding:3px 0 3px 18px !important;}
+.dg-850-hittime .a-w{display:none !important;}
+.dg-850-hittime .a-n{display:inline !important;}
+}
+</style>
+<div class="dg-eyebrow">타격 시간 2단 · 적중 한 번의 판정</div>
+<div class="dg-title">강한 적중은 세계를, 약한 적중은 맞은 적만 멈춥니다</div>
+<span class="dg-start">주문이 적에게 적중</span>
+<div class="dg-flow">
+<div class="dg-step"><div class="dg-q">강한 적중인가<small>전역 정지 시간이 0.08초 이상</small></div><div class="dg-yes"><span class="a-w">예 →</span><span class="a-n">예 ↓</span></div><div class="dg-r is-world">세계 전체가 잠깐 멈춤<small>히트스톱 · 파이어볼·메테오</small></div></div>
+<div class="dg-no">아니오 ↓</div>
+<div class="dg-step"><div class="dg-q">애니메이터가 없는 대상인가<small>절차 운동으로 움직이는 보스</small></div><div class="dg-yes"><span class="a-w">예 →</span><span class="a-n">예 ↓</span></div><div class="dg-r is-world">표 값이 0보다 크면 세계 정지<small>아니면 아무것도 하지 않음</small></div></div>
+<div class="dg-no">아니오 ↓</div>
+<div class="dg-step"><div class="dg-q">약한 적중이고 대상이 살아 있나<small>0.25초 안에 다시 맞은 적은 제외</small></div><div class="dg-yes"><span class="a-w">예 →</span><span class="a-n">예 ↓</span></div><div class="dg-r is-key">✓ 맞은 적만 경직<small>애니메이션 <span class="dg-n">0.12</span>초 · 속도 <span class="dg-n">0.1</span>배 · 라이트닝 직격</small></div></div>
+<div class="dg-no">아니오 ↓</div>
+<div class="dg-step"><div class="dg-q">그 밖의 적중<small>약한 적중 기준 미달 · 연쇄 같은 효과 피해 · 이 적중으로 죽은 적</small></div><div class="dg-yes"><span class="a-w">→</span><span class="a-n">↓</span></div><div class="dg-r is-none">― 아무것도 하지 않음</div></div>
+</div>
+<div class="dg-note">우선순위는 일시정지 &gt; 히트스톱 &gt; 슬로 &gt; 개체 경직입니다.</div>
+</div>

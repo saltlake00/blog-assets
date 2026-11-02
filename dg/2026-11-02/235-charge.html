@@ -1,0 +1,49 @@
+<div class="dg-235-charge">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&display=swap');
+.dg-235-charge{container-type:inline-size !important;box-sizing:border-box !important;max-width:960px !important;margin:0 auto !important;padding:22px 22px 20px !important;background:#FFFFFF !important;border:1px solid #E8E6DC !important;border-radius:12px !important;font-family:'Noto Sans KR','Malgun Gothic',sans-serif !important;color:#141413 !important;line-height:1.45 !important;word-break:keep-all !important;overflow-wrap:anywhere !important;}
+.dg-235-charge *{box-sizing:border-box !important;}
+.dg-235-charge .dg-eyebrow{font-size:12px !important;font-weight:500 !important;letter-spacing:.08em !important;color:#87867F !important;}
+.dg-235-charge .dg-title{margin-top:5px !important;font-family:'Noto Serif KR',Georgia,serif !important;font-size:21px !important;font-weight:700 !important;line-height:1.35 !important;color:#141413 !important;}
+.dg-235-charge .dg-rows{margin-top:16px !important;display:grid !important;gap:12px !important;}
+.dg-235-charge .dg-row{display:grid !important;grid-template-columns:150px minmax(0,1fr) !important;gap:14px !important;align-items:center !important;background:#F5F3EC !important;border:1px solid #E8E6DC !important;border-radius:10px !important;padding:12px 14px !important;}
+.dg-235-charge .dg-row.is-key{background:#F5EDE6 !important;border-color:#C6613F !important;}
+.dg-235-charge .dg-name{font-size:14px !important;font-weight:700 !important;color:#141413 !important;}
+.dg-235-charge .dg-row.is-key .dg-name{color:#A9502F !important;}
+.dg-235-charge .dg-formula{margin-top:3px !important;font-family:'JetBrains Mono',monospace !important;font-size:12px !important;color:#5E5D59 !important;}
+.dg-235-charge .dg-track{position:relative !important;height:30px !important;background:#FFFFFF !important;border:1px solid #E8E6DC !important;border-radius:5px !important;overflow:hidden !important;}
+.dg-235-charge .dg-seg{position:absolute !important;top:0 !important;bottom:0 !important;display:flex !important;align-items:center !important;padding:0 8px !important;font-size:12px !important;white-space:nowrap !important;overflow:hidden !important;}
+.dg-235-charge .seg-fill{left:0 !important;background:#F0EEE6 !important;color:#3D3D3A !important;}
+.dg-235-charge .seg-bad{background:#B5402A !important;color:#FFFFFF !important;justify-content:center !important;padding:0 !important;font-weight:700 !important;}
+.dg-235-charge .seg-good{background:#5B7A4B !important;color:#FFFFFF !important;justify-content:center !important;padding:0 !important;font-weight:700 !important;}
+.dg-235-charge .dg-impact{position:absolute !important;top:-2px !important;bottom:-2px !important;right:0 !important;width:2px !important;background:#141413 !important;}
+.dg-235-charge .dg-cap{margin-top:6px !important;font-size:12px !important;color:#3D3D3A !important;}
+.dg-235-charge .dg-cap b{font-family:'JetBrains Mono',monospace !important;}
+.dg-235-charge .dg-cap .is-bad{color:#B5402A !important;font-weight:700 !important;}
+.dg-235-charge .dg-cap .is-good{color:#5B7A4B !important;font-weight:700 !important;}
+.dg-235-charge .dg-axis{display:grid !important;grid-template-columns:150px minmax(0,1fr) !important;gap:14px !important;margin-top:6px !important;padding:0 15px !important;}
+.dg-235-charge .dg-ticks{position:relative !important;height:16px !important;font-family:'JetBrains Mono',monospace !important;font-size:11.5px !important;color:#87867F !important;}
+.dg-235-charge .dg-ticks span{position:absolute !important;top:0 !important;transform:translateX(-50%) !important;white-space:nowrap !important;}
+.dg-235-charge .dg-ticks span:first-child{transform:none !important;}
+.dg-235-charge .dg-ticks span:last-child{transform:translateX(-100%) !important;color:#141413 !important;font-weight:700 !important;}
+.dg-235-charge .dg-axislabel{font-size:12px !important;color:#87867F !important;}
+.dg-235-charge .dg-pill{display:inline-block !important;margin-top:14px !important;background:#C6613F !important;color:#FFFFFF !important;border-radius:999px !important;padding:7px 16px !important;font-size:13px !important;font-weight:500 !important;}
+@container (max-width:560px){
+.dg-235-charge .dg-row{grid-template-columns:1fr !important;gap:8px !important;}
+.dg-235-charge .dg-axis{grid-template-columns:1fr !important;}
+.dg-235-charge .dg-axislabel{display:none !important;}
+}
+</style>
+<div class="dg-eyebrow">보스 C 충전 패턴 · 충전 3초 · 번개 18쌍</div>
+<div class="dg-title">켜진 개수를 내림으로 세야 18쌍이 착탄 순간에 다 켜집니다</div>
+<div class="dg-rows">
+<div class="dg-row"><div><div class="dg-name">× 올림 (옛 방식)</div><div class="dg-formula">올림(진행률 × 18)</div></div>
+<div><div class="dg-track"><span class="dg-seg seg-fill" style="width:94.4% !important">1쌍 → 17쌍 켜지는 중</span><span class="dg-seg seg-bad" style="left:94.4% !important; width:5.6% !important">18</span><span class="dg-impact"></span></div>
+<div class="dg-cap">2.833초에 18쌍이 다 켜집니다 · <span class="is-bad">착탄보다 <b>0.167</b>초 먼저 완충</span></div></div></div>
+<div class="dg-row is-key"><div><div class="dg-name">✓ 내림 (바꾼 방식)</div><div class="dg-formula">내림(진행률 × 18), 최대 17</div></div>
+<div><div class="dg-track"><span class="dg-seg seg-fill" style="width:97% !important">0쌍 → 17쌍 켜지는 중</span><span class="dg-seg seg-good" style="left:97% !important; width:3% !important">18</span><span class="dg-impact"></span></div>
+<div class="dg-cap">18쌍은 <span class="is-good">착탄 순간(3.0초)에만</span> 켜집니다</div></div></div>
+</div>
+<div class="dg-axis"><div class="dg-axislabel">예고 시작부터 초</div><div class="dg-ticks"><span style="left:0 !important">0초</span><span style="left:33.3% !important">1초</span><span style="left:66.7% !important">2초</span><span style="left:100% !important">3.0초 착탄</span></div></div>
+<span class="dg-pill">착탄 순간 반경 10m 원형 폭발 · 피해 30</span>
+</div>

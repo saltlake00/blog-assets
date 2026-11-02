@@ -1,0 +1,70 @@
+<div class="dg-860-perf">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&display=swap');
+.dg-860-perf{container-type:inline-size !important;box-sizing:border-box !important;max-width:960px !important;margin:0 auto !important;padding:22px 22px 20px !important;background:#FFFFFF !important;border:1px solid #E8E6DC !important;border-radius:12px !important;font-family:'Noto Sans KR','Malgun Gothic',sans-serif !important;color:#141413 !important;line-height:1.45 !important;word-break:keep-all !important;overflow-wrap:anywhere !important;}
+.dg-860-perf *{box-sizing:border-box !important;}
+.dg-860-perf .dg-eyebrow{font-size:12px !important;font-weight:500 !important;letter-spacing:.08em !important;color:#87867F !important;}
+.dg-860-perf .dg-title{margin-top:5px !important;font-family:'Noto Serif KR',Georgia,serif !important;font-size:21px !important;font-weight:700 !important;line-height:1.35 !important;color:#141413 !important;}
+.dg-860-perf .dg-legend{display:flex !important;gap:14px !important;margin-top:10px !important;font-size:12px !important;color:#5E5D59 !important;}
+.dg-860-perf .dg-legend span{display:inline-flex !important;align-items:center !important;gap:5px !important;}
+.dg-860-perf .dg-sw{display:inline-block !important;width:14px !important;height:8px !important;border-radius:2px !important;}
+.dg-860-perf .sw-before{background:#D1CFC5 !important;}
+.dg-860-perf .sw-after{background:#C6613F !important;}
+.dg-860-perf .dg-cols{display:grid !important;grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:12px !important;margin-top:12px !important;}
+.dg-860-perf .dg-group{background:#F5F3EC !important;border:1px solid #E8E6DC !important;border-radius:10px !important;padding:10px 12px !important;}
+.dg-860-perf .dg-group + .dg-group{margin-top:12px !important;}
+.dg-860-perf .dg-gname{font-size:13px !important;font-weight:700 !important;color:#3D3D3A !important;margin-bottom:2px !important;}
+.dg-860-perf .dg-item{padding:6px 0 4px !important;}
+.dg-860-perf .dg-item + .dg-item{border-top:1px solid #E8E6DC !important;}
+.dg-860-perf .dg-head{display:flex !important;justify-content:space-between !important;gap:8px !important;align-items:baseline !important;}
+.dg-860-perf .dg-what{font-size:12px !important;color:#3D3D3A !important;}
+.dg-860-perf .dg-cut{flex:none !important;font-family:'JetBrains Mono',monospace !important;font-size:12px !important;font-weight:700 !important;color:#5B7A4B !important;}
+.dg-860-perf .dg-bar{display:grid !important;grid-template-columns:minmax(0,1fr) 62px !important;gap:8px !important;align-items:center !important;margin-top:4px !important;}
+.dg-860-perf .dg-track{height:8px !important;background:#FFFFFF !important;border-radius:4px !important;position:relative !important;}
+.dg-860-perf .dg-fill{position:absolute !important;left:0 !important;top:0 !important;height:8px !important;border-radius:4px !important;}
+.dg-860-perf .f-before{background:#D1CFC5 !important;width:100% !important;}
+.dg-860-perf .f-after{background:#C6613F !important;}
+.dg-860-perf .dg-val{font-family:'JetBrains Mono',monospace !important;font-size:12px !important;color:#3D3D3A !important;text-align:right !important;white-space:nowrap !important;}
+.dg-860-perf .dg-note{margin-top:12px !important;font-size:12px !important;color:#73716A !important;}
+@container (max-width:560px){.dg-860-perf .dg-cols{grid-template-columns:1fr !important;}}
+</style>
+<div class="dg-eyebrow">필드 성능 · 항목마다 같은 조건에서 전후 측정</div>
+<div class="dg-title">배치 수는 10분의 1로, 고친 곳의 GC 할당은 0이 됐습니다</div>
+<div class="dg-legend"><span><i class="dg-sw sw-before"></i>전</span><span><i class="dg-sw sw-after"></i>후</span></div>
+<div class="dg-cols">
+<div>
+<div class="dg-group"><div class="dg-gname">나무 인스턴싱 · 릴리스 빌드 600프레임</div>
+<div class="dg-item"><div class="dg-head"><span class="dg-what">북쪽 보기 렌더링 배치 수 (개/프레임)</span><span class="dg-cut">−90%</span></div>
+<div class="dg-bar"><div class="dg-track"><span class="dg-fill f-before"></span></div><span class="dg-val">22,355</span></div>
+<div class="dg-bar"><div class="dg-track"><span class="dg-fill f-after" style="width:9.9% !important"></span></div><span class="dg-val">2,210</span></div></div>
+<div class="dg-item"><div class="dg-head"><span class="dg-what">같은 장면 평균 프레임 시간 (ms)</span><span class="dg-cut">−10%</span></div>
+<div class="dg-bar"><div class="dg-track"><span class="dg-fill f-before"></span></div><span class="dg-val">9.60</span></div>
+<div class="dg-bar"><div class="dg-track"><span class="dg-fill f-after" style="width:89.6% !important"></span></div><span class="dg-val">8.60</span></div></div>
+</div>
+<div class="dg-group"><div class="dg-gname">메인 스레드 병목 · 개발 빌드 녹화</div>
+<div class="dg-item"><div class="dg-head"><span class="dg-what">메인 스레드 시간 (ms, 이어 돈 회차끼리)</span><span class="dg-cut">−15%</span></div>
+<div class="dg-bar"><div class="dg-track"><span class="dg-fill f-before"></span></div><span class="dg-val">11.04</span></div>
+<div class="dg-bar"><div class="dg-track"><span class="dg-fill f-after" style="width:85.3% !important"></span></div><span class="dg-val">9.42</span></div></div>
+<div class="dg-item"><div class="dg-head"><span class="dg-what">나무 그리기 준비 (ms, 3회 평균)</span><span class="dg-cut">−36%</span></div>
+<div class="dg-bar"><div class="dg-track"><span class="dg-fill f-before"></span></div><span class="dg-val">1.71</span></div>
+<div class="dg-bar"><div class="dg-track"><span class="dg-fill f-after" style="width:64.3% !important"></span></div><span class="dg-val">1.10</span></div></div>
+</div>
+</div>
+<div>
+<div class="dg-group"><div class="dg-gname">GC 할당 · 개발 빌드 전후 3회씩</div>
+<div class="dg-item"><div class="dg-head"><span class="dg-what">고친 네 곳 합계 (KB/프레임)</span><span class="dg-cut">−100%</span></div>
+<div class="dg-bar"><div class="dg-track"><span class="dg-fill f-before"></span></div><span class="dg-val">15.3</span></div>
+<div class="dg-bar"><div class="dg-track"><span class="dg-fill f-after" style="width:0% !important"></span></div><span class="dg-val">0</span></div></div>
+<div class="dg-item"><div class="dg-head"><span class="dg-what">프레임 전체 (KB/프레임)</span><span class="dg-cut">−62%</span></div>
+<div class="dg-bar"><div class="dg-track"><span class="dg-fill f-before"></span></div><span class="dg-val">26.0</span></div>
+<div class="dg-bar"><div class="dg-track"><span class="dg-fill f-after" style="width:38.1% !important"></span></div><span class="dg-val">9.9</span></div></div>
+</div>
+<div class="dg-group"><div class="dg-gname">이펙트 미리 만들기 · 에디터 16칸</div>
+<div class="dg-item"><div class="dg-head"><span class="dg-what">첫 표시 비용 평균 (ms)</span><span class="dg-cut">−93%</span></div>
+<div class="dg-bar"><div class="dg-track"><span class="dg-fill f-before"></span></div><span class="dg-val">5.18</span></div>
+<div class="dg-bar"><div class="dg-track"><span class="dg-fill f-after" style="width:7.3% !important"></span></div><span class="dg-val">0.38</span></div></div>
+</div>
+</div>
+</div>
+<div class="dg-note">막대는 항목마다 「전」 값을 전체 길이로 둡니다. 측정 조건과 단위가 달라 항목끼리는 비교하지 않습니다.</div>
+</div>
