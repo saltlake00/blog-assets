@@ -1,0 +1,266 @@
+<div class="dg-check9">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&family=JetBrains+Mono:wght@400&display=swap');
+
+.dg-check9, .dg-check9 div, .dg-check9 span { box-sizing: border-box !important; }
+
+.dg-check9 {
+  max-width: 960px !important;
+  margin: 0 auto !important;
+  padding: 20px !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 12px !important;
+  font-family: 'Noto Sans KR', system-ui, sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  color: #3D3D3A !important;
+  word-break: keep-all !important;
+  container-type: inline-size !important;
+}
+
+.dg-check9 .kicker {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+  color: #87867F !important;
+  margin-bottom: 6px !important;
+  overflow-wrap: anywhere !important;
+}
+
+.dg-check9 .title {
+  font-family: 'Noto Serif KR', serif !important;
+  font-weight: 700 !important;
+  font-size: 22px !important;
+  line-height: 1.35 !important;
+  color: #141413 !important;
+  margin-bottom: 16px !important;
+}
+
+.dg-check9 .sum { margin-bottom: 16px !important; }
+
+.dg-check9 .bar {
+  display: flex !important;
+  gap: 2px !important;
+  height: 16px !important;
+  background: #F0EEE6 !important;
+  border-radius: 5px !important;
+  overflow: hidden !important;
+}
+
+.dg-check9 .bar .sg { flex: 7 !important; background: #5B7A4B !important; }
+.dg-check9 .bar .sb { flex: 2 !important; background: #B5402A !important; }
+
+.dg-check9 .legend {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 4px 14px !important;
+  margin-top: 8px !important;
+  font-size: 12.5px !important;
+  line-height: 1.5 !important;
+  color: #5E5D59 !important;
+}
+
+.dg-check9 .lg {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  white-space: nowrap !important;
+}
+
+.dg-check9 .sw {
+  display: inline-block !important;
+  width: 9px !important;
+  height: 9px !important;
+  border-radius: 2px !important;
+}
+
+.dg-check9 .sw.g { background: #5B7A4B !important; }
+.dg-check9 .sw.b { background: #B5402A !important; }
+
+.dg-check9 .tot {
+  margin-left: auto !important;
+  font-size: 12px !important;
+  color: #87867F !important;
+  white-space: nowrap !important;
+}
+
+.dg-check9 .grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 12px !important;
+}
+
+.dg-check9 .card {
+  display: flex !important;
+  flex-direction: column !important;
+  min-width: 0 !important;
+  padding: 11px 12px !important;
+  background: #F5F3EC !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 5px !important;
+}
+
+.dg-check9 .name {
+  font-size: 13.5px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  color: #141413 !important;
+  min-height: 19px !important;
+}
+
+.dg-check9 .row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 4px !important;
+  margin-top: 6px !important;
+}
+
+.dg-check9 .badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 3px !important;
+  padding: 4px 6px !important;
+  background: #F0EEE6 !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 3px !important;
+  font-size: 11.5px !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+
+.dg-check9 .badge.ok { color: #5B7A4B !important; }
+.dg-check9 .badge.no { color: #B5402A !important; }
+.dg-check9 .badge.part { color: #A6781F !important; }
+
+.dg-check9 .badge.follow {
+  color: #A6781F !important;
+  background: #FFFFFF !important;
+  border-style: dashed !important;
+  border-color: #D1CFC5 !important;
+}
+
+.dg-check9 .note {
+  margin-top: 7px !important;
+  min-height: 35px !important;
+  font-size: 12.5px !important;
+  line-height: 1.4 !important;
+  color: #5E5D59 !important;
+}
+
+.dg-check9 .pill {
+  margin-top: 16px !important;
+  text-align: center !important;
+}
+
+.dg-check9 .pill span {
+  display: inline-block !important;
+  padding: 10px 20px !important;
+  background: #C6613F !important;
+  color: #FFFFFF !important;
+  border-radius: 999px !important;
+  font-size: 13.5px !important;
+  line-height: 1.3 !important;
+}
+
+@container (max-width: 560px) {
+  .dg-check9 .title { font-size: 20px !important; }
+  .dg-check9 .grid { grid-template-columns: 1fr !important; }
+  .dg-check9 .card { padding: 10px 12px !important; }
+  .dg-check9 .note { min-height: 0 !important; }
+  .dg-check9 .tot { margin-left: 0 !important; }
+}
+</style>
+
+<div class="kicker">NCAIFinal · DAY68 개발 04</div>
+<div class="title">자동 시험 뒤에 남은 항목을 확인 빌드 하나로 점검했습니다</div>
+
+<div class="sum">
+  <div class="bar" role="img" aria-label="확인 대기 9건 중 닫음 7건, 되돌림 2건">
+    <div class="sg"></div>
+    <div class="sb"></div>
+  </div>
+  <div class="legend">
+    <span class="lg"><span class="sw g"></span>✓ 닫음 7건</span>
+    <span class="lg"><span class="sw b"></span>× 되돌림 2건</span>
+    <span class="tot">확인 대기 9건</span>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="card">
+    <div class="name">보스 몸 밖 부유체 판정</div>
+    <div class="row"><span class="badge ok">✓ 닫음</span></div>
+    <div class="note"></div>
+  </div>
+
+  <div class="card">
+    <div class="name">보스 C 기둥 충전 패턴</div>
+    <div class="row">
+      <span class="badge ok">✓ 닫음</span>
+      <span class="badge follow">↳ 후속</span>
+    </div>
+    <div class="note">전기선이 멈춰 철선처럼 보입니다</div>
+  </div>
+
+  <div class="card">
+    <div class="name">랭킹판 상호작용</div>
+    <div class="row"><span class="badge ok">✓ 닫음</span></div>
+    <div class="note"></div>
+  </div>
+
+  <div class="card">
+    <div class="name">골드 상점 마법 구매</div>
+    <div class="row">
+      <span class="badge ok">✓ 닫음</span>
+      <span class="badge part">일부 미확인</span>
+      <span class="badge follow">↳ 후속</span>
+    </div>
+    <div class="note">실제 구매는 못 봤고, 주문 아이콘을 넣습니다</div>
+  </div>
+
+  <div class="card">
+    <div class="name">조준 보정</div>
+    <div class="row">
+      <span class="badge ok">✓ 닫음</span>
+      <span class="badge follow">↳ 후속</span>
+    </div>
+    <div class="note">공격 중에도 몬스터가 계속 회전합니다</div>
+  </div>
+
+  <div class="card">
+    <div class="name">필드 메모리 정리</div>
+    <div class="row">
+      <span class="badge ok">✓ 닫음</span>
+      <span class="badge follow">↳ 후속</span>
+    </div>
+    <div class="note">빛의 교회가 미니맵에 안 보입니다</div>
+  </div>
+
+  <div class="card">
+    <div class="name">개발 허브 도식 그림 변환</div>
+    <div class="row"><span class="badge ok">✓ 닫음</span></div>
+    <div class="note"></div>
+  </div>
+
+  <div class="card">
+    <div class="name">몬스터 던전 방</div>
+    <div class="row">
+      <span class="badge no">× 되돌림</span>
+      <span class="badge follow">↳ 후속</span>
+    </div>
+    <div class="note">방 위쪽이 뚫려 보이고, 포털 이름이 겹칩니다</div>
+  </div>
+
+  <div class="card">
+    <div class="name">스킬 옵션</div>
+    <div class="row"><span class="badge no">× 되돌림</span></div>
+    <div class="note">보상 화면이 아직 없어 확인하지 못했습니다</div>
+  </div>
+</div>
+
+<div class="pill"><span>닫은 항목에서도 새 의견 4건이 나와 이슈에 후속으로 적어 두었습니다.</span></div>
+
+</div>
