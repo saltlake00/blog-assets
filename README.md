@@ -15,7 +15,8 @@
    python grid.py out.png a.png b.png c.png d.png --cols 2 --labels "평소" "조준" "벽 옆" "수정 후"
    ```
 3. **올리기** — `python add.py out.png --name m06-fox-detect`
-   `YYYY/MM/DD/` 아래로 복사·커밋·push한 뒤, 커밋 해시로 고정한 jsDelivr `<img>` 태그를 출력한다.
+   `YYYY/MM/DD/` 아래로 복사·커밋·push한 뒤 GitHub Pages(`saltlake00.github.io/blog-assets/…`) `<img>` 태그를 출력하고, 배포가 끝나 200이 나올 때까지 기다린다.
+   jsDelivr는 쓰지 않는다. 저장소가 50MB를 넘어 일부 요청이 403으로 실패한다(2026-11-04).
 
 ## 올리기 전 확인
 
