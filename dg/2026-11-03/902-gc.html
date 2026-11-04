@@ -1,0 +1,373 @@
+<div class="dg-902-gc">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&family=JetBrains+Mono:wght@500&display=swap');
+
+.dg-902-gc{
+  container-type:inline-size !important;
+  box-sizing:border-box !important;
+  max-width:960px !important;
+  margin:0 auto !important;
+  padding:12px !important;
+  background:#FAF9F5 !important;
+  font-family:'Noto Sans KR',sans-serif !important;
+  color:#141413 !important;
+  word-break:keep-all !important;
+  -webkit-font-smoothing:antialiased !important;
+}
+.dg-902-gc div,
+.dg-902-gc span{box-sizing:border-box !important;}
+.dg-902-gc .board{
+  background:#FFFFFF !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:12px !important;
+  padding:22px 24px 20px !important;
+}
+.dg-902-gc .title{
+  font-family:'Noto Serif KR',serif !important;
+  font-weight:700 !important;
+  font-size:22px !important;
+  line-height:1.35 !important;
+  letter-spacing:-0.01em !important;
+  color:#141413 !important;
+}
+.dg-902-gc .sub{
+  margin-top:6px !important;
+  font-size:12px !important;
+  line-height:1.55 !important;
+  color:#73716A !important;
+}
+.dg-902-gc .legend{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  flex-wrap:wrap !important;
+  gap:6px 12px !important;
+  margin:14px 0 4px !important;
+  padding-bottom:8px !important;
+  border-bottom:1px solid #E8E6DC !important;
+  font-size:11.5px !important;
+  color:#73716A !important;
+}
+.dg-902-gc .legend-left{
+  display:flex !important;
+  align-items:center !important;
+  gap:7px !important;
+}
+.dg-902-gc .swatch{
+  flex:0 0 auto !important;
+  width:18px !important;
+  height:8px !important;
+  border-radius:2px !important;
+  background:#C6613F !important;
+}
+.dg-902-gc .legend-right{
+  display:flex !important;
+  align-items:center !important;
+  gap:5px !important;
+  color:#5B7A4B !important;
+  font-weight:500 !important;
+}
+.dg-902-gc .row{
+  display:grid !important;
+  grid-template-columns:124px minmax(0,1fr) 52px 196px !important;
+  column-gap:10px !important;
+  align-items:center !important;
+  padding:7px 0 !important;
+  border-bottom:1px solid #E8E6DC !important;
+}
+.dg-902-gc .name{
+  font-size:13px !important;
+  font-weight:500 !important;
+  line-height:1.4 !important;
+  color:#3D3D3A !important;
+}
+.dg-902-gc .barwrap{
+  display:flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  min-width:0 !important;
+}
+.dg-902-gc .track{
+  flex:1 1 auto !important;
+  min-width:0 !important;
+  height:12px !important;
+  background:#F0EEE6 !important;
+  border-radius:3px !important;
+  overflow:hidden !important;
+}
+.dg-902-gc .bar{
+  height:100% !important;
+  background:#C6613F !important;
+  border-radius:3px !important;
+}
+.dg-902-gc .value{
+  flex:0 0 58px !important;
+  text-align:right !important;
+  font-family:'JetBrains Mono',monospace !important;
+  font-size:11.5px !important;
+  color:#5E5D59 !important;
+  white-space:nowrap !important;
+}
+.dg-902-gc .zero{
+  justify-self:start !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-width:44px !important;
+  height:22px !important;
+  padding:0 7px !important;
+  background:#F5F3EC !important;
+  border:1px solid #D1CFC5 !important;
+  border-radius:3px !important;
+  color:#5B7A4B !important;
+  font-size:11.5px !important;
+  font-weight:700 !important;
+  white-space:nowrap !important;
+}
+.dg-902-gc .cause{
+  font-size:11.5px !important;
+  line-height:1.5 !important;
+  color:#73716A !important;
+  overflow-wrap:anywhere !important;
+}
+.dg-902-gc .axis{
+  display:grid !important;
+  grid-template-columns:124px minmax(0,1fr) 52px 196px !important;
+  column-gap:10px !important;
+  margin-top:5px !important;
+}
+.dg-902-gc .axis-track{
+  grid-column:2 !important;
+  display:flex !important;
+  justify-content:space-between !important;
+  margin-right:66px !important;
+  font-family:'JetBrains Mono',monospace !important;
+  font-size:10.5px !important;
+  color:#87867F !important;
+}
+.dg-902-gc .total{
+  display:grid !important;
+  grid-template-columns:124px minmax(0,1fr) 64px !important;
+  column-gap:10px !important;
+  align-items:center !important;
+  margin-top:14px !important;
+  padding:11px 13px !important;
+  background:#F5F3EC !important;
+  border:1px solid #E8E6DC !important;
+  border-radius:5px !important;
+}
+.dg-902-gc .total-head{
+  font-size:12.5px !important;
+  font-weight:700 !important;
+  line-height:1.4 !important;
+  color:#3D3D3A !important;
+}
+.dg-902-gc .total-note{
+  display:block !important;
+  margin-top:2px !important;
+  font-size:10.5px !important;
+  font-weight:400 !important;
+  color:#87867F !important;
+}
+.dg-902-gc .total-rows{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:5px !important;
+  min-width:0 !important;
+}
+.dg-902-gc .total-line{
+  display:flex !important;
+  align-items:center !important;
+  gap:7px !important;
+  min-width:0 !important;
+}
+.dg-902-gc .total-tag{
+  flex:0 0 14px !important;
+  font-size:11px !important;
+  color:#87867F !important;
+}
+.dg-902-gc .total-track{
+  flex:1 1 auto !important;
+  min-width:0 !important;
+  height:10px !important;
+  background:#E8E6DC !important;
+  border-radius:3px !important;
+  overflow:hidden !important;
+}
+.dg-902-gc .total-fill{
+  height:100% !important;
+  border-radius:3px !important;
+}
+.dg-902-gc .before-fill{
+  width:100% !important;
+  background:#C6613F !important;
+}
+.dg-902-gc .after-fill{
+  width:11% !important;
+  background:#5B7A4B !important;
+}
+.dg-902-gc .total-val{
+  flex:0 0 58px !important;
+  text-align:right !important;
+  font-family:'JetBrains Mono',monospace !important;
+  font-size:11.5px !important;
+  color:#3D3D3A !important;
+  white-space:nowrap !important;
+}
+.dg-902-gc .drop{
+  justify-self:end !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-width:58px !important;
+  height:26px !important;
+  padding:0 9px !important;
+  background:#F5EDE6 !important;
+  border:1px solid #C6613F !important;
+  border-radius:3px !important;
+  font-family:'JetBrains Mono',monospace !important;
+  font-size:12.5px !important;
+  font-weight:700 !important;
+  color:#A9502F !important;
+  white-space:nowrap !important;
+}
+.dg-902-gc .pill{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  margin-top:12px !important;
+  padding:10px 16px !important;
+  background:#C6613F !important;
+  border-radius:999px !important;
+  color:#FFFFFF !important;
+  font-size:12.5px !important;
+  line-height:1.5 !important;
+  text-align:center !important;
+}
+
+@container (max-width:560px){
+  .dg-902-gc .board{padding:16px 14px 15px !important;}
+  .dg-902-gc .title{font-size:20px !important;}
+  .dg-902-gc .legend{margin-top:10px !important;}
+  .dg-902-gc .row{
+    grid-template-columns:minmax(0,1fr) auto !important;
+    column-gap:8px !important;
+    row-gap:5px !important;
+    padding:9px 0 !important;
+  }
+  .dg-902-gc .name{grid-column:1 !important;grid-row:1 !important;}
+  .dg-902-gc .zero{grid-column:2 !important;grid-row:1 !important;justify-self:end !important;height:20px !important;}
+  .dg-902-gc .barwrap{grid-column:1 / -1 !important;grid-row:2 !important;}
+  .dg-902-gc .cause{grid-column:1 / -1 !important;grid-row:3 !important;}
+  .dg-902-gc .axis{display:none !important;}
+  .dg-902-gc .total{
+    grid-template-columns:minmax(0,1fr) auto !important;
+    row-gap:7px !important;
+    padding:10px 11px !important;
+  }
+  .dg-902-gc .total-head{grid-column:1 !important;grid-row:1 !important;}
+  .dg-902-gc .drop{grid-column:2 !important;grid-row:1 !important;justify-self:end !important;}
+  .dg-902-gc .total-rows{grid-column:1 / -1 !important;grid-row:2 !important;}
+  .dg-902-gc .pill{font-size:12px !important;padding:10px 13px !important;}
+}
+</style>
+
+  <div class="board">
+    <div class="title">필드 코드가 매 프레임 새로 잡던 메모리를 없앴습니다</div>
+    <div class="sub">같은 개발 빌드를 전·후 3회씩 번갈아 측정했고, 세 번 모두 같은 값이 나왔습니다.</div>
+
+    <div class="legend">
+      <div class="legend-left">
+        <span class="swatch"></span>
+        <span>수정 전 막대 — 한 프레임에 새로 잡은 메모리 (KB)</span>
+      </div>
+      <div class="legend-right"><span>✓ 0 = 수정 후</span></div>
+    </div>
+
+    <div class="row">
+      <div class="name">외곽 건물 렌더러</div>
+      <div class="barwrap">
+        <div class="track"><div class="bar" style="width:96.4% !important"></div></div>
+        <span class="value">2.41 KB</span>
+      </div>
+      <div class="zero">✓ 0</div>
+      <div class="cause">건물 56개마다 인자 3개 Max 호출이 배열 생성</div>
+    </div>
+
+    <div class="row">
+      <div class="name">튜토리얼</div>
+      <div class="barwrap">
+        <div class="track"><div class="bar" style="width:80% !important"></div></div>
+        <span class="value">2.00 KB</span>
+      </div>
+      <div class="zero">✓ 0</div>
+      <div class="cause">LINQ·단계 문자열·색 태그 치환</div>
+    </div>
+
+    <div class="row">
+      <div class="name">미니맵</div>
+      <div class="barwrap">
+        <div class="track"><div class="bar" style="width:59.6% !important"></div></div>
+        <span class="value">1.49 KB</span>
+      </div>
+      <div class="zero">✓ 0</div>
+      <div class="cause">지역 이름 문자열·상위 캔버스 조회 배열</div>
+    </div>
+
+    <div class="row">
+      <div class="name">HUD</div>
+      <div class="barwrap">
+        <div class="track"><div class="bar" style="width:55.6% !important"></div></div>
+        <span class="value">1.39 KB</span>
+      </div>
+      <div class="zero">✓ 0</div>
+      <div class="cause">LINQ 조회·슬롯·HP·MP 문자열</div>
+    </div>
+
+    <div class="row">
+      <div class="name">목표 표시</div>
+      <div class="barwrap">
+        <div class="track"><div class="bar" style="width:37.6% !important"></div></div>
+        <span class="value">0.94 KB</span>
+      </div>
+      <div class="zero">✓ 0</div>
+      <div class="cause">HUD·지도 수정으로 함께 0</div>
+    </div>
+
+    <div class="row">
+      <div class="name">조준</div>
+      <div class="barwrap">
+        <div class="track"><div class="bar" style="width:6.8% !important"></div></div>
+        <span class="value">0.17 KB</span>
+      </div>
+      <div class="zero">✓ 0</div>
+      <div class="cause">대상 HP 문자열</div>
+    </div>
+
+    <div class="axis">
+      <div class="axis-track"><span>0</span><span>1.25</span><span>2.5 KB</span></div>
+    </div>
+
+    <div class="total">
+      <div class="total-head">
+        프레임 전체 평균
+        <span class="total-note">위 항목을 포함한 프레임 전체</span>
+      </div>
+      <div class="total-rows">
+        <div class="total-line">
+          <span class="total-tag">전</span>
+          <div class="total-track"><div class="total-fill before-fill"></div></div>
+          <span class="total-val">9.57 KB</span>
+        </div>
+        <div class="total-line">
+          <span class="total-tag">후</span>
+          <div class="total-track"><div class="total-fill after-fill"></div></div>
+          <span class="total-val">1.05 KB</span>
+        </div>
+      </div>
+      <div class="drop">−89%</div>
+    </div>
+
+    <div class="pill">원인은 매 프레임 반복되던 임시 배열과 문자열 생성이었습니다.</div>
+  </div>
+</div>

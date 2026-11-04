@@ -1,0 +1,66 @@
+<div class="dg-899-own">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&display=swap');
+.dg-899-own{container-type:inline-size !important;box-sizing:border-box !important;max-width:960px !important;margin:0 auto !important;padding:12px !important;background:#FAF9F5 !important;font-family:'Noto Sans KR',sans-serif !important;color:#141413 !important;word-break:keep-all !important;-webkit-font-smoothing:antialiased !important;}
+.dg-899-own div,.dg-899-own span,.dg-899-own b,.dg-899-own small{box-sizing:border-box !important;}
+.dg-899-own .board{background:#FFFFFF !important;border:1px solid #E8E6DC !important;border-radius:12px !important;padding:22px 24px 20px !important;}
+.dg-899-own .title{font-family:'Noto Serif KR',serif !important;font-weight:700 !important;font-size:22px !important;line-height:1.35 !important;color:#141413 !important;}
+.dg-899-own .sub{margin-top:6px !important;font-size:12px !important;line-height:1.55 !important;color:#73716A !important;}
+.dg-899-own .flow{display:grid !important;grid-template-columns:minmax(0,1fr) 22px minmax(0,1fr) 22px minmax(0,1fr) !important;align-items:stretch !important;margin-top:16px !important;}
+.dg-899-own .col{display:flex !important;flex-direction:column !important;gap:8px !important;min-width:0 !important;}
+.dg-899-own .arrow{display:flex !important;align-items:flex-start !important;justify-content:center !important;padding-top:22px !important;color:#D1CFC5 !important;font-size:16px !important;font-weight:700 !important;}
+.dg-899-own .q{background:#F5F3EC !important;border:1px solid #E8E6DC !important;border-radius:5px !important;padding:10px 12px !important;}
+.dg-899-own .step{display:inline-block !important;font-size:11px !important;font-weight:700 !important;color:#A9502F !important;margin-bottom:3px !important;}
+.dg-899-own .q b{display:block !important;font-size:14px !important;font-weight:700 !important;line-height:1.4 !important;color:#141413 !important;}
+.dg-899-own .q small{display:block !important;margin-top:3px !important;font-size:12px !important;line-height:1.45 !important;color:#5E5D59 !important;}
+.dg-899-own .yes{font-size:12px !important;font-weight:500 !important;color:#5E5D59 !important;padding-left:2px !important;}
+.dg-899-own .side{border:1px dashed #D1CFC5 !important;border-radius:5px !important;padding:8px 10px !important;background:#FFFFFF !important;}
+.dg-899-own .side .lab{display:block !important;font-size:11px !important;font-weight:700 !important;color:#87867F !important;margin-bottom:2px !important;}
+.dg-899-own .side b{display:block !important;font-size:13px !important;font-weight:700 !important;color:#3D3D3A !important;line-height:1.4 !important;}
+.dg-899-own .side small{display:block !important;margin-top:2px !important;font-size:12px !important;color:#5E5D59 !important;line-height:1.45 !important;}
+.dg-899-own .end{border-radius:5px !important;padding:9px 12px !important;}
+.dg-899-own .end b{display:block !important;font-size:14px !important;font-weight:700 !important;line-height:1.4 !important;}
+.dg-899-own .end small{display:block !important;margin-top:2px !important;font-size:12px !important;line-height:1.45 !important;color:#5E5D59 !important;}
+.dg-899-own .end.own{background:#F5EDE6 !important;border:1px solid #C6613F !important;}
+.dg-899-own .end.own b{color:#A9502F !important;}
+.dg-899-own .end.lock{background:#F0EEE6 !important;border:1px solid #E8E6DC !important;}
+.dg-899-own .end.lock b{color:#3D3D3A !important;}
+.dg-899-own .tag{display:inline-block !important;font-size:11px !important;font-weight:700 !important;padding:1px 6px !important;border-radius:3px !important;margin-right:6px !important;vertical-align:1px !important;}
+.dg-899-own .tag.y{background:#5B7A4B !important;color:#FFFFFF !important;}
+.dg-899-own .tag.n{background:#87867F !important;color:#FFFFFF !important;}
+.dg-899-own .tag.x{background:#B5402A !important;color:#FFFFFF !important;}
+.dg-899-own .block{margin-top:14px !important;padding-top:12px !important;border-top:1px solid #E8E6DC !important;display:flex !important;align-items:center !important;gap:10px !important;flex-wrap:wrap !important;font-size:13px !important;color:#3D3D3A !important;}
+.dg-899-own .block .lab{font-size:11px !important;font-weight:700 !important;color:#87867F !important;}
+.dg-899-own .block b{color:#B5402A !important;}
+@container (max-width:560px){
+.dg-899-own .board{padding:18px 16px 16px !important;}
+.dg-899-own .title{font-size:19px !important;}
+.dg-899-own .flow{grid-template-columns:minmax(0,1fr) !important;row-gap:6px !important;}
+.dg-899-own .arrow{padding:0 !important;transform:rotate(90deg) !important;height:18px !important;align-items:center !important;}
+}
+</style>
+<div class="board">
+<div class="title">상점 주문을 「가진 주문」으로 판정하는 경로</div>
+<div class="sub">주문을 장착하거나 마법책에 표시할 때마다 이 순서로 판단합니다.</div>
+<div class="flow">
+<div class="col">
+<div class="q"><span class="step">1</span><b>상점 목록에 있는 주문인가?</b><small>번개 감옥 120골드, 나비 떼 200골드</small></div>
+<div class="yes"><span class="tag y">예</span>다음 단계로</div>
+<div class="side"><span class="lab"><span class="tag n">아니오</span></span><b>레벨 해금 표로 판정</b><small>상점에 없는 주문은 기존 방식 그대로</small></div>
+</div>
+<div class="arrow">→</div>
+<div class="col">
+<div class="q"><span class="step">2</span><b>저장에 소유 목록이 있는가?</b><small>목록이 없으면 이번 변경 전에 만든 저장</small></div>
+<div class="yes"><span class="tag y">있음</span>다음 단계로</div>
+<div class="side"><span class="lab"><span class="tag n">없음 · 옛 저장</span></span><b>레벨로 옮겨 적기</b><small>3레벨 이상 → 번개 감옥 소유<br>4레벨 이상 → 나비 떼 소유</small></div>
+</div>
+<div class="arrow">→</div>
+<div class="col">
+<div class="q"><span class="step">3</span><b>소유 목록에 그 주문이 있는가?</b><small>노점에서 배우면 목록에 더해집니다</small></div>
+<div class="end own"><b><span class="tag y">있음</span>가진 주문</b><small>장착하고 마법책에서 쓸 수 있음</small></div>
+<div class="end lock"><b><span class="tag n">없음</span>잠김</b><small>마법책에 「노점에서 배우기」로 표시</small></div>
+</div>
+</div>
+<div class="block"><span class="lab">막은 경로</span><span>주문을 일반 아이템처럼 구매</span><span><span class="tag x">×</span><b>거부</b></span><span style="color:#73716A !important; font-size:12px !important">가방에 주문이 아이템으로 생기지 않게</span></div>
+</div>
+</div>
