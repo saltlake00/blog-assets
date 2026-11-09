@@ -1,0 +1,98 @@
+<div class="dg-880-marker">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&family=JetBrains+Mono:wght@500&display=swap');
+
+.dg-880-marker{container-type:inline-size !important;max-width:960px !important;margin:0 auto !important;font-family:'Noto Sans KR',system-ui,sans-serif !important;color:#3D3D3A !important;word-break:keep-all !important;-webkit-text-size-adjust:100% !important;}
+
+.dg-880-marker .panel{box-sizing:border-box !important;background:#FFFFFF !important;border:1px solid #E8E6DC !important;border-radius:12px !important;padding:22px 24px 20px !important;}
+
+.dg-880-marker .title{font-family:'Noto Serif KR',serif !important;font-weight:700 !important;font-size:22px !important;line-height:1.35 !important;color:#141413 !important;word-break:keep-all !important;overflow-wrap:anywhere !important;}
+
+.dg-880-marker .sub{margin-top:6px !important;font-size:12px !important;line-height:1.5 !important;color:#73716A !important;word-break:keep-all !important;}
+
+.dg-880-marker .chart{position:relative !important;margin-top:14px !important;padding-top:20px !important;}
+
+.dg-880-marker .axis-label{position:absolute !important;top:0 !important;left:calc(25% + 98px) !important;transform:translateX(-50%) !important;z-index:3 !important;background:#FFFFFF !important;padding:0 6px !important;font-size:12px !important;line-height:16px !important;color:#5E5D59 !important;white-space:nowrap !important;}
+
+.dg-880-marker .row{display:grid !important;grid-template-columns:150px minmax(0,1fr) 86px !important;column-gap:14px !important;align-items:center !important;padding:9px 0 !important;border-bottom:1px dashed #E8E6DC !important;}
+
+.dg-880-marker .row:last-child{border-bottom:0 !important;}
+
+.dg-880-marker .name{display:flex !important;align-items:center !important;gap:6px !important;min-width:0 !important;font-size:13px !important;line-height:1.4 !important;color:#3D3D3A !important;}
+
+.dg-880-marker .mark{flex:0 0 auto !important;width:13px !important;text-align:center !important;font-size:12px !important;line-height:1 !important;font-weight:700 !important;}
+.dg-880-marker .mark.bad{color:#B5402A !important;}
+.dg-880-marker .mark.good{color:#5B7A4B !important;}
+
+.dg-880-marker .track{position:relative !important;grid-column:2 !important;height:18px !important;background:#F0EEE6 !important;border-radius:3px !important;}
+.dg-880-marker .track::before{content:"" !important;position:absolute !important;left:25% !important;top:-9px !important;bottom:-9px !important;border-left:1.5px dashed #87867F !important;z-index:1 !important;}
+.dg-880-marker .row.first .track::before{top:-24px !important;}
+
+.dg-880-marker .bar{position:absolute !important;top:3px !important;left:0 !important;height:12px !important;border-radius:3px !important;z-index:2 !important;box-sizing:border-box !important;}
+.dg-880-marker .bar.old{left:95% !important;width:5% !important;background:#B0AEA5 !important;border-left:2px solid #73716A !important;border-right:2px solid #73716A !important;border-radius:2px !important;}
+.dg-880-marker .bar.before{width:45.75% !important;background:#A6781F !important;}
+.dg-880-marker .bar.after{width:5.875% !important;background:#5B7A4B !important;}
+
+.dg-880-marker .val{grid-column:3 !important;font-family:'JetBrains Mono',monospace !important;font-size:12px !important;font-weight:500 !important;color:#3D3D3A !important;text-align:right !important;white-space:nowrap !important;}
+
+.dg-880-marker .frame{margin-top:14px !important;display:flex !important;flex-wrap:wrap !important;align-items:baseline !important;gap:6px 14px !important;background:#F5F3EC !important;border:1px solid #E8E6DC !important;border-radius:5px !important;padding:10px 12px !important;}
+
+.dg-880-marker .frame-label{font-size:13px !important;line-height:1.4 !important;color:#5E5D59 !important;}
+.dg-880-marker .frame-vals{display:flex !important;flex-wrap:wrap !important;gap:4px 16px !important;font-size:13px !important;line-height:1.4 !important;color:#3D3D3A !important;}
+.dg-880-marker .frame-vals b{font-family:'JetBrains Mono',monospace !important;font-weight:500 !important;font-size:12px !important;color:#141413 !important;}
+.dg-880-marker .frame-note{margin-left:auto !important;font-size:12px !important;line-height:1.4 !important;color:#73716A !important;}
+
+.dg-880-marker .pill{margin-top:14px !important;background:#C6613F !important;color:#FFFFFF !important;border-radius:999px !important;padding:9px 18px !important;font-size:13px !important;line-height:1.45 !important;text-align:center !important;word-break:keep-all !important;}
+
+@container (max-width:560px){
+.dg-880-marker .panel{padding:18px 16px 16px !important;}
+.dg-880-marker .title{font-size:19px !important;}
+.dg-880-marker .axis-label{left:calc(25% - 21.5px) !important;}
+.dg-880-marker .row{grid-template-columns:minmax(0,1fr) 76px !important;column-gap:10px !important;row-gap:5px !important;padding:9px 0 !important;}
+.dg-880-marker .name{grid-column:1 / -1 !important;}
+.dg-880-marker .track{grid-column:1 !important;}
+.dg-880-marker .track::before{top:-4px !important;bottom:-4px !important;}
+.dg-880-marker .row.first .track::before{top:-6px !important;}
+.dg-880-marker .val{grid-column:2 !important;font-size:11px !important;}
+.dg-880-marker .frame-note{margin-left:0 !important;width:100% !important;}
+.dg-880-marker .pill{border-radius:14px !important;}
+}
+</style>
+<div class="panel">
+  <div class="title">패턴 코드가 한 프레임에 쓰는 CPU 시간을 예고 방식별로 비교합니다</div>
+  <div class="sub">에디터 환경, 적 20마리 · 값은 한 프레임 안 패턴 구간의 CPU 시간(ms)입니다</div>
+
+  <div class="chart">
+    <div class="axis-label">기준 1ms</div>
+
+    <div class="row first">
+      <div class="name"><span class="mark bad">×</span>옛 큐브 길</div>
+      <div class="track"><div class="bar old"></div></div>
+      <div class="val">3.8~4.0 ms</div>
+    </div>
+
+    <div class="row">
+      <div class="name"><span class="mark bad">×</span>칸마다 띠 하나</div>
+      <div class="track"><div class="bar before"></div></div>
+      <div class="val">1.83 ms</div>
+    </div>
+
+    <div class="row">
+      <div class="name"><span class="mark good">✓</span>띠 묶음 메시 하나</div>
+      <div class="track"><div class="bar after"></div></div>
+      <div class="val">0.235 ms</div>
+    </div>
+  </div>
+
+  <div class="frame">
+    <div class="frame-label">화면 한 장 평균</div>
+    <div class="frame-vals">
+      <span>패턴 없음 <b>36.27 ms</b></span>
+      <span>패턴 있음 <b>36.26 ms</b></span>
+    </div>
+    <div class="frame-note">위 CPU 시간과 다른 지표입니다</div>
+  </div>
+
+  <div class="pill">예고를 띠 묶음 메시 하나로 그리면 CPU 시간이 기준 안으로 들어옵니다</div>
+</div>
+</div>
