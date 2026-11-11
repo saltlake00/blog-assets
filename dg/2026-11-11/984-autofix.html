@@ -1,0 +1,183 @@
+<div class="dg-984-autofix">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&display=swap');
+
+.dg-984-autofix {
+  container-type: inline-size !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 960px !important;
+  margin: 0 auto !important;
+  padding: 13px 15px 12px !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 12px !important;
+  font-family: 'Noto Sans KR', system-ui, -apple-system, sans-serif !important;
+  color: #3D3D3A !important;
+  word-break: keep-all !important;
+  line-height: 1.4 !important;
+}
+.dg-984-autofix .ttl {
+  margin: 0 0 8px !important;
+  font-family: 'Noto Serif KR', serif !important;
+  font-weight: 700 !important;
+  font-size: 22px !important;
+  line-height: 1.28 !important;
+  color: #141413 !important;
+}
+.dg-984-autofix .fail {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: baseline !important;
+  gap: 3px 9px !important;
+  padding: 7px 10px !important;
+  background: #F5F3EC !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 5px !important;
+}
+.dg-984-autofix .fail-tag {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #73716A !important;
+}
+.dg-984-autofix .fail-file {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 13px !important;
+  color: #141413 !important;
+  overflow-wrap: anywhere !important;
+}
+.dg-984-autofix .fail-num {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #141413 !important;
+}
+.dg-984-autofix .fail-cap {
+  font-size: 12px !important;
+  color: #73716A !important;
+}
+.dg-984-autofix .branches {
+  display: flex !important;
+  gap: 10px !important;
+  align-items: stretch !important;
+  margin: 8px 0 !important;
+}
+.dg-984-autofix .branch {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  padding: 8px 9px !important;
+  background: #F5F3EC !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 5px !important;
+}
+.dg-984-autofix .is-bad { border-color: #B5402A !important; }
+.dg-984-autofix .is-good { border-color: #5B7A4B !important; }
+.dg-984-autofix .bhead {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  margin-bottom: 5px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+}
+.dg-984-autofix .is-bad .bhead { color: #B5402A !important; }
+.dg-984-autofix .is-good .bhead { color: #5B7A4B !important; }
+.dg-984-autofix .brow {
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 8px !important;
+  padding: 4px 0 !important;
+}
+.dg-984-autofix .brow + .brow { border-top: 1px solid #E8E6DC !important; }
+.dg-984-autofix .lab {
+  flex: 0 0 58px !important;
+  font-size: 12px !important;
+  color: #73716A !important;
+}
+.dg-984-autofix .val {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  font-size: 13px !important;
+  line-height: 1.3 !important;
+  color: #3D3D3A !important;
+}
+.dg-984-autofix .note {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: baseline !important;
+  gap: 3px 8px !important;
+  padding: 7px 10px !important;
+  background: #F0EEE6 !important;
+  border: 1px solid #E8E6DC !important;
+  border-radius: 5px !important;
+}
+.dg-984-autofix .note-tag {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #73716A !important;
+}
+.dg-984-autofix .note-t {
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+  color: #5E5D59 !important;
+}
+.dg-984-autofix .code {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 12px !important;
+  overflow-wrap: anywhere !important;
+}
+.dg-984-autofix .pill {
+  margin: 8px 0 0 !important;
+  text-align: center !important;
+}
+.dg-984-autofix .pill-in {
+  display: inline-block !important;
+  padding: 6px 14px !important;
+  background: #C6613F !important;
+  border-radius: 999px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  line-height: 1.25 !important;
+  color: #FFFFFF !important;
+}
+@container (max-width: 560px) {
+  .dg-984-autofix .branches { flex-direction: column !important; }
+  .dg-984-autofix .ttl { font-size: 20px !important; }
+  .dg-984-autofix .lab { flex-basis: 64px !important; }
+  .dg-984-autofix .pill-in { display: block !important; text-align: center !important; }
+}
+</style>
+
+<div class="ttl">자동 수정이 이번 변경과 무관한 시험까지 고쳤습니다</div>
+
+<div class="fail">
+  <span class="fail-tag">시험 실패</span>
+  <span class="fail-file">BuildingMesher.cs</span>
+  <span class="fail-num">221줄</span>
+  <span class="fail-cap">상한 200줄</span>
+</div>
+
+<div class="branches">
+  <div class="branch is-bad">
+    <div class="bhead"><span class="ic">×</span><span>이전 지시</span></div>
+    <div class="brow"><span class="lab">요약 확인</span><span class="val">하지 않음</span></div>
+    <div class="brow"><span class="lab">처리</span><span class="val">파일을 둘로 나눔 (범위 밖)</span></div>
+    <div class="brow"><span class="lab">결과</span><span class="val">사람이 되돌림 · #983 추적</span></div>
+  </div>
+  <div class="branch is-good">
+    <div class="bhead"><span class="ic">✓</span><span>바꾼 지시</span></div>
+    <div class="brow"><span class="lab">요약 확인</span><span class="val">확인함 → 없음</span></div>
+    <div class="brow"><span class="lab">처리</span><span class="val">보고만 하고 고치지 않음</span></div>
+    <div class="brow"><span class="lab">결과</span><span class="val">이번 PR은 지도 파일만 바뀜</span></div>
+  </div>
+</div>
+
+<div class="note">
+  <span class="note-tag">같은 날</span>
+  <span class="note-t">200줄 규칙을 시험 파일에도 적용 → 343줄에서 199줄로 몰아쓰기 → 규칙 범위를 <span class="code">Assets/Scripts</span>로 한정했습니다.</span>
+</div>
+
+<div class="pill"><span class="pill-in">변경 요약에 없는 실패는 고치지 않고 보고합니다.</span></div>
+
+</div>
