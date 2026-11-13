@@ -1,0 +1,47 @@
+<div class="dg-545-achievement-flow">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&display=swap');
+.dg-545-achievement-flow{max-width:960px !important;margin:0 auto !important;font-family:'Noto Sans KR',system-ui,sans-serif !important;color:#141413 !important;-webkit-font-smoothing:antialiased !important;}
+.dg-545-achievement-flow .panel{box-sizing:border-box !important;background:#FFFFFF !important;border:1px solid #E8E6DC !important;border-radius:12px !important;padding:14px 16px !important;}
+.dg-545-achievement-flow .title{font-family:'Noto Serif KR',serif !important;font-weight:700 !important;font-size:20px !important;line-height:1.35 !important;color:#141413 !important;word-break:keep-all !important;margin:0 0 10px !important;}
+.dg-545-achievement-flow .main{display:grid !important;grid-template-columns:minmax(0,1fr) 18px minmax(0,1fr) 18px minmax(0,1fr) 18px minmax(0,1.15fr) !important;gap:6px !important;align-items:stretch !important;}
+.dg-545-achievement-flow .box{box-sizing:border-box !important;background:#F5F3EC !important;border:1px solid #E8E6DC !important;border-radius:6px !important;padding:8px 10px !important;min-width:0 !important;}
+.dg-545-achievement-flow .box.key{background:#F5EDE6 !important;border-color:#C6613F !important;}
+.dg-545-achievement-flow .tag{display:inline-block !important;font-family:'JetBrains Mono',monospace !important;font-size:11px !important;color:#A9502F !important;background:#FFFFFF !important;border:1px solid #E8E6DC !important;border-radius:4px !important;padding:0 5px !important;margin-bottom:4px !important;}
+.dg-545-achievement-flow .h{font-weight:700 !important;font-size:14px !important;line-height:1.35 !important;color:#141413 !important;word-break:keep-all !important;}
+.dg-545-achievement-flow .t{font-size:12px !important;line-height:1.5 !important;color:#5E5D59 !important;word-break:keep-all !important;margin-top:3px !important;}
+.dg-545-achievement-flow .arr{display:flex !important;align-items:center !important;justify-content:center !important;color:#D1CFC5 !important;font-size:16px !important;}
+.dg-545-achievement-flow .outs{display:grid !important;grid-template-rows:1fr 1fr !important;gap:6px !important;min-width:0 !important;}
+.dg-545-achievement-flow .alert{display:grid !important;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) !important;gap:6px !important;margin-top:10px !important;border-top:1px dashed #D1CFC5 !important;padding-top:10px !important;}
+.dg-545-achievement-flow .alert .box{background:#FFFFFF !important;}
+.dg-545-achievement-flow .ok{color:#5B7A4B !important;font-weight:700 !important;}
+.dg-545-achievement-flow .hold{color:#A6781F !important;font-weight:700 !important;}
+.dg-545-achievement-flow .lbl{font-size:12px !important;color:#87867F !important;margin:0 0 6px !important;}
+@media(max-width:600px){
+.dg-545-achievement-flow .main{grid-template-columns:minmax(0,1fr) !important;}
+.dg-545-achievement-flow .arr{transform:rotate(90deg) !important;height:14px !important;}
+.dg-545-achievement-flow .outs{grid-template-rows:auto !important;}
+.dg-545-achievement-flow .alert{grid-template-columns:minmax(0,1fr) !important;}
+}
+</style>
+<div class="panel">
+<div class="title">게임 사건이 업적 달성과 화면 표시가 되기까지</div>
+<div class="main">
+<div class="box"><span class="tag">#1004</span><div class="h">사건</div><div class="t">처치(정예 여부)·세공석 사용은 카운터로, 보스·원정·포털·레벨·랭킹은 저장된 값으로</div></div>
+<div class="arr">→</div>
+<div class="box key"><span class="tag">#1004</span><div class="h">판정</div><div class="t">필드 커밋·원정 기록 같은 저장 직전에 업적 18개 판정</div></div>
+<div class="arr">→</div>
+<div class="box"><span class="tag">#1004</span><div class="h">저장 v12</div><div class="t">achievements 블록: 달성 목록·카운터·장착 칭호</div></div>
+<div class="arr">→</div>
+<div class="outs">
+<div class="box"><span class="tag">#1005</span><div class="h">상태창 업적 탭</div><div class="t">분류 → 목록 → 상세, 칭호 장착은 창을 닫을 때 한 번 저장</div></div>
+<div class="box"><span class="tag">#1006</span><div class="h">칭호 표시</div><div class="t">HUD 경험치 줄 · 머리 위 이름표(ALT) · 저장 슬롯 상세</div></div>
+</div>
+</div>
+<div class="alert">
+<div class="box"><span class="tag">#1006</span><div class="h">판정에서 달성 → 알림</div><div class="t">레벨업·해금 알림과 같은 대기열. 알림 중 P를 누르면 그 업적을 고른 업적 탭</div></div>
+<div class="box"><div class="h"><span class="ok">✓</span> 필드에 있으면</div><div class="t">위쪽 알림 카드를 바로 3초 표시</div></div>
+<div class="box"><div class="h"><span class="hold">―</span> 던전·몬스터 구역이면</div><div class="t">보류했다가 필드로 돌아오면 표시, 메뉴로 나가면 버림</div></div>
+</div>
+</div>
+</div>

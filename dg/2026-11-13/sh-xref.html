@@ -1,0 +1,90 @@
+<div class="dg-sh-xref"><style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&family=JetBrains+Mono:wght@500&display=swap');
+.dg-sh-xref{container-type:inline-size !important;box-sizing:border-box !important;max-width:960px !important;margin:0 auto !important;padding:16px 20px !important;background:#FFFFFF !important;border:1px solid #E8E6DC !important;border-radius:12px !important;font-family:'Noto Sans KR',sans-serif !important;color:#3D3D3A !important;word-break:keep-all !important;-webkit-font-smoothing:antialiased !important}
+.dg-sh-xref *{box-sizing:border-box !important}
+.dg-sh-xref .title{font-family:'Noto Serif KR',serif !important;font-weight:700 !important;font-size:22px !important;line-height:1.3 !important;color:#141413 !important;letter-spacing:-0.01em !important;margin-bottom:12px !important}
+.dg-sh-xref .body{display:grid !important;grid-template-columns:minmax(0,1fr) 176px !important;gap:16px !important;align-items:start !important}
+.dg-sh-xref .diagram{min-width:0 !important}
+.dg-sh-xref .sheets{display:grid !important;grid-template-columns:repeat(4,minmax(0,1fr)) !important;gap:8px !important}
+.dg-sh-xref .sheet{background:#F5F3EC !important;border:1px solid #E8E6DC !important;border-radius:5px !important;padding:8px 10px !important;text-align:center !important}
+.dg-sh-xref .sheet-n{font-size:14px !important;font-weight:700 !important;line-height:1.35 !important;color:#3D3D3A !important}
+.dg-sh-xref .sheet-t{margin-top:2px !important;font-size:12px !important;line-height:1.3 !important;color:#87867F !important}
+.dg-sh-xref .arws{display:grid !important;grid-template-columns:repeat(4,minmax(0,1fr)) !important;gap:8px !important;height:22px !important}
+.dg-sh-xref .arw{display:flex !important;justify-content:center !important}
+.dg-sh-xref .arw-line{position:relative !important;width:1px !important;height:15px !important;background:#D1CFC5 !important}
+.dg-sh-xref .arw-line::after{content:"" !important;position:absolute !important;left:50% !important;bottom:-6px !important;margin-left:-4px !important;border-left:4px solid transparent !important;border-right:4px solid transparent !important;border-top:6px solid #D1CFC5 !important}
+.dg-sh-xref .arw-single{display:none !important;height:22px !important;justify-content:center !important}
+.dg-sh-xref .base{background:#F5EDE6 !important;border:1px solid #D1CFC5 !important;border-radius:5px !important;padding:9px 12px !important;text-align:center !important}
+.dg-sh-xref .base-k{font-size:12px !important;line-height:1.3 !important;color:#5E5D59 !important;font-weight:500 !important}
+.dg-sh-xref .base-v{font-size:16px !important;font-weight:700 !important;line-height:1.35 !important;color:#A9502F !important;margin-top:1px !important}
+.dg-sh-xref .base-e{font-family:'JetBrains Mono',monospace !important;font-size:12px !important;line-height:1.4 !important;color:#73716A !important;margin-top:1px !important;overflow-wrap:anywhere !important}
+.dg-sh-xref .nums{display:grid !important;grid-template-columns:1fr !important;gap:8px !important;min-width:0 !important}
+.dg-sh-xref .ncard{background:#F5F3EC !important;border:1px solid #E8E6DC !important;border-radius:5px !important;padding:9px 11px !important}
+.dg-sh-xref .ncard-k{font-size:12px !important;line-height:1.3 !important;color:#87867F !important}
+.dg-sh-xref .ncard-v{font-family:'Noto Serif KR',serif !important;font-weight:700 !important;font-size:18px !important;line-height:1.3 !important;color:#141413 !important;margin-top:2px !important;white-space:nowrap !important;letter-spacing:-0.01em !important}
+.dg-sh-xref .foot{display:flex !important;align-items:center !important;justify-content:space-between !important;gap:16px !important;margin-top:14px !important}
+.dg-sh-xref .cmp{flex:1 1 auto !important;min-width:0 !important}
+.dg-sh-xref .cmp-k{font-size:12px !important;line-height:1.3 !important;color:#73716A !important;margin-bottom:5px !important}
+.dg-sh-xref .bar{display:flex !important;align-items:center !important;gap:8px !important;margin-top:4px !important}
+.dg-sh-xref .bar-n{flex:0 0 34px !important;font-size:12px !important;line-height:1.3 !important;color:#5E5D59 !important;font-weight:500 !important}
+.dg-sh-xref .bar-track{flex:1 1 auto !important;height:10px !important;background:#F0EEE6 !important;border-radius:3px !important}
+.dg-sh-xref .bar-fill{height:10px !important;border-radius:3px !important;background:#5E5D59 !important}
+.dg-sh-xref .bar-fill-soft{height:10px !important;border-radius:3px !important;background:#87867F !important}
+.dg-sh-xref .bar-v{flex:0 0 24px !important;text-align:right !important;font-family:'JetBrains Mono',monospace !important;font-size:12px !important;line-height:1.3 !important;color:#3D3D3A !important}
+.dg-sh-xref .pill{flex:0 0 auto !important;background:#C6613F !important;color:#FFFFFF !important;border-radius:999px !important;padding:8px 15px !important;font-size:12px !important;line-height:1.35 !important;text-align:center !important}
+@container (max-width:560px){
+.dg-sh-xref .body{grid-template-columns:minmax(0,1fr) !important}
+.dg-sh-xref .sheets{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+.dg-sh-xref .arws{display:none !important}
+.dg-sh-xref .arw-single{display:flex !important}
+.dg-sh-xref .nums{grid-template-columns:1fr 1fr !important}
+.dg-sh-xref .foot{flex-direction:column !important;align-items:stretch !important;gap:10px !important}
+}
+</style>
+
+<div class="title">시트는 주석만 담고, 벽은 바탕 XREF에서 옵니다</div>
+
+<div class="body">
+  <div class="diagram">
+    <div class="sheets">
+      <div class="sheet"><div class="sheet-n">평면도</div><div class="sheet-t">주석만: 치수·글자·기호</div></div>
+      <div class="sheet"><div class="sheet-n">중심선도</div><div class="sheet-t">주석만: 치수·글자·기호</div></div>
+      <div class="sheet"><div class="sheet-n">단열방수도</div><div class="sheet-t">주석만: 치수·글자·기호</div></div>
+      <div class="sheet"><div class="sheet-n">천장도</div><div class="sheet-t">주석만: 치수·글자·기호</div></div>
+    </div>
+    <div class="arws">
+      <div class="arw"><div class="arw-line"></div></div>
+      <div class="arw"><div class="arw-line"></div></div>
+      <div class="arw"><div class="arw-line"></div></div>
+      <div class="arw"><div class="arw-line"></div></div>
+    </div>
+    <div class="arw-single"><div class="arw-line"></div></div>
+    <div class="base">
+      <div class="base-k">세대 바탕 도면 · 외부 참조(XREF)</div>
+      <div class="base-v">벽 · 문 · 가구</div>
+      <div class="base-e">예: U-49A-기본형</div>
+    </div>
+  </div>
+
+  <div class="nums">
+    <div class="ncard">
+      <div class="ncard-k">XREF를 쓰는 시트</div>
+      <div class="ncard-v">89장 중 89장</div>
+    </div>
+    <div class="ncard">
+      <div class="ncard-k">시트 한 장의 XREF</div>
+      <div class="ncard-v">평균 17.6개</div>
+    </div>
+  </div>
+</div>
+
+<div class="foot">
+  <div class="cmp">
+    <div class="cmp-k">치수 스타일 개수 · 같은 눈금</div>
+    <div class="bar"><div class="bar-n">고덕</div><div class="bar-track"><div class="bar-fill-soft" style="width:10% !important"></div></div><div class="bar-v">4</div></div>
+    <div class="bar"><div class="bar-n">공덕</div><div class="bar-track"><div class="bar-fill" style="width:100% !important"></div></div><div class="bar-v">42</div></div>
+  </div>
+  <div class="pill">한 바탕을 네 종 도면이 함께 참조합니다</div>
+</div>
+
+</div>
