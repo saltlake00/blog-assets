@@ -1,0 +1,339 @@
+<div class="dg-mmd-physics">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&display=swap');
+
+.dg-mmd-physics,
+.dg-mmd-physics *{ box-sizing:border-box !important; }
+
+.dg-mmd-physics{
+  --sheet:#FFFFFF !important;
+  --card:#F5F3EC !important;
+  --card2:#F0EEE6 !important;
+  --line:#E8E6DC !important;
+  --line2:#D1CFC5 !important;
+  --faint:#B0AEA5 !important;
+  --muted:#87867F !important;
+  --muted2:#73716A !important;
+  --ink3:#5E5D59 !important;
+  --ink2:#3D3D3A !important;
+  --ink:#141413 !important;
+  --clay:#C6613F !important;
+  --claydark:#A9502F !important;
+  --claytint:#F5EDE6 !important;
+  --bad:#B5402A !important;
+  --mid:#A6781F !important;
+  --good:#5B7A4B !important;
+  max-width:960px !important;
+  margin:0 auto !important;
+  container-type:inline-size !important;
+  font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,sans-serif !important;
+  color:var(--ink2) !important;
+  word-break:keep-all !important;
+  overflow-wrap:anywhere !important;
+  -webkit-font-smoothing:antialiased !important;
+}
+
+.dg-mmd-physics .sheet{
+  background:var(--sheet) !important;
+  border:1px solid var(--line) !important;
+  border-radius:12px !important;
+  padding:14px 16px 13px !important;
+}
+
+.dg-mmd-physics .ttl{
+  font-family:'Noto Serif KR',serif !important;
+  font-weight:700 !important;
+  font-size:22px !important;
+  line-height:1.3 !important;
+  letter-spacing:-0.01em !important;
+  color:var(--ink) !important;
+}
+
+.dg-mmd-physics .sub{
+  margin-top:3px !important;
+  font-size:12px !important;
+  line-height:1.45 !important;
+  color:var(--muted2) !important;
+}
+
+.dg-mmd-physics .main{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) 228px !important;
+  gap:20px !important;
+  align-items:start !important;
+  margin-top:11px !important;
+}
+
+.dg-mmd-physics .chead{
+  display:flex !important;
+  align-items:baseline !important;
+  justify-content:space-between !important;
+  gap:8px !important;
+}
+.dg-mmd-physics .clabel{
+  font-size:12px !important;
+  line-height:1.4 !important;
+  color:var(--ink3) !important;
+  white-space:nowrap !important;
+}
+.dg-mmd-physics .clabel em{
+  font-style:normal !important;
+  font-family:'JetBrains Mono',monospace !important;
+  font-size:10px !important;
+  color:var(--faint) !important;
+  margin-left:3px !important;
+}
+.dg-mmd-physics .legend{
+  display:flex !important;
+  align-items:baseline !important;
+  gap:10px !important;
+  font-size:11px !important;
+  line-height:1.4 !important;
+  color:var(--muted2) !important;
+  white-space:nowrap !important;
+}
+.dg-mmd-physics .legend .mk{
+  font-weight:700 !important;
+  font-size:11px !important;
+  margin-right:2px !important;
+}
+.dg-mmd-physics .legend .b{ color:var(--bad) !important; }
+.dg-mmd-physics .legend .g{ color:var(--good) !important; }
+
+.dg-mmd-physics .axis{
+  position:relative !important;
+  height:12px !important;
+  margin:5px 66px 0 17px !important;
+  border-bottom:1px solid var(--line) !important;
+  font-family:'JetBrains Mono',monospace !important;
+  font-size:10px !important;
+  line-height:1.1 !important;
+  color:var(--faint) !important;
+}
+.dg-mmd-physics .axis span{
+  position:absolute !important;
+  bottom:3px !important;
+  transform:translateX(-50%) !important;
+}
+.dg-mmd-physics .axis .a0{ left:0 !important; transform:none !important; }
+.dg-mmd-physics .axis .a90{ right:0 !important; transform:none !important; }
+
+.dg-mmd-physics .grp{ margin-top:9px !important; }
+.dg-mmd-physics .gname{
+  font-size:12px !important;
+  font-weight:500 !important;
+  line-height:1.4 !important;
+  color:var(--ink2) !important;
+  margin-bottom:3px !important;
+}
+.dg-mmd-physics .line{
+  display:flex !important;
+  align-items:center !important;
+  gap:6px !important;
+  height:13px !important;
+}
+.dg-mmd-physics .line + .line{ margin-top:3px !important; }
+.dg-mmd-physics .st{
+  flex:0 0 11px !important;
+  width:11px !important;
+  font-size:11px !important;
+  font-weight:700 !important;
+  line-height:1 !important;
+  text-align:center !important;
+}
+.dg-mmd-physics .st.bad{ color:var(--bad) !important; }
+.dg-mmd-physics .st.good{ color:var(--good) !important; }
+.dg-mmd-physics .track{
+  position:relative !important;
+  flex:1 1 auto !important;
+  min-width:0 !important;
+  height:10px !important;
+  border-radius:2px !important;
+}
+.dg-mmd-physics .base{
+  position:absolute !important;
+  left:0 !important;
+  top:0 !important;
+  bottom:0 !important;
+  width:var(--u) !important;
+  background:var(--card2) !important;
+  border:1px solid var(--line) !important;
+  border-radius:2px !important;
+}
+.dg-mmd-physics .band{
+  position:absolute !important;
+  left:var(--l) !important;
+  top:-1px !important;
+  bottom:-1px !important;
+  width:var(--w) !important;
+  background:rgba(181,64,42,0.18) !important;
+  border-left:2px solid var(--bad) !important;
+  border-right:2px solid var(--bad) !important;
+  border-radius:1px !important;
+}
+.dg-mmd-physics .fill{
+  position:absolute !important;
+  left:0 !important;
+  top:0 !important;
+  bottom:0 !important;
+  width:var(--w) !important;
+  min-width:3px !important;
+  background:var(--good) !important;
+  border-radius:2px !important;
+}
+.dg-mmd-physics .v{
+  flex:0 0 60px !important;
+  width:60px !important;
+  text-align:right !important;
+  font-family:'JetBrains Mono',monospace !important;
+  font-size:10px !important;
+  font-weight:500 !important;
+  line-height:1.2 !important;
+  white-space:nowrap !important;
+}
+.dg-mmd-physics .v.bad{ color:var(--bad) !important; }
+.dg-mmd-physics .v.good{ color:var(--good) !important; }
+
+.dg-mmd-physics .side{ padding-top:1px !important; }
+.dg-mmd-physics .shead{
+  font-size:12px !important;
+  line-height:1.4 !important;
+  color:var(--ink3) !important;
+  margin-bottom:5px !important;
+}
+.dg-mmd-physics .chip{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:6px !important;
+  height:20px !important;
+  padding:0 7px !important;
+  margin-bottom:3px !important;
+  background:var(--card) !important;
+  border:1px solid var(--line) !important;
+  border-radius:3px !important;
+  font-size:11px !important;
+  line-height:1 !important;
+  color:var(--ink3) !important;
+}
+.dg-mmd-physics .chip:last-child{ margin-bottom:0 !important; }
+.dg-mmd-physics .chip .num{
+  font-family:'JetBrains Mono',monospace !important;
+  font-size:10px !important;
+  font-weight:500 !important;
+  color:var(--ink) !important;
+  white-space:nowrap !important;
+}
+.dg-mmd-physics .cnote{
+  margin-top:5px !important;
+  font-size:11px !important;
+  line-height:1.4 !important;
+  color:var(--muted2) !important;
+}
+
+.dg-mmd-physics .pill{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  margin-top:10px !important;
+  padding:7px 16px !important;
+  background:var(--clay) !important;
+  border-radius:999px !important;
+  color:var(--sheet) !important;
+  font-size:13px !important;
+  line-height:1.4 !important;
+  text-align:center !important;
+}
+
+@container (max-width:560px){
+  .dg-mmd-physics .main{
+    grid-template-columns:minmax(0,1fr) !important;
+    gap:13px !important;
+  }
+  .dg-mmd-physics .chips{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:4px !important;
+  }
+  .dg-mmd-physics .chip{ margin-bottom:0 !important; }
+  .dg-mmd-physics .sheet{ padding:13px 13px 12px !important; }
+  .dg-mmd-physics .legend{ gap:7px !important; }
+}
+</style>
+
+<div class="sheet">
+  <div class="ttl">각도 제한과 가로 제약을 넣기 전후의 사슬 끝 높이</div>
+  <div class="sub">곡 0~25초 동안 사슬 끝 본이 기준 자세보다 위로 솟은 최대 높이입니다. 작을수록 몸에 붙어 움직입니다.</div>
+
+  <div class="main">
+    <div class="chart">
+      <div class="chead">
+        <div class="clabel">솟은 최대 높이<em>cm</em></div>
+        <div class="legend">
+          <span><span class="mk b">×</span>수정 전</span>
+          <span><span class="mk g">✓</span>수정 후</span>
+        </div>
+      </div>
+
+      <div class="axis">
+        <span class="a0">0</span>
+        <span style="left:33.333% !important">30</span>
+        <span style="left:66.666% !important">60</span>
+        <span class="a90">90</span>
+      </div>
+
+      <div class="grp">
+        <div class="gname">뒷머리 끝</div>
+        <div class="line">
+          <span class="st bad">×</span>
+          <div class="track">
+            <div class="base" style="--u:97.78% !important"></div>
+            <div class="band" style="--l:84.44% !important; --w:13.33% !important"></div>
+          </div>
+          <span class="v bad">+76~88cm</span>
+        </div>
+        <div class="line">
+          <span class="st good">✓</span>
+          <div class="track">
+            <div class="fill" style="--w:7.78% !important"></div>
+          </div>
+          <span class="v good">+7cm</span>
+        </div>
+      </div>
+
+      <div class="grp">
+        <div class="gname">치마 밑단</div>
+        <div class="line">
+          <span class="st bad">×</span>
+          <div class="track">
+            <div class="base" style="--u:77.78% !important"></div>
+            <div class="band" style="--l:44.44% !important; --w:33.33% !important"></div>
+          </div>
+          <span class="v bad">+40~70cm</span>
+        </div>
+        <div class="line">
+          <span class="st good">✓</span>
+          <div class="track">
+            <div class="fill" style="--w:2.22% !important"></div>
+          </div>
+          <span class="v good">+2cm</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="side">
+      <div class="shead">마디당 최대 꺾임</div>
+      <div class="chips">
+        <div class="chip"><span>뒷머리</span><span class="num">12°</span></div>
+        <div class="chip"><span>긴 옆머리</span><span class="num">16°</span></div>
+        <div class="chip"><span>소매</span><span class="num">20°</span></div>
+        <div class="chip"><span>자락</span><span class="num">32°</span></div>
+        <div class="chip"><span>치마 본체</span><span class="num">8°</span></div>
+      </div>
+      <div class="cnote">치마 열 사이에는 가로 제약 282쌍을 넣었습니다.</div>
+    </div>
+  </div>
+
+  <div class="pill">마디 꺾임을 PMX 원본 값으로 묶고 치마 열을 가로로 이은 뒤, 사슬이 몸에 붙어 움직였습니다.</div>
+</div>
+</div>
